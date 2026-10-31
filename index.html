@@ -1,0 +1,1556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Duolingo-style practice for AP Physics 1 Unit 2: forces, free-body diagrams, Newton's laws, friction, springs, circular motion and real AP FRQs.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 110'%3E%3Crect x='18' y='24' width='74' height='70' rx='18' fill='%23FFB21E'/%3E%3Cpath d='M37 54q6-7 12 0M61 54q6-7 12 0M44 66q11 11 22 0' stroke='%231B2140' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 22V6' stroke='%23F2553A' stroke-width='6'/%3E%3Cpath d='M47 10l8-9 8 9z' fill='%23F2553A'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Nush's Physics Prep</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one phone-width column; a zig-zag skill path on the home view, a full-screen lesson card stack on top of it. */
+:root{
+  --bg:#EEF1FA; --surface:#FFFFFF; --sunk:#E3E7F4; --ink:#1B2140; --muted:#5E6688; --line:#D3D8EA;
+  --force:#F2553A; --force-deep:#C23C24; --force-soft:#FDE4DE;
+  --go:#1FA874; --go-deep:#13805A; --go-soft:#D8F4E8;
+  --xp:#FFB21E; --xp-deep:#D98E00; --xp-soft:#FFF0CF;
+  --field:#4462F2; --field-deep:#2D47C4; --field-soft:#E0E6FE;
+  --f-display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11142A; --surface:#1B2042; --sunk:#151935; --ink:#EDF0FB; --muted:#9CA3C8; --line:#2E355F;
+  --force:#FF6A4D; --force-deep:#B9442D; --force-soft:#3A2230;
+  --go:#2CC68C; --go-deep:#178A5F; --go-soft:#173A36;
+  --xp:#FFC24A; --xp-deep:#B88512; --xp-soft:#3A3226;
+  --field:#7D93FF; --field-deep:#4B60D0; --field-soft:#232B5C; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#11142A; --surface:#1B2042; --sunk:#151935; --ink:#EDF0FB; --muted:#9CA3C8; --line:#2E355F;
+  --force:#FF6A4D; --force-deep:#B9442D; --force-soft:#3A2230;
+  --go:#2CC68C; --go-deep:#178A5F; --go-soft:#173A36;
+  --xp:#FFC24A; --xp-deep:#B88512; --xp-soft:#3A3226;
+  --field:#7D93FF; --field-deep:#4B60D0; --field-soft:#232B5C; color-scheme:dark }
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--field)}
+:focus-visible{outline:3px solid var(--field);outline-offset:3px;border-radius:12px}
+.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono)}
+svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:2px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.brand svg{width:34px;height:34px}
+@media (max-width:480px){.brand{font-size:17px;gap:4px}.brand svg{width:28px;height:28px}.top .wrap{gap:6px}.stats{gap:2px}}
+.stats{display:flex;align-items:center;gap:6px}
+.stat{display:flex;align-items:center;gap:4px;font-family:var(--f-display);font-weight:700;font-size:17px;padding:4px 8px;border-radius:12px;font-variant-numeric:tabular-nums}
+.stat.streak{color:var(--force)} .stat.xp{color:var(--xp-deep)}
+:root[data-theme="dark"] .stat.xp{color:var(--xp)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stat.xp{color:var(--xp)}}
+.iconbtn{background:none;border:0;padding:6px;border-radius:12px;color:var(--muted);display:flex}
+.iconbtn:hover{background:var(--sunk)}
+
+.tabs{display:flex;gap:6px;padding-block:14px 4px}
+.tab{flex:1;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:9px 10px;font-family:var(--f-display);font-weight:600;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px}
+.tab[aria-selected="true"]{color:var(--field);border-color:var(--field);background:var(--field-soft)}
+
+/* unit banner */
+.banner{margin-top:14px;background:var(--field);color:#fff;border-radius:20px;padding:18px 18px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;box-shadow:0 5px 0 var(--field-deep);position:relative;overflow:hidden}
+.acct{position:relative;width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:var(--surface);padding:0;display:grid;place-items:center;color:var(--muted);overflow:visible}
+.acct img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.acct svg.ic{width:20px;height:20px}
+.dot{position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
+.dot.synced{background:var(--go)} .dot.device{background:var(--xp)} .dot.loading{background:var(--line)}
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(10,12,30,.45);display:flex;align-items:flex-end;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px))}
+.sheet{width:100%;max-width:560px;max-height:90%;overflow-y:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.4}}
+.sheet-head{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.sheet-head > svg,.sheet-head > img{width:56px;height:56px}
+.sheet-head > img{border-radius:50%}
+.sheet-head .dot{display:none}
+.sheet h3{margin:0;font-family:var(--f-display);font-weight:700;font-size:22px;line-height:1.2;text-wrap:balance}
+.sheet h4{margin:4px 0 -4px;font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sheet .tiles3{max-width:none}
+.sync,.muted{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.sync.synced{color:var(--go-deep)}
+:root[data-theme="dark"] .sync.synced{color:var(--go)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sync.synced{color:var(--go)}}
+.goalopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.goalopts .choice{flex-direction:column;align-items:flex-start;gap:0;padding:10px 12px}
+.goalopts .choice b{font-family:var(--f-display);font-weight:600}
+.goalopts .choice span{font-size:13px;color:var(--muted)}
+.sheet-btns{display:flex;flex-wrap:wrap;gap:10px}
+.sheet-btns .btn{margin-left:0;flex:1 1 180px;min-width:0}
+.btn.danger{color:var(--force);border-color:var(--force-soft)}
+.today{margin-top:14px;background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.today-top{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center}
+.today-top svg{width:64px;height:64px}
+.today-txt{min-width:0}
+.today small{font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.today h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1.2;text-wrap:balance}
+.today p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.today-act{display:flex;gap:10px;flex-wrap:wrap}
+.today-act .btn{margin-left:0;flex:1 1 160px;min-width:0}
+.focus-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.focus-row > span{font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--force)}
+.fchip-go{background:var(--force-soft);color:var(--ink);border:2px solid var(--force);border-radius:999px;padding:4px 12px;font-size:14px}
+.focus-tag{display:inline-block;margin-left:4px;padding:0 6px;border-radius:6px;background:var(--force);color:#fff;letter-spacing:.06em;font-size:10px;vertical-align:1px}
+.results{list-style:none;margin:0;padding:0;width:100%;max-width:440px;display:flex;flex-direction:column;gap:6px;text-align:left}
+.results li{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:8px 12px}
+.rchip{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:2px 10px;border-radius:999px;flex:none}
+.rchip.ok{background:var(--go-soft);color:var(--go-deep)} .rchip.no{background:var(--force-soft);color:var(--force-deep)}
+:root[data-theme="dark"] .rchip.ok{color:var(--go)} :root[data-theme="dark"] .rchip.no{color:var(--force)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .rchip.ok{color:var(--go)} :root:not([data-theme="light"]) .rchip.no{color:var(--force)}}
+.onb .l-body .wrap{padding-top:40px;gap:18px}
+.choice .k svg.ic{width:18px;height:18px}
+.banner.class{background:var(--go);box-shadow:0 5px 0 var(--go-deep)}
+.banner.frq{background:var(--force);box-shadow:0 5px 0 var(--force-deep)}
+.banner.mcq{background:var(--field-deep);box-shadow:0 5px 0 var(--field)}
+.choices.pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.choices.pics .choice{flex-direction:column;align-items:flex-start}
+.choices.pics svg.mini{width:100%;max-width:200px;height:auto}
+.choices.pics text{font-family:var(--f-mono);font-weight:700}
+.ctx{background:var(--surface);border:2px solid var(--line);border-left:6px solid var(--field);border-radius:14px;padding:10px 14px;font-size:15px;max-width:62ch}
+.banner small{font-family:var(--f-display);font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-size:12px}
+.banner h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.15;text-wrap:balance}
+.banner .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;opacity:.95;margin-top:4px}
+.goal{grid-row:1/3;grid-column:2;align-self:center;width:62px;height:62px;position:relative}
+.goal svg{width:62px;height:62px;transform:rotate(-90deg)}
+.goal span{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:13px;line-height:1;text-align:center}
+
+/* path */
+.path{list-style:none;margin:0;padding:56px 0 50px;display:flex;flex-direction:column;align-items:center;gap:22px;position:relative}
+.row{display:flex;flex-direction:column;align-items:center;gap:6px;transform:translateX(var(--x,0));position:relative}
+.node{width:76px;height:72px;border-radius:50%;border:0;display:grid;place-items:center;position:relative;transition:transform .08s}
+.node svg.ic{width:32px;height:32px;stroke-width:2.6}
+.node:active{transform:translateY(5px)}
+.node.done{background:var(--xp);color:#fff;box-shadow:0 6px 0 var(--xp-deep)}
+.node.open{background:var(--go);color:#fff;box-shadow:0 6px 0 var(--go-deep)}
+.node.locked{background:var(--sunk);color:var(--muted);box-shadow:0 6px 0 var(--line)}
+.node.k-boss{width:86px;height:80px;border-radius:26px;transform:rotate(45deg)}
+.node.k-boss > *{transform:rotate(-45deg)}
+.node.k-boss:active{transform:rotate(45deg) translateY(4px)}
+.node.k-boss.open{background:var(--force);box-shadow:0 6px 0 var(--force-deep)}
+.node .tag{font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.04em}
+.node.open::after{content:"";position:absolute;inset:-9px;border-radius:inherit;border:4px solid var(--go);opacity:.35;animation:pulse 1.6s ease-in-out infinite}
+.node.k-boss.open::after{border-color:var(--force)}
+@keyframes pulse{50%{inset:-14px;opacity:.12}}
+.label{font-family:var(--f-display);font-weight:600;font-size:15px;text-align:center;max-width:200px;line-height:1.2;color:var(--ink)}
+.label b{display:block;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row.locked .label{color:var(--muted)}
+.bubble{position:absolute;top:-44px;background:var(--surface);color:var(--go);border:2px solid var(--line);border-radius:12px;padding:5px 12px;font-family:var(--f-display);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;animation:bob 1.4s ease-in-out infinite;z-index:1}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:var(--surface);border-right:2px solid var(--line);border-bottom:2px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+.row.bossrow .bubble{color:var(--force);top:-50px}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.side-newt{position:absolute;width:96px;opacity:.95;pointer-events:none}
+.hint{font-size:13px;color:var(--muted);text-align:center;max-width:44ch;margin:0 auto}
+
+/* exams view */
+.exams{padding-block:18px 80px;display:flex;flex-direction:column;gap:14px}
+.exams h2{font-family:var(--f-display);font-weight:700;font-size:22px;margin:4px 0 0}
+.exams p{margin:0;color:var(--muted);max-width:62ch}
+.year{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.year header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.year h3{margin:0;font-family:var(--f-display);font-weight:700;font-size:20px}
+.year .links{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-display);font-weight:600;font-size:14px;padding:6px 12px;border-radius:999px;border:2px solid var(--field);color:var(--field);text-decoration:none;background:var(--surface)}
+.pill svg.ic{width:16px;height:16px}
+.pill:hover{background:var(--field-soft)}
+.qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.qlist li{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:baseline}
+.qn{font-family:var(--f-mono);font-weight:700;font-size:13px;background:var(--sunk);border-radius:8px;padding:2px 7px;color:var(--ink)}
+.chip{display:inline-block;font-family:var(--f-mono);font-size:11px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--force-soft);color:var(--force-deep);margin-left:4px;vertical-align:1px}
+:root[data-theme="dark"] .chip{color:var(--force)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip{color:var(--force)}}
+
+/* lesson overlay */
+.lesson{position:fixed;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.l-top{width:100%;display:flex;align-items:center;gap:14px;padding-block:14px}
+.bar{flex:1;height:16px;background:var(--sunk);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--go);border-radius:999px;transition:width .35s cubic-bezier(.3,1.4,.6,1);position:relative}
+.bar i::after{content:"";position:absolute;left:8px;right:8px;top:4px;height:4px;border-radius:4px;background:rgba(255,255,255,.35)}
+.hearts{display:flex;align-items:center;gap:4px;color:var(--force);font-family:var(--f-display);font-weight:700;font-size:18px}
+.hearts svg.ic{fill:var(--force);stroke:var(--force)}
+.hearts.hit{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.l-body{flex:1;overflow-y:auto}
+.l-body .wrap{padding-block:10px 30px;display:flex;flex-direction:column;gap:16px}
+.kicker{font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--field)}
+.kicker.boss{color:var(--force)}
+.qtitle{font-family:var(--f-display);font-weight:600;font-size:23px;line-height:1.25;margin:0;text-wrap:balance}
+.prose{max-width:62ch}
+.prose p{margin:0 0 10px}
+.eq{font-family:var(--f-mono);font-weight:500;background:var(--sunk);border-radius:8px;padding:1px 6px;white-space:nowrap}
+.eqblock{font-family:var(--f-mono);font-weight:700;font-size:18px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 14px;text-align:center;overflow-x:auto}
+.newt-say{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:start}
+.newt-say svg{width:76px;height:76px}
+.say{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px 14px;position:relative;min-width:0}
+.say::before{content:"";position:absolute;left:-9px;top:22px;width:14px;height:14px;background:var(--surface);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.fig{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:10px;overflow-x:auto}
+.fig svg{display:block;width:100%;max-width:420px;height:auto;margin:0 auto}
+.fig text{font-family:var(--f-mono);font-size:13px;font-weight:700}
+.fig .cap{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.06em}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-force{fill:var(--force)} .t-field{fill:var(--field)} .t-go{fill:var(--go)}
+.s-ink{stroke:var(--ink)} .s-muted{stroke:var(--muted)} .s-force{stroke:var(--force)} .s-field{stroke:var(--field)} .s-line{stroke:var(--line)}
+.f-sunk{fill:var(--sunk)} .f-surface{fill:var(--surface)} .f-field{fill:var(--field-soft)} .f-xp{fill:var(--xp-soft)} .f-ink{fill:var(--ink)}
+
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;align-items:center;gap:12px;text-align:left;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px 14px;font-size:16px;line-height:1.35}
+.choice .k{flex:none;width:28px;height:28px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:14px;color:var(--muted)}
+.choice:hover{background:var(--sunk)}
+.choice[aria-pressed="true"]{border-color:var(--field);background:var(--field-soft);color:var(--ink)}
+.choice[aria-pressed="true"] .k{border-color:var(--field);color:var(--field)}
+.choices.locked .choice{pointer-events:none}
+.choice.right{border-color:var(--go);background:var(--go-soft)}
+.choice.wrong{border-color:var(--force);background:var(--force-soft)}
+.tf{flex-direction:row}
+.tf .choice{flex:1;justify-content:center;font-family:var(--f-display);font-weight:600;font-size:18px}
+.tf .choice .k{display:none}
+
+.numrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.numrow input{font-family:var(--f-mono);font-weight:700;font-size:24px;width:180px;max-width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);border-bottom-width:4px;background:var(--surface);color:var(--ink)}
+.numrow input:focus{outline:none;border-color:var(--field)}
+.numrow .unit{font-family:var(--f-mono);font-weight:700;font-size:20px;color:var(--muted)}
+.given{font-size:14px;color:var(--muted)}
+
+.fbd{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:14px;align-items:start}
+@media (max-width:520px){.fbd{grid-template-columns:1fr}}
+.fbd .canvas{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:6px}
+.fbd .canvas svg{display:block;width:100%;max-width:220px;margin:0 auto;height:auto}
+.fbd .canvas text{font-family:var(--f-mono);font-weight:700;font-size:13px}
+.fchips{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.fchip{display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:8px 12px;font-size:15px;text-align:left}
+.fchip svg{width:22px;height:22px;flex:none}
+.fchip[aria-pressed="true"]{border-color:var(--force);background:var(--force-soft)}
+.fchips.locked .fchip{pointer-events:none}
+
+.tiles-ans{min-height:62px;border-bottom:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;align-items:center}
+.tiles-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding-top:6px}
+.tile{font-family:var(--f-mono);font-weight:700;font-size:18px;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:8px 12px;min-width:44px}
+.tile.ghost{visibility:hidden}
+.tiles-wrap.locked .tile{pointer-events:none}
+
+.vids{display:flex;flex-direction:column;gap:10px}
+.vid{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px;text-decoration:none;color:var(--ink)}
+.vid:hover{border-color:var(--force)}
+.vid .play{width:56px;height:42px;border-radius:12px;background:var(--force);color:#fff;display:grid;place-items:center}
+.vid .play svg.ic{fill:#fff;width:20px;height:20px}
+.vid b{font-family:var(--f-display);font-weight:600;font-size:17px;display:block;line-height:1.2}
+.vid span{font-size:13px;color:var(--muted)}
+
+.source{background:var(--force-soft);border:2px solid var(--force);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.source b{font-family:var(--f-display);font-weight:700;color:var(--force-deep)}
+:root[data-theme="dark"] .source b{color:var(--force)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .source b{color:var(--force)}}
+.source .links{display:flex;gap:8px;flex-wrap:wrap}
+.datatable{border-collapse:collapse;font-family:var(--f-mono);font-size:15px;margin:4px 0}
+.datatable th,.datatable td{border:2px solid var(--line);padding:4px 14px;text-align:right;font-variant-numeric:tabular-nums}
+.datatable th{background:var(--sunk);font-weight:700}
+
+.l-foot{border-top:2px solid var(--line);background:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
+.l-foot .wrap{padding-block:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.l-foot.good{background:var(--go-soft);border-color:transparent}
+.l-foot.bad{background:var(--force-soft);border-color:transparent}
+.fb{display:flex;gap:12px;align-items:flex-start;min-width:0;flex:1 1 300px}
+.fb .badge{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--surface)}
+.good .fb .badge{color:var(--go)} .bad .fb .badge{color:var(--force)}
+.fb .badge svg.ic{width:26px;height:26px;stroke-width:3}
+.fb h4{margin:0;font-family:var(--f-display);font-weight:700;font-size:21px}
+.good .fb h4{color:var(--go-deep)} .bad .fb h4{color:var(--force-deep)}
+:root[data-theme="dark"] .good .fb h4{color:var(--go)} :root[data-theme="dark"] .bad .fb h4{color:var(--force)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .good .fb h4{color:var(--go)} :root:not([data-theme="light"]) .bad .fb h4{color:var(--force)}}
+.fb p{margin:2px 0 0;font-size:15px;max-width:60ch}
+.fb .ans{font-weight:700}
+
+.btn{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase;border:0;border-radius:16px;padding:13px 26px;min-width:150px;color:#fff;background:var(--go);box-shadow:0 4px 0 var(--go-deep);transition:transform .06s,box-shadow .06s;margin-left:auto}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--go-deep)}
+.btn:disabled{background:var(--sunk);color:var(--muted);box-shadow:0 4px 0 var(--line);cursor:default;transform:none}
+.btn.red{background:var(--force);box-shadow:0 4px 0 var(--force-deep)}
+.btn.ghost{background:var(--surface);color:var(--muted);box-shadow:0 4px 0 var(--line);border:2px solid var(--line);margin-left:0}
+.end{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding-top:20px}
+.end svg.big{width:150px;height:150px}
+.end h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:30px;color:var(--xp-deep)}
+:root[data-theme="dark"] .end h2{color:var(--xp)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .end h2{color:var(--xp)}}
+.end h2.fail{color:var(--force)}
+.tiles3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:420px}
+.st{border-radius:14px;border:2px solid var(--c);overflow:hidden;background:var(--c)}
+.st small{display:block;color:#fff;font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:3px}
+.st b{display:flex;align-items:center;justify-content:center;gap:4px;background:var(--surface);color:var(--c);font-family:var(--f-display);font-size:22px;padding:8px 4px;font-variant-numeric:tabular-nums}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:30}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ah-force" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--force)"/></marker>
+    <marker id="ah-field" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--field)"/></marker>
+    <marker id="ah-ink" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker>
+  </defs>
+</svg>
+
+<div id="app"></div>
+
+<script>
+/* ---------- icons (line style) ---------- */
+const I = {
+  flame:'<svg class="ic" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 1.5.8 2.5 2 3 0-3 0-5.5 1-8.5z"/></svg>',
+  bolt:'<svg class="ic" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+  heart:'<svg class="ic" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  lock:'<svg class="ic" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  check:'<svg class="ic" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  x:'<svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  play:'<svg class="ic" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+  star:'<svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>',
+  arrow:'<svg class="ic" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></svg>',
+  map:'<svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"/></svg>',
+  file:'<svg class="ic" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  ext:'<svg class="ic" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+  sound:'<svg class="ic" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
+  mute:'<svg class="ic" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="m17 9 5 6M22 9l-5 6"/></svg>',
+  clock:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  target:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
+  crown:'<svg class="ic" viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>',
+};
+
+/* ---------- Newt, the block mascot ---------- */
+function newt(mood='happy', cls=''){
+  const eyes = mood==='sad'
+    ? '<path d="M38 52q5-4 10 0M62 52q5-4 10 0" class="s-ink" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    : mood==='wow'
+    ? '<circle cx="43" cy="52" r="6" class="f-ink"/><circle cx="67" cy="52" r="6" class="f-ink"/><circle cx="45" cy="50" r="2" fill="#fff"/><circle cx="69" cy="50" r="2" fill="#fff"/>'
+    : '<path d="M37 54q6-7 12 0M61 54q6-7 12 0" class="s-ink" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  const mouth = mood==='sad' ? '<path d="M47 72q8-6 16 0" class="s-ink" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    : mood==='wow' ? '<ellipse cx="55" cy="71" rx="6" ry="7" class="f-ink"/>'
+    : '<path d="M44 66q11 11 22 0" class="s-ink" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  return `<svg class="${cls}" viewBox="0 0 110 110" aria-hidden="true">
+    <line x1="55" y1="22" x2="55" y2="3" class="s-force" stroke-width="5" marker-end="url(#ah-force)"/>
+    <rect x="18" y="24" width="74" height="70" rx="18" style="fill:var(--xp)"/>
+    <rect x="18" y="80" width="74" height="14" rx="7" style="fill:var(--xp-deep);opacity:.55"/>
+    <circle cx="32" cy="64" r="5" style="fill:var(--force);opacity:.35"/><circle cx="78" cy="64" r="5" style="fill:var(--force);opacity:.35"/>
+    ${eyes}${mouth}
+    <line x1="10" y1="100" x2="100" y2="100" class="s-muted" stroke-width="3" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ---------- small figure helpers ---------- */
+const arr = (x1,y1,x2,y2,c='force',w=3.5)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="s-${c}" stroke-width="${w}" stroke-linecap="round" marker-end="url(#ah-${c})"/>`;
+const sub = (s)=>{ const [a,b]=s.split('_'); return b?`${a}<tspan font-size="10" dy="3">${b}</tspan>`:a; };
+
+const FIG = {
+  cm:`<svg viewBox="0 0 320 150">
+    <line x1="30" y1="90" x2="290" y2="90" class="s-muted" stroke-width="2"/>
+    <circle cx="50" cy="76" r="14" class="f-field s-field" stroke-width="2.5"/>
+    <circle cx="250" cy="66" r="24" class="f-field s-field" stroke-width="2.5"/>
+    <text x="50" y="81" text-anchor="middle" class="t-field">2</text><text x="250" y="71" text-anchor="middle" class="t-field">6</text>
+    <path d="M200 92 l-9 15 h18z" style="fill:var(--force)"/>
+    <text x="50" y="120" text-anchor="middle" class="t-muted">x = 0</text><text x="250" y="120" text-anchor="middle" class="t-muted">x = 4 m</text>
+    <text x="200" y="138" text-anchor="middle" class="t-force">x_cm = 3 m</text>
+    <text x="30" y="24" class="cap t-muted">MASSES IN kg</text></svg>`,
+  book:`<svg viewBox="0 0 330 180">
+    <text x="20" y="22" class="cap t-muted">SCENE</text><text x="215" y="22" class="cap t-muted">FREE-BODY DIAGRAM</text>
+    <rect x="30" y="118" width="150" height="10" rx="3" class="f-sunk s-muted" stroke-width="2"/>
+    <line x1="45" y1="128" x2="45" y2="168" class="s-muted" stroke-width="3"/><line x1="165" y1="128" x2="165" y2="168" class="s-muted" stroke-width="3"/>
+    <rect x="70" y="92" width="72" height="26" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <line x1="215" y1="34" x2="215" y2="168" class="s-line" stroke-width="2" stroke-dasharray="4 5"/>
+    <circle cx="265" cy="98" r="7" class="f-ink"/>
+    ${arr(265,90,265,38)}${arr(265,106,265,158)}
+    <text x="276" y="50" class="t-force">${sub('F_N')}</text><text x="276" y="154" class="t-force">${sub('F_g')}</text></svg>`,
+  incline:`<svg viewBox="0 0 320 185">
+    <path d="M20 40 L300 150 L20 150 Z" class="f-sunk s-muted" stroke-width="2"/>
+    <g transform="translate(160 95) rotate(21.4)"><rect x="-26" y="-30" width="52" height="30" rx="4" class="f-field s-field" stroke-width="2.5"/></g>
+    <circle cx="165" cy="81" r="5" class="f-ink"/>
+    ${arr(165,81,184,32)}${arr(165,81,165,150)}${arr(165,81,112,60)}
+    <text x="192" y="36" class="t-force">${sub('F_N')}</text><text x="172" y="146" class="t-force">${sub('F_g')}</text><text x="76" y="56" class="t-force">${sub('F_f')}</text>
+    <path d="M262 150 A 40 40 0 0 0 266 137" class="s-muted" stroke-width="2" fill="none"/><text x="236" y="144" class="t-muted">θ</text>
+    <text x="300" y="176" text-anchor="end" class="cap t-muted">BLOCK SLIDING DOWN A ROUGH RAMP</text></svg>`,
+  spring:`<svg viewBox="0 0 320 150">
+    <rect x="16" y="40" width="14" height="90" class="f-sunk s-muted" stroke-width="2"/>
+    <polyline points="30,100 45,100 55,84 70,116 85,84 100,116 115,84 130,116 145,84 155,100 170,100" class="s-ink" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    <rect x="170" y="78" width="54" height="44" rx="5" class="f-field s-field" stroke-width="2.5"/>
+    <line x1="140" y1="40" x2="140" y2="134" class="s-muted" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="104" y="34" class="t-muted">natural length</text>
+    ${arr(197,62,150,62)}<text x="176" y="52" class="t-force">${sub('F_s')}</text>
+    <line x1="140" y1="140" x2="170" y2="140" class="s-field" stroke-width="2"/><text x="146" y="134" class="t-field">Δx</text>
+    <text x="236" y="104" class="t-muted">stretched</text></svg>`,
+  circle:`<svg viewBox="0 0 320 180">
+    <circle cx="120" cy="100" r="62" class="s-muted" stroke-width="2" fill="none" stroke-dasharray="5 6"/>
+    <circle cx="120" cy="100" r="3" class="f-ink"/>
+    <circle cx="120" cy="38" r="9" class="f-field s-field" stroke-width="2.5"/>
+    ${arr(130,38,196,38,'field')}${arr(120,48,120,86)}
+    <text x="200" y="43" class="t-field">v</text><text x="128" y="74" class="t-force">ΣF</text>
+    <text x="214" y="110" class="t-ink">a = v²/r</text><text x="214" y="130" class="t-muted">toward center</text></svg>`,
+  loop:`<svg viewBox="0 0 320 170">
+    <circle cx="160" cy="90" r="62" class="s-muted" stroke-width="3" fill="none"/>
+    <rect x="148" y="28" width="24" height="18" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    ${arr(160,46,160,96)}${arr(170,46,170,96)}
+    <text x="122" y="80" class="t-force">${sub('F_g')}</text><text x="176" y="80" class="t-force">${sub('F_N')}</text>
+    <text x="20" y="22" class="cap t-muted">TOP OF A LOOP: BOTH POINT TO CENTER</text></svg>`,
+  pulleyTable:`<svg viewBox="0 0 320 190">
+    <rect x="20" y="70" width="232" height="10" rx="2" class="f-sunk s-muted" stroke-width="2"/>
+    <line x1="240" y1="80" x2="240" y2="182" class="s-muted" stroke-width="3"/>
+    <rect x="60" y="36" width="80" height="34" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <text x="100" y="58" text-anchor="middle" class="t-field">10 kg</text>
+    <line x1="140" y1="53" x2="252" y2="53" class="s-ink" stroke-width="2"/>
+    <circle cx="252" cy="66" r="13" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="265" y1="66" x2="265" y2="118" class="s-ink" stroke-width="2"/>
+    <rect x="237" y="118" width="56" height="34" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <text x="265" y="140" text-anchor="middle" class="t-field">2.0 kg</text>
+    ${arr(70,22,130,22,'field',2.5)}${arr(306,120,306,170,'field',2.5)}<text x="138" y="26" class="t-field">a</text>
+    <text x="20" y="182" class="cap t-muted">FRICTIONLESS TABLE</text></svg>`,
+  atwood:`<svg viewBox="0 0 320 225">
+    <line x1="120" y1="4" x2="200" y2="4" class="s-muted" stroke-width="3"/><line x1="160" y1="4" x2="160" y2="12" class="s-muted" stroke-width="2"/>
+    <circle cx="160" cy="38" r="26" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="134" y1="38" x2="134" y2="120" class="s-ink" stroke-width="2"/><line x1="186" y1="38" x2="186" y2="92" class="s-ink" stroke-width="2"/>
+    <rect x="116" y="120" width="36" height="50" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <rect x="168" y="92" width="36" height="40" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <text x="108" y="142" text-anchor="end" class="t-ink">A</text><text x="108" y="160" text-anchor="end" class="t-muted">3.2 kg</text>
+    <text x="212" y="108" class="t-ink">B</text><text x="212" y="126" class="t-muted">2.4 kg</text>
+    <line x1="60" y1="212" x2="280" y2="212" class="s-muted" stroke-width="3"/>
+    ${arr(134,190,134,174,'ink',2)}${arr(134,192,134,208,'ink',2)}<text x="128" y="196" text-anchor="end" class="t-muted">0.5 m</text></svg>`,
+  elevGraph:`<svg viewBox="0 0 340 215">
+    ${[0,2,4,6,8,10,12,14,16,18,20].map(t=>`<line x1="${40+14*t}" y1="25" x2="${40+14*t}" y2="185" class="s-line" stroke-width="1"/>`).join('')}
+    ${[-2,-1,1,2].map(a=>`<line x1="40" y1="${105-40*a}" x2="320" y2="${105-40*a}" class="s-line" stroke-width="1"/><text x="34" y="${109-40*a}" text-anchor="end" class="t-muted">${a.toFixed(1)}</text>`).join('')}
+    <line x1="40" y1="105" x2="320" y2="105" class="s-muted" stroke-width="2"/><line x1="40" y1="20" x2="40" y2="190" class="s-muted" stroke-width="2"/>
+    <text x="34" y="109" text-anchor="end" class="t-muted">0</text>
+    ${[0,4,8,12,16,20].map(t=>`<text x="${40+14*t}" y="204" text-anchor="middle" class="t-muted">${t}</text>`).join('')}
+    <polyline points="${[[0,0],[2,-1.6],[4,-1.6],[7,0],[10,0],[12,1.2],[16,1.2],[17,0],[20,0]].map(([t,a])=>`${40+14*t},${105-40*a}`).join(' ')}" fill="none" class="s-force" stroke-width="3.5" stroke-linejoin="round"/>
+    <text x="44" y="16" class="t-ink">a (m/s²)</text><text x="320" y="16" text-anchor="end" class="t-ink">t (s) along bottom</text></svg>`,
+  blocks3:`<svg viewBox="0 0 320 120">
+    <line x1="10" y1="95" x2="310" y2="95" class="s-muted" stroke-width="3"/>
+    <rect x="96" y="65" width="40" height="30" rx="3" class="f-field s-field" stroke-width="2.5"/>
+    <rect x="136" y="55" width="50" height="40" rx="3" class="f-field s-field" stroke-width="2.5"/>
+    <rect x="186" y="45" width="62" height="50" rx="3" class="f-field s-field" stroke-width="2.5"/>
+    <text x="116" y="85" text-anchor="middle" class="t-field">${sub('M_1')}</text><text x="161" y="80" text-anchor="middle" class="t-field">${sub('M_2')}</text><text x="217" y="75" text-anchor="middle" class="t-field">${sub('M_3')}</text>
+    <text x="116" y="112" text-anchor="middle" class="t-muted">2 kg</text><text x="161" y="112" text-anchor="middle" class="t-muted">3 kg</text><text x="217" y="112" text-anchor="middle" class="t-muted">5 kg</text>
+    ${arr(30,80,90,80)}<text x="40" y="70" class="t-force">20 N</text></svg>`,
+  train:`<svg viewBox="0 0 340 100">
+    <line x1="10" y1="80" x2="330" y2="80" class="s-muted" stroke-width="3"/>
+    <rect x="16" y="50" width="52" height="30" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="42" y="70" text-anchor="middle" class="t-field">5 kg</text>
+    <line x1="68" y1="65" x2="104" y2="65" class="s-ink" stroke-width="2"/>
+    <rect x="104" y="44" width="64" height="36" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="136" y="67" text-anchor="middle" class="t-field">10 kg</text>
+    <line x1="168" y1="62" x2="204" y2="62" class="s-ink" stroke-width="2"/>
+    <rect x="204" y="36" width="72" height="44" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="240" y="63" text-anchor="middle" class="t-field">20 kg</text>
+    <line x1="276" y1="58" x2="292" y2="58" class="s-ink" stroke-width="2"/>${arr(292,58,328,58)}<text x="300" y="46" class="t-force">20 N</text></svg>`,
+  stack:`<svg viewBox="0 0 320 130">
+    <line x1="20" y1="110" x2="300" y2="110" class="s-muted" stroke-width="3"/>
+    <rect x="100" y="66" width="120" height="44" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="160" y="93" text-anchor="middle" class="t-field">5 kg</text>
+    <rect x="132" y="36" width="56" height="30" rx="3" class="f-xp s-field" stroke-width="2.5"/><text x="160" y="56" text-anchor="middle" class="t-field">2 kg</text>
+    ${arr(224,88,290,88)}<text x="236" y="80" class="t-force">20 N</text>
+    <text x="20" y="126" class="cap t-muted">TABLE FRICTION ON BOTTOM BLOCK: 15 N</text></svg>`,
+  incline18:`<svg viewBox="0 0 320 160">
+    <path d="M20 50 L300 140 L20 140 Z" class="f-sunk s-muted" stroke-width="2"/>
+    <g transform="translate(150 91.8) rotate(17.8)"><rect x="-26" y="-28" width="52" height="28" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="0" y="-9" text-anchor="middle" class="t-field">50 kg</text></g>
+    ${arr(196,86,246,102,'field',2.5)}<text x="236" y="86" class="t-field">v</text>
+    <path d="M250 140 A 50 50 0 0 0 253 125" class="s-muted" stroke-width="2" fill="none"/><text x="222" y="135" class="t-muted">18°</text>
+    <text x="20" y="156" class="cap t-muted">CONSTANT VELOCITY, 0.50 m/s DOWN THE SLOPE</text></svg>`,
+  fanBlock:`<svg viewBox="0 0 320 150">
+    <line x1="10" y1="122" x2="310" y2="122" class="s-muted" stroke-width="3"/>
+    <rect x="100" y="92" width="100" height="30" rx="4" class="f-field s-field" stroke-width="2.5"/>
+    <line x1="150" y1="92" x2="150" y2="70" class="s-ink" stroke-width="3"/>
+    <g transform="translate(150 66) rotate(-30)"><rect x="-26" y="-9" width="34" height="18" rx="4" class="f-xp s-ink" stroke-width="2"/><ellipse cx="-28" cy="0" rx="4" ry="16" class="f-surface s-ink" stroke-width="2"/></g>
+    ${arr(160,60,214,29)}<text x="220" y="30" class="t-force">F</text>
+    <line x1="160" y1="60" x2="220" y2="60" class="s-muted" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <path d="M196 60 A 36 36 0 0 0 191 43" class="s-muted" stroke-width="2" fill="none"/><text x="200" y="54" class="t-muted">θ</text>
+    <text x="20" y="142" class="cap t-muted">FAN-BLOCK ON A TRACK (WITH FRICTION)</text></svg>`,
+  fourH:`<svg viewBox="0 0 330 205">
+    <line x1="10" y1="192" x2="320" y2="192" class="s-muted" stroke-width="3"/>
+    <rect x="40" y="50" width="174" height="8" rx="2" class="f-sunk s-muted" stroke-width="2"/>
+    <line x1="52" y1="58" x2="52" y2="192" class="s-muted" stroke-width="3"/><line x1="202" y1="58" x2="202" y2="192" class="s-muted" stroke-width="3"/>
+    <rect x="70" y="26" width="34" height="24" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="87" y="43" text-anchor="middle" class="t-field">A</text>
+    <polyline points="104,38 214,38 222,46 222,96" class="s-ink" stroke-width="2" fill="none"/>
+    <rect x="208" y="96" width="28" height="26" rx="3" class="f-field s-field" stroke-width="2.5"/><text x="222" y="114" text-anchor="middle" class="t-field">B</text>
+    ${arr(26,120,26,54,'ink',2)}${arr(26,124,26,188,'ink',2)}<text x="30" y="126" class="t-muted">2h</text>
+    ${arr(262,155,262,126,'ink',2)}${arr(262,159,262,188,'ink',2)}<text x="270" y="162" class="t-muted">h</text>
+    <text x="104" y="20" class="cap t-muted">STRING LENGTH 4h · SMOOTH TABLE</text></svg>`,
+  pulleyGen:`<svg viewBox="0 0 320 200">
+    <rect x="20" y="70" width="232" height="10" rx="2" class="f-sunk s-muted" stroke-width="2"/>
+    <line x1="40" y1="80" x2="40" y2="190" class="s-muted" stroke-width="3"/><line x1="240" y1="80" x2="240" y2="190" class="s-muted" stroke-width="3"/>
+    <line x1="10" y1="190" x2="310" y2="190" class="s-muted" stroke-width="3"/>
+    <rect x="70" y="36" width="70" height="34" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="105" y="58" text-anchor="middle" class="t-field">${sub('m_1')}</text>
+    <line x1="140" y1="53" x2="252" y2="53" class="s-ink" stroke-width="2"/>
+    <circle cx="252" cy="66" r="13" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="265" y1="66" x2="265" y2="110" class="s-ink" stroke-width="2"/>
+    <rect x="249" y="110" width="32" height="30" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="265" y="130" text-anchor="middle" class="t-field">${sub('m_2')}</text>
+    ${arr(298,160,298,144,'ink',2)}${arr(298,164,298,186,'ink',2)}<text x="290" y="168" text-anchor="end" class="t-muted">h</text>
+    <text x="50" y="96" class="cap t-muted">WOODEN TABLE (FRICTION)</text></svg>`,
+  atwoodEq:`<svg viewBox="0 0 320 210">
+    <line x1="120" y1="4" x2="200" y2="4" class="s-muted" stroke-width="3"/><line x1="160" y1="4" x2="160" y2="12" class="s-muted" stroke-width="2"/>
+    <circle cx="160" cy="38" r="26" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="134" y1="38" x2="134" y2="100" class="s-ink" stroke-width="2"/><line x1="186" y1="38" x2="186" y2="96" class="s-ink" stroke-width="2"/>
+    <rect x="120" y="100" width="28" height="30" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="134" y="120" text-anchor="middle" class="t-field">${sub('m_1')}</text>
+    <rect x="168" y="96" width="36" height="38" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="186" y="120" text-anchor="middle" class="t-field">${sub('m_2')}</text>
+    <line x1="60" y1="200" x2="280" y2="200" class="s-muted" stroke-width="3"/>
+    
+    ${arr(240,150,240,119,'ink',2)}${arr(240,154,240,196,'ink',2)}<text x="248" y="160" class="t-muted">h</text></svg>`,
+  rope:`<svg viewBox="0 0 320 205">
+    <line x1="110" y1="4" x2="210" y2="4" class="s-muted" stroke-width="3"/><line x1="160" y1="4" x2="160" y2="12" class="s-muted" stroke-width="2"/>
+    <circle cx="160" cy="36" r="24" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="136" y1="36" x2="136" y2="128" class="s-ink" stroke-width="2"/><line x1="184" y1="36" x2="184" y2="74" class="s-ink" stroke-width="2"/>
+    <g class="s-field" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="136" cy="146" r="9" class="f-field"/><line x1="136" y1="155" x2="136" y2="178"/><line x1="136" y1="178" x2="126" y2="196"/><line x1="136" y1="178" x2="146" y2="196"/><line x1="136" y1="160" x2="136" y2="132"/></g>
+    <g class="s-force" stroke-width="3" fill="none" stroke-linecap="round" transform="translate(0 -30)"><circle cx="184" cy="122" r="9" style="fill:var(--force-soft)"/><line x1="184" y1="131" x2="184" y2="152"/><line x1="184" y1="152" x2="177" y2="170"/><line x1="184" y1="152" x2="191" y2="170"/><line x1="184" y1="136" x2="184" y2="108"/></g>
+    <line x1="60" y1="196" x2="280" y2="196" class="s-muted" stroke-width="3"/>
+    <text x="112" y="150" text-anchor="end" class="t-field">A</text><text x="204" y="96" class="t-force">B</text>
+    ${arr(214,102,214,74,'force',2.5)}<text x="220" y="82" class="t-force">a</text></svg>`,
+  stackHang:`<svg viewBox="0 0 320 190">
+    <rect x="20" y="90" width="232" height="10" rx="2" class="f-sunk s-muted" stroke-width="2"/>
+    <line x1="40" y1="100" x2="40" y2="184" class="s-muted" stroke-width="3"/><line x1="240" y1="100" x2="240" y2="184" class="s-muted" stroke-width="3"/>
+    <rect x="70" y="56" width="110" height="34" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="125" y="78" text-anchor="middle" class="t-field">A</text>
+    <rect x="100" y="30" width="50" height="26" rx="4" class="f-xp s-field" stroke-width="2.5"/><text x="125" y="48" text-anchor="middle" class="t-field">B</text>
+    <line x1="180" y1="73" x2="252" y2="73" class="s-ink" stroke-width="2"/>
+    <circle cx="252" cy="86" r="13" class="f-surface s-ink" stroke-width="2.5"/>
+    <line x1="265" y1="86" x2="265" y2="128" class="s-ink" stroke-width="2"/>
+    <rect x="250" y="128" width="30" height="30" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="265" y="148" text-anchor="middle" class="t-field">C</text></svg>`,
+};
+
+FIG.pushPull=`<svg viewBox="0 0 320 135">
+    <line x1="10" y1="112" x2="310" y2="112" class="s-muted" stroke-width="3"/>
+    <rect x="50" y="62" width="60" height="50" rx="3" class="f-field s-field" stroke-width="2.5"/>
+    ${arr(14,30,52,60)}<text x="14" y="22" class="t-force">${sub('F_0')}</text>
+    <line x1="52" y1="60" x2="10" y2="60" class="s-muted" stroke-width="1.5" stroke-dasharray="4 4"/><text x="22" y="56" class="t-muted">θ</text>
+    <rect x="200" y="62" width="60" height="50" rx="3" class="f-field s-field" stroke-width="2.5"/>
+    ${arr(258,66,304,30)}<text x="290" y="22" class="t-force">${sub('F_0')}</text>
+    <line x1="258" y1="66" x2="310" y2="66" class="s-muted" stroke-width="1.5" stroke-dasharray="4 4"/><text x="290" y="60" class="t-muted">θ</text>
+    <text x="80" y="130" text-anchor="middle" class="cap t-muted">BOX 1: PUSH</text><text x="230" y="130" text-anchor="middle" class="cap t-muted">BOX 2: PULL</text></svg>`;
+FIG.rampUp=`<svg viewBox="0 0 320 155">
+    <path d="M20 140 L300 140 L300 50 Z" class="f-sunk s-muted" stroke-width="2"/>
+    <g transform="translate(200 82.1) rotate(-17.8)"><rect x="-24" y="-26" width="48" height="26" rx="4" class="f-field s-field" stroke-width="2.5"/><text x="0" y="-8" text-anchor="middle" class="t-field">m</text></g>
+    ${arr(70,108,130,88.7,'ink',2.5)}<text x="134" y="88" class="t-muted">+x</text>
+    ${arr(70,108,63.8,88.9,'ink',2.5)}<text x="48" y="86" class="t-muted">+y</text>
+    <path d="M60 140 A 40 40 0 0 0 58 128" class="s-muted" stroke-width="2" fill="none"/><text x="66" y="134" class="t-muted">θ</text></svg>`;
+
+/* tiny graphs used as answer choices for "sketch a graph" parts */
+function mini(curves, xl='t', yl='y'){
+  const P=(x,y)=>`${(14+98*x).toFixed(1)},${(64-54*y).toFixed(1)}`;
+  return `<svg class="mini" viewBox="0 0 120 78" aria-hidden="true">
+    <line x1="14" y1="6" x2="14" y2="66" class="s-muted" stroke-width="1.5"/><line x1="14" y1="66" x2="116" y2="66" class="s-muted" stroke-width="1.5"/>
+    <text x="4" y="12" class="t-muted" style="font-size:9px">${yl}</text><text x="114" y="76" text-anchor="end" class="t-muted" style="font-size:9px">${xl}</text>
+    ${curves.map(c=>{const pts=Array.from({length:21},(_,i)=>{const x=i/20;return [x,c.f(x)];}).filter(([,y])=>y>=0&&y<=1.05);
+      const [lx,ly]=pts[pts.length-1];
+      return `<polyline points="${pts.map(([x,y])=>P(x,y)).join(' ')}" fill="none" class="s-${c.c}" stroke-width="2.5"/>${c.l?`<text x="${Math.min(14+98*lx+3,104).toFixed(1)}" y="${(64-54*ly+(ly>0.5?8:0)).toFixed(1)}" class="t-${c.c}" style="font-size:9px">${c.l}</text>`:''}`;}).join('')}
+  </svg>`;
+}
+
+/* ---------- video links (open YouTube / Khan search for each topic) ---------- */
+const yt = (q)=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+const ka = (q)=>'https://www.khanacademy.org/search?page_search_query='+encodeURIComponent(q);
+const vids = (topic)=>[
+  {href:yt('Flipping Physics '+topic+' AP Physics 1'), t:'Flipping Physics: '+topic, s:'YouTube · classroom-style walkthroughs'},
+  {href:yt('AP Physics 1 '+topic+' review'), t:'Quick review: '+topic, s:'YouTube · short AP review videos'},
+  {href:ka(topic), t:'Khan Academy: '+topic, s:'Lesson videos plus practice'},
+];
+
+/* ---------- College Board sources ---------- */
+const CB = 'https://apcentral.collegeboard.org';
+const SRC = {
+  y24:{frq:CB+'/media/pdf/ap24-frq-physics-1.pdf', sg:CB+'/media/pdf/ap24-sg-physics-1.pdf'},
+  y25:{frq:CB+'/media/pdf/ap25-frq-physics-1.pdf', sg:CB+'/media/pdf/ap25-sg-physics-1.pdf'},
+  y26:{frq:CB+'/media/pdf/ap26-frq-physics-1.pdf', sg:CB+'/media/pdf/ap26-sg-physics-1.pdf'},
+  y23:{frq:CB+'/media/pdf/ap23-frq-physics-1.pdf', sg:CB+'/media/pdf/ap23-sg-physics-1.pdf'},
+  page:CB+'/courses/ap-physics-1/exam/past-exam-questions',
+};
+
+/* ---------- force palette for free-body questions (angle: 0 = right, 90 = up) ---------- */
+const F = (id,label,sym,dir,ok)=>({id,label,sym,dir,ok});
+
+/* ---------- course content ---------- */
+const MAIN = [
+{id:'2.1', kind:'lesson', title:'Systems & Center of Mass', topic:'center of mass',
+ learn:[
+  {h:'You pick the system', body:`<p>A <b>system</b> is whatever objects you decide to analyze. Forces from things outside it are <b>external</b>. Forces between parts inside it are <b>internal</b>, and they come in equal-and-opposite pairs that cancel.</p><p>So only external forces can change how the system as a whole moves.</p>`},
+  {h:'Center of mass', body:`<p>A system's motion is the motion of its <b>center of mass</b>. For objects on a line:</p><div class="eqblock">x<sub>cm</sub> = (m₁x₁ + m₂x₂ + …) / (m₁ + m₂ + …)</div><p>Uniform, symmetric objects have their center of mass at the geometric center.</p>`, fig:'cm'},
+ ],
+ qs:[
+  {t:'mc', q:'A hand pushes block A, which pushes block B across a frictionless floor. You choose A + B as the system. Which force is internal?', c:['The force of A on B','The hand on A','Earth\'s gravity on B','The floor\'s normal force on A'], a:0, why:'A and B are both inside the system, so the A-on-B force (and its B-on-A partner) is internal. The hand, Earth, and floor are outside.'},
+  {t:'num', q:'A 2 kg mass sits at x = 0 and a 6 kg mass at x = 4 m. Where is the center of mass?', a:3, unit:'m', why:'(2·0 + 6·4) / (2 + 6) = 24 / 8 = 3 m. It sits closer to the heavier mass.'},
+  {t:'tf', q:'Internal forces can change the velocity of a system\'s center of mass.', a:false, why:'Internal forces come in Newton\'s third law pairs that cancel when you add them up for the whole system. Only a net external force changes the center of mass velocity.'},
+  {t:'mc', q:'An astronaut floating at rest in space throws a wrench. What does the center of mass of the astronaut + wrench system do?', c:['Stays at rest','Moves with the wrench','Moves with the astronaut','Speeds up, then stops'], a:0, why:'The throw is an internal force. No external force acts, so the center of mass keeps its original velocity: zero.'},
+  {t:'num', q:'A uniform 0.2 kg meterstick has a 0.3 kg mass hung at the 100 cm mark. Where is the center of mass of the stick + mass system?', a:80, unit:'cm', why:'The stick acts like 0.2 kg at 50 cm. (0.2·50 + 0.3·100) / 0.5 = 40 / 0.5 = 80 cm.'},
+  {t:'mc', q:'When can you model a system as a single object (a dot)?', c:['When its internal structure doesn\'t matter for the question','Only when it is smaller than 1 m','Only when no forces act on it','Only when it is at rest'], a:0, why:'The AP course says you can treat a system as an object when changes inside it don\'t matter for what you are asking.'},
+ ]},
+
+{id:'2.2', kind:'lesson', title:'Forces & Free-Body Diagrams', topic:'free body diagrams',
+ learn:[
+  {h:'Every force has a source', body:`<p>A force is a push or pull <b>between two objects</b>, measured in newtons (N). If you can\'t name what is doing the pushing, it isn\'t a force.</p><p><b>Contact forces:</b> normal, tension, friction, spring. <b>Field force:</b> gravity, which acts without touching.</p>`},
+  {h:'How AP wants your FBD', body:`<p>Draw the object as a dot. Draw each force as an arrow that <b>starts on the dot and points away</b>, with a label like F<sub>g</sub> or F<sub>N</sub>.</p><p>Never draw components, velocity, or an "ma" arrow. Those cost points on the exam.</p>`, fig:'book'},
+ ],
+ qs:[
+  {t:'fbd', q:'A book rests on a level table. Pick every force acting on the book.', f:[F('g','Gravity from Earth','F_g',-90,1),F('n','Normal force from table','F_N',90,1),F('fr','Friction','F_f',180,0),F('m','Force of motion','F_m',0,0)], why:'Only Earth (gravity, down) and the table (normal, up) touch or pull on the book. It isn\'t sliding, so there\'s no friction.'},
+  {t:'fbd', q:'A ball has been thrown straight up and is still rising. Ignore air. Pick every force on the ball.', f:[F('g','Gravity from Earth','F_g',-90,1),F('th','Force of the throw','F_throw',90,0),F('n','Normal force','F_N',90,0),F('a','Air resistance','F_air',-90,0)], why:'Once it leaves your hand, the hand exerts nothing. Only gravity acts. The ball keeps rising because it already has upward velocity, not because of an upward force.'},
+  {t:'mc', q:'Which arrow should never appear on an AP free-body diagram?', c:['An "ma" arrow','A tension arrow','A friction arrow','A normal force arrow'], a:0, why:'ma is the result of the net force, not a force itself. Putting it on the diagram double-counts.'},
+  {t:'fbd', q:'A rope pulls a box to the right across a rough floor at constant velocity. Pick every force on the box.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from floor','F_N',90,1),F('t','Tension from rope','F_T',0,1),F('fr','Kinetic friction','F_f',180,1),F('m','Force of motion','F_m',0,0)], why:'Four real forces: gravity, normal, tension forward, friction backward. Constant velocity means tension and friction balance.'},
+  {t:'mc', q:'Which way does a normal force point?', c:['Perpendicular to the surface, pushing away from it','Always straight up','Opposite to gravity','In the direction of motion'], a:0, why:'"Normal" means perpendicular. On a ramp it tilts with the surface, so it isn\'t always straight up.'},
+  {t:'fbd', q:'A lamp hangs at rest from a single cord. Pick every force on the lamp.', f:[F('g','Gravity','F_g',-90,1),F('t','Tension from cord','F_T',90,1),F('n','Normal from ceiling','F_N',-90,0)], why:'The cord pulls up, Earth pulls down. The ceiling only touches the cord, not the lamp.'},
+  {t:'tf', q:'The normal force on an object always equals mg.', a:false, why:'It equals whatever the surface needs to push. On a ramp it\'s mg·cosθ; in an accelerating elevator it\'s m(g + a); if you press down on a book, it\'s more than mg.'},
+ ]},
+
+{id:'boss-fbd', kind:'boss', title:'FRQ: The hinged beam', year:'2024', qnum:'Q3 (a)', src:SRC.y24,
+ intro:`<p>A uniform beam of mass M is attached to a wall by a <b>hinge</b> at its left end. A string runs from the beam\'s right end up to the wall above the hinge, making an angle θ with the beam. The beam stays horizontal.</p><p>Part (a) asks you to draw and label the forces on the beam. Let\'s do it.</p>`,
+ steps:[
+  {t:'fbd', q:'Pick every force exerted on the beam.', f:[F('g','Gravity (at the center)','F_g',-90,1),F('t','Tension along the string','F_T',150,1),F('h','Hinge force from the wall','F_H',30,1),F('n','Normal force from the floor','F_N',90,0),F('tq','Torque','τ',0,0)], why:'Three forces: gravity, string tension (pulling up and toward the wall), and the hinge. Torque isn\'t a force, and nothing is underneath the beam.'},
+  {t:'mc', q:'The string pulls the beam toward the wall. What keeps the beam from moving toward the wall?', c:['The hinge pushes the beam away from the wall','Gravity pulls it away from the wall','Friction from the air','Nothing, it\'s not in equilibrium'], a:0, why:'The beam is at rest, so horizontal forces balance. Only the hinge can push horizontally away from the wall.'},
+  {t:'mc', q:'The string supports part of the beam\'s weight. In which direction must the hinge force point?', c:['Up and away from the wall','Straight down','Down and toward the wall','Straight toward the wall'], a:0, why:'It must push away from the wall (to balance tension) and up (the string holds only part of the weight). So it points up and away from the wall.'},
+ ],
+ model:`<p>On the dot: <b>F<sub>g</sub></b> straight down, <b>F<sub>T</sub></b> along the string toward the upper wall attachment, and <b>F<sub>H</sub></b> from the hinge, up and away from the wall. Three distinct arrows, each starting on the beam and pointing away.</p><p>Check the official scoring guidelines to see exactly which labels and directions earned the point.</p>`},
+
+{id:'2.3', kind:'lesson', title:'Newton\'s Third Law', topic:'Newton\'s third law',
+ learn:[
+  {h:'Forces come in pairs', body:`<p>If A pushes on B, then B pushes on A with a force that is <b>equal in size, opposite in direction, and the same type</b>.</p><div class="eqblock">F<sub>A on B</sub> = −F<sub>B on A</sub></div>`},
+  {h:'Why they don\'t cancel', body:`<p>The two forces act on <b>different objects</b>, so they never appear on the same free-body diagram. Each object accelerates based only on forces acting on it.</p><p>A heavy truck and a tiny bug feel the same force in a crash. The bug just has far less mass, so its acceleration is huge.</p>`},
+ ],
+ qs:[
+  {t:'mc', q:'A truck hits a bug. How does the force on the bug compare with the force on the truck?', c:['They are equal','The bug feels more force','The truck feels more force','The bug feels force, the truck feels none'], a:0, why:'Third law pairs are always equal in magnitude. The difference you see is in acceleration (a = F/m).'},
+  {t:'mc', q:'Earth pulls down on a book with gravity. What is the third law partner of that force?', c:['The book pulls up on Earth','The table pushes up on the book','The book pushes down on the table','There is no partner'], a:0, why:'The partner swaps the two objects: Earth on book becomes book on Earth. The table\'s normal force is a different interaction.'},
+  {t:'tf', q:'Because third law forces are equal and opposite, they cancel and nothing can accelerate.', a:false, why:'They act on different objects. To find one object\'s acceleration, add only the forces on that object.'},
+  {t:'mc', q:'A horse pulls a cart and both speed up. Why does the horse move forward?', c:['The ground pushes the horse forward harder than the cart pulls back on it','The horse pulls the cart harder than the cart pulls the horse','The cart\'s pull on the horse is zero','The horse\'s inertia carries it'], a:0, why:'Horse-on-cart and cart-on-horse are equal. The horse accelerates because friction from the ground (pushing forward) beats the cart\'s backward pull.'},
+  {t:'num', q:'You push a wall with 50 N. How hard does the wall push you?', a:50, unit:'N', why:'Equal and opposite: 50 N, pointed back at you.'},
+  {t:'num', q:'On frictionless ice, a 60 kg skater pushes a 20 kg box with 30 N. What is the size of the skater\'s acceleration?', a:0.5, unit:'m/s²', why:'The box pushes back with 30 N. a = 30 / 60 = 0.5 m/s². (The box gets 30 / 20 = 1.5 m/s².)'},
+ ]},
+
+{id:'2.4', kind:'lesson', title:'Newton\'s First Law', topic:'Newton\'s first law inertia',
+ learn:[
+  {h:'Zero net force, constant velocity', body:`<p>If the forces on an object add to zero, its velocity doesn\'t change. That includes sitting still <b>and</b> cruising at a steady speed in a straight line.</p><div class="eqblock">ΣF = 0 ⇔ v = constant</div>`},
+  {h:'Inertia', body:`<p><b>Inertia</b> is an object\'s resistance to changes in velocity, and mass measures it. You don\'t need a force to keep moving; you need a force to <b>change</b> how you\'re moving.</p><p>An object with ΣF = 0 is in <b>translational equilibrium</b>.</p>`},
+ ],
+ qs:[
+  {t:'mc', q:'A puck slides across frictionless ice at 5 m/s. What force is needed to keep it going at 5 m/s?', c:['None','A small forward force','A force equal to its weight','A force that grows over time'], a:0, why:'With zero net force, velocity stays constant. Forces change motion; they don\'t maintain it.'},
+  {t:'mc', q:'An elevator moves upward at constant speed. How does cable tension compare with the elevator\'s weight?', c:['Equal','Greater','Less','Zero'], a:0, why:'Constant velocity means ΣF = 0, so tension exactly balances gravity, even while moving up.'},
+  {t:'tf', q:'If something is moving, there must be a net force on it.', a:false, why:'That\'s the most common misconception in physics. Moving at constant velocity needs zero net force.'},
+  {t:'mc', q:'A car brakes hard and the passenger lurches forward. Why?', c:['Their body tends to keep moving at the original velocity','A forward force pushes them','The seat pushes them forward','Gravity tilts forward'], a:0, why:'There\'s no forward force. The car slows down and the passenger\'s body keeps going until the seatbelt applies a backward force.'},
+  {t:'mc', q:'Which object is in translational equilibrium?', c:['A skydiver falling at terminal velocity','A ball at the very top of its flight','A car rounding a curve at constant speed','A rocket speeding up'], a:0, why:'Terminal velocity is constant velocity, so ΣF = 0. The ball still has gravity acting; the car is changing direction; the rocket is speeding up.'},
+  {t:'num', q:'You push a crate across a floor at constant velocity with a 120 N horizontal force. How big is the friction force?', a:120, unit:'N', why:'Constant velocity means the forces balance: friction = 120 N, opposite your push.'},
+ ]},
+
+{id:'2.5', kind:'lesson', title:'Newton\'s Second Law', topic:'Newton\'s second law',
+ learn:[
+  {h:'The big one', body:`<div class="eqblock">a = ΣF / m</div><p>Acceleration points in the direction of the <b>net</b> force. Double the net force, double the acceleration. Double the mass, halve it.</p>`},
+  {h:'The recipe', body:`<p>1. Choose your system. 2. Draw the FBD. 3. Pick axes, one along the acceleration. 4. Write ΣF = ma for each axis. 5. Solve.</p><p>With connected objects, treat them as <b>one system</b> to find a, then isolate one object to find the force between them.</p>`},
+ ],
+ qs:[
+  {t:'num', q:'A 4 kg cart has a net force of 20 N on it. Find its acceleration.', a:5, unit:'m/s²', why:'a = 20 / 4 = 5 m/s².'},
+  {t:'num', q:'A 2 kg box is pulled right with 15 N while friction pulls left with 5 N. Find its acceleration.', a:5, unit:'m/s²', why:'ΣF = 15 − 5 = 10 N right. a = 10 / 2 = 5 m/s².'},
+  {t:'num', q:'A 50 kg student stands on a scale in an elevator accelerating upward at 2 m/s². What does the scale read? (g = 9.8 m/s²)', a:590, unit:'N', why:'F_N − mg = ma, so F_N = m(g + a) = 50 × 11.8 = 590 N. The scale reads the normal force.'},
+  {t:'num', q:'Blocks of 3 kg and 1 kg sit side by side on a frictionless floor. An 8 N push acts on the 3 kg block. How hard does the 3 kg block push the 1 kg block?', a:2, unit:'N', why:'Whole system: a = 8 / 4 = 2 m/s². The 1 kg block alone needs F = 1 × 2 = 2 N, and only the 3 kg block pushes it.'},
+  {t:'num', q:'A 2 kg cart on a frictionless table is tied over a pulley to a hanging 0.5 kg mass. Find the acceleration. (g = 9.8 m/s²)', a:1.96, unit:'m/s²', why:'Only the hanging weight drives the whole 2.5 kg system: a = (0.5 × 9.8) / 2.5 = 1.96 m/s².'},
+  {t:'tiles', q:'Build Newton\'s second law for the hanging mass m₂ in that setup (down is positive).', tiles:['m₂g','−','T','=','m₂a','+','m₁a'], ans:['m₂g','−','T','=','m₂a'], why:'On the hanging mass: gravity down, tension up. Net force m₂g − T equals m₂a.'},
+  {t:'mc', q:'A ball is thrown straight up. At the very top, what is its acceleration?', c:['9.8 m/s² downward','Zero','9.8 m/s² upward','It depends on the throw speed'], a:0, why:'Velocity is momentarily zero, but gravity is still the net force. a = g downward the whole flight.'},
+ ]},
+
+{id:'2.6', kind:'lesson', title:'Gravitational Force', topic:'gravitational force',
+ learn:[
+  {h:'Universal gravitation', body:`<div class="eqblock">F<sub>g</sub> = G m₁m₂ / r²</div><p>Every mass pulls on every other mass. r is the distance between their <b>centers</b>. Double r and the force drops to one fourth.</p>`},
+  {h:'Near a planet\'s surface', body:`<p>The pull becomes F<sub>g</sub> = mg, where <span class="eq">g = GM/R²</span> is the gravitational field (9.8 N/kg on Earth).</p><p>A scale doesn\'t read gravity. It reads the <b>normal force</b>, which is your apparent weight.</p>`},
+ ],
+ qs:[
+  {t:'mc', q:'The distance between two moons\' centers doubles. The gravitational force between them becomes…', c:['¼ as large','½ as large','2× as large','4× as large'], a:0, why:'Inverse square: (1/2)² = 1/4.'},
+  {t:'mc', q:'Planet X has the same mass as Earth but a larger radius. How does g at its surface compare?', c:['Smaller','Larger','The same','Depends on the object'], a:0, why:'g = GM/R². Same M, bigger R means smaller g. Hold onto this, the next boss uses it.'},
+  {t:'num', q:'A planet has 2× Earth\'s mass and 2× Earth\'s radius. What is g at its surface? (Earth: 9.8 m/s²)', a:4.9, unit:'m/s²', why:'g scales as M/R² = 2 / 4 = ½. Half of 9.8 is 4.9 m/s².'},
+  {t:'tf', q:'Astronauts on the space station float because there is no gravity up there.', a:false, why:'Gravity there is about 90% of what it is on the surface. They float because they\'re in free fall along with the station.'},
+  {t:'mc', q:'You stand on a scale in an elevator whose cable snaps (free fall). The scale reads…', c:['Zero','Your normal weight','Double your weight','Half your weight'], a:0, why:'You and the scale fall together with a = g, so the scale doesn\'t need to push on you. F_N = 0.'},
+  {t:'num', q:'Find the weight of a 70 kg person on Earth. (g = 9.8 m/s²)', a:686, unit:'N', why:'F_g = mg = 70 × 9.8 = 686 N.'},
+  {t:'mc', q:'A bowling ball and a tennis ball are dropped together in a vacuum. Which lands first?', c:['They land together','The bowling ball','The tennis ball','Depends on height'], a:0, why:'Bigger mass means bigger gravitational force but also more inertia. They cancel: a = g for both.'},
+ ]},
+
+{id:'boss-planet', kind:'boss', title:'FRQ: The pendulum on Planet X', year:'2024', qnum:'Q4 (a)', src:SRC.y24,
+ intro:`<p>A small sphere on a string is pulled to a small angle and released, swinging to its lowest point. On Earth, the work Earth\'s gravity does on it over that swing is W<sub>E</sub>.</p><p>The same pendulum goes to <b>Planet X</b>: same mass as Earth, <b>larger radius</b>. Same angle, same swing. The work done by Planet X is W<sub>X</sub>. Part (a) asks you to justify why W<sub>X</sub> is less than W<sub>E</sub>.</p>`,
+ steps:[
+  {t:'mc', q:'How does the gravitational field at Planet X\'s surface compare with Earth\'s?', c:['Weaker, because g = GM/R² and R is larger','Stronger, because the planet is bigger','The same, because the masses match','It can\'t be determined'], a:0, why:'Same M, larger R. Since R is squared in the denominator, g is smaller.'},
+  {t:'mc', q:'Does the sphere drop the same vertical height from release to the lowest point on both planets?', c:['Yes, same string length and angle','No, it drops less on Planet X','No, it drops more on Planet X','It depends on g'], a:0, why:'The height drop depends only on geometry: L(1 − cosθ). Geometry doesn\'t change between planets.'},
+  {t:'mc', q:'Which is the best justification that W_X < W_E?', c:['Work by gravity is mgΔh; Δh is the same but g is smaller on X','The sphere moves slower on X so there\'s less work','Gravity does negative work on Planet X','The string does more work on Planet X'], a:0, why:'Gravity\'s work over a vertical drop is F_g·Δh = mgΔh. Same m and Δh, smaller g, so less work.'},
+ ],
+ model:`<p>The gravitational field at a planet\'s surface is g = GM/R². Planet X has the same mass but a larger radius, so g<sub>X</sub> &lt; g<sub>E</sub>. The sphere falls the same height Δh on both planets because the string length and starting angle are unchanged. Work done by gravity is mgΔh, so with a smaller g, W<sub>X</sub> &lt; W<sub>E</sub>.</p>`},
+
+{id:'2.7', kind:'lesson', title:'Kinetic & Static Friction', topic:'static and kinetic friction',
+ learn:[
+  {h:'Kinetic friction: sliding', body:`<div class="eqblock">F<sub>f,k</sub> = μ<sub>k</sub> F<sub>N</sub></div><p>Opposes the sliding. It doesn\'t depend on speed or contact area in the AP model, only on the surfaces (μ) and how hard they press together (F<sub>N</sub>).</p>`},
+  {h:'Static friction: not sliding', body:`<div class="eqblock">F<sub>f,s</sub> ≤ μ<sub>s</sub> F<sub>N</sub></div><p>Static friction is only as big as it needs to be to prevent slipping, up to a maximum. Usually μ<sub>s</sub> &gt; μ<sub>k</sub>, which is why it\'s harder to start a box moving than to keep it moving.</p><p>On a ramp, F<sub>N</sub> = mg cosθ.</p>`, fig:'incline'},
+ ],
+ qs:[
+  {t:'num', q:'A 10 kg box slides across a level floor with μk = 0.3. Find the friction force. (g = 9.8 m/s²)', a:29.4, unit:'N', why:'F_N = mg = 98 N. F_f = 0.3 × 98 = 29.4 N.'},
+  {t:'mc', q:'A box can take up to 50 N of static friction. You push it with 20 N and it doesn\'t move. What is the static friction force?', c:['20 N','50 N','30 N','0 N'], a:0, why:'Static friction matches what\'s needed to keep ΣF = 0. You push 20 N, so it pushes back 20 N. 50 N is only the maximum.'},
+  {t:'tf', q:'Static friction always equals μs·F_N.', a:false, why:'μs·F_N is the maximum. Static friction can be anything from zero up to that value.'},
+  {t:'num', q:'A puck slides on a level floor with μk = 0.2 and no other horizontal forces. Find the magnitude of its deceleration.', a:1.96, unit:'m/s²', why:'μk·mg = ma, so a = μk·g = 0.2 × 9.8 = 1.96 m/s². The mass cancels.'},
+  {t:'mc', q:'A block sits at rest on a ramp. Which way does static friction point?', c:['Up the ramp','Down the ramp','Perpendicular to the ramp','There is no friction'], a:0, why:'Gravity\'s component pulls it down the slope, so friction points up the slope to hold it still.'},
+  {t:'num', q:'A block just starts to slide when the ramp is tilted to 35°. Find μs.', a:0.70, unit:'', why:'At the slipping point, mg sinθ = μs mg cosθ, so μs = tan 35° ≈ 0.70.'},
+  {t:'mc', q:'A car\'s tires roll without skidding. What kind of friction pushes the car forward?', c:['Static','Kinetic','Rolling only, no friction','Air friction'], a:0, why:'The contact patch isn\'t sliding relative to the road, so it\'s static friction.'},
+  {t:'fbd', q:'A block slides down a rough ramp (the ramp goes down to the right). Pick every force on the block.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal, perpendicular to ramp','F_N',68.6,1),F('fu','Friction up the ramp','F_f',158.6,1),F('fd','Friction down the ramp','F_f',-21.4,0),F('m','Force of motion down ramp','F_m',-21.4,0)], why:'Gravity straight down, normal perpendicular to the surface, and kinetic friction up the slope, opposite the sliding.'},
+ ]},
+
+{id:'boss-ramp', kind:'boss', title:'FRQ: Finding μ on a ramp', year:'2026', qnum:'Q3 (C–D)', src:SRC.y26,
+ intro:`<p>Students release a block from rest on a rough ramp tilted at <b>θ = 30°</b>. A photogate a distance <b>d</b> down the ramp measures the block\'s speed <b>v</b>. They repeat this for several values of d. They correctly find that</p><div class="eqblock">v² = 2g(sinθ − μ<sub>k</sub>cosθ)·d</div><p>Their data:</p><div style="overflow-x:auto"><table class="datatable"><tr><th>d (m)</th><th>v (m/s)</th></tr><tr><td>0.20</td><td>0.29</td></tr><tr><td>0.30</td><td>0.38</td></tr><tr><td>0.40</td><td>0.41</td></tr><tr><td>0.50</td><td>0.49</td></tr><tr><td>0.60</td><td>0.52</td></tr></table></div>`,
+ steps:[
+  {t:'mc', q:'They plot d on the horizontal axis. What should go on the vertical axis to get a straight line?', c:['v²','v','1/v','√v'], a:0, why:'The equation is v² = (constant)·d. That\'s y = mx with y = v².'},
+  {t:'num', q:'Calculate v² for the d = 0.60 m trial.', a:0.27, tol:0.04, unit:'m²/s²', why:'0.52² = 0.2704 m²/s².'},
+  {t:'num', q:'A best-fit line through (d, v²) has what slope? Estimate it.', a:0.468, tol:0.15, unit:'m/s²', why:'v² runs from about 0.084 to 0.270 as d runs 0.20 to 0.60 m. A least-squares fit gives a slope of about 0.47 m/s². Use the best-fit line, not just two data points.'},
+  {t:'num', q:'Slope = 2g(sinθ − μk cosθ). Solve for μk. (g = 9.8 m/s², θ = 30°)', a:0.55, tol:0.05, unit:'', why:'μk = (sinθ − slope/2g) / cosθ = (0.5 − 0.47/19.6) / 0.866 ≈ 0.55. Notice μk is just under tan 30° ≈ 0.58, which is why the block speeds up so slowly.'},
+ ],
+ model:`<p>Plot <b>v²</b> (m²/s²) against <b>d</b> (m). Draw a best-fit straight line, not dot-to-dot. Its slope equals 2g(sinθ − μ<sub>k</sub>cosθ), so μ<sub>k</sub> = (sinθ − slope/2g)/cosθ ≈ <b>0.55</b>.</p><p>Parts A and B of this question are a design-your-own experiment with a curved ramp and only a meterstick. Try them on paper, then compare with the scoring guidelines.</p>`},
+
+{id:'2.8', kind:'lesson', title:'Spring Forces', topic:'spring force Hooke\'s law',
+ learn:[
+  {h:'Hooke\'s law', body:`<div class="eqblock">F<sub>s</sub> = −kΔx</div><p>A spring pushes or pulls back toward its natural length with a force proportional to how far it\'s stretched or compressed. k (N/m) measures stiffness. The minus sign means "opposite the displacement."</p>`, fig:'spring'},
+  {h:'Graphs and combos', body:`<p>On a force vs. stretch graph, the <b>slope is k</b>.</p><p>Springs side by side (parallel) add: <span class="eq">k = k₁ + k₂</span>. End to end (series) get softer: <span class="eq">1/k = 1/k₁ + 1/k₂</span>.</p>`},
+ ],
+ qs:[
+  {t:'num', q:'A spring with k = 200 N/m is stretched 0.15 m. How much force does it exert?', a:30, unit:'N', why:'F = kΔx = 200 × 0.15 = 30 N.'},
+  {t:'num', q:'A 0.5 kg mass hangs at rest from a spring, stretching it 0.049 m. Find k. (g = 9.8 m/s²)', a:100, unit:'N/m', why:'At rest, kΔx = mg. k = (0.5 × 9.8) / 0.049 = 100 N/m.'},
+  {t:'mc', q:'You graph spring force (vertical) against stretch (horizontal). The slope represents…', c:['The spring constant k','The mass','The energy stored','The natural length'], a:0, why:'F = kΔx is a line through the origin with slope k.'},
+  {t:'mc', q:'A block is pressed against a spring, compressing it. Which way does the spring push the block?', c:['Back toward the spring\'s natural length','Further into the compression','Straight down','There is no force until released'], a:0, why:'Spring forces are restoring: they always point toward equilibrium.'},
+  {t:'num', q:'Two identical springs (k = 100 N/m each) hang side by side and share a load. What is the effective spring constant?', a:200, unit:'N/m', why:'Parallel springs add: 100 + 100 = 200 N/m. Each one stretches half as much.'},
+  {t:'num', q:'The same two springs are hooked end to end. What is the effective spring constant now?', a:50, unit:'N/m', why:'Series: 1/k = 1/100 + 1/100 = 2/100, so k = 50 N/m. Each spring feels the full load and stretches.'},
+  {t:'tf', q:'For an ideal spring, doubling the stretch doubles the force.', a:true, why:'F is proportional to Δx, so it doubles.'},
+ ]},
+
+{id:'2.9', kind:'lesson', title:'Circular Motion', topic:'uniform circular motion',
+ learn:[
+  {h:'Speed constant, velocity not', body:`<p>In uniform circular motion, speed stays the same but the velocity keeps changing direction. That\'s an acceleration, pointing toward the <b>center</b>.</p><div class="eqblock">a<sub>c</sub> = v²/r &nbsp;&nbsp; v = 2πr/T</div>`, fig:'circle'},
+  {h:'"Centripetal" is a job, not a force', body:`<p>The net force toward the center is ΣF = mv²/r. Some real force does that job: tension, gravity, friction, or normal force. Never draw a separate "centripetal force" arrow.</p><p>At the top of a loop, gravity and the normal force both point down: F<sub>N</sub> + mg = mv²/r. The slowest you can go is when F<sub>N</sub> = 0, giving <span class="eq">v = √(gr)</span>.</p>`, fig:'loop'},
+ ],
+ qs:[
+  {t:'mc', q:'You swing a ball on a string in a horizontal circle and the string snaps. Which way does the ball go?', c:['Straight along the tangent','Straight outward from the center','Along the curve for a while','Straight toward the center'], a:0, why:'With the inward force gone, there\'s no net force sideways (first law), so it moves in a straight line in the direction it was going.'},
+  {t:'num', q:'A 1000 kg car takes a flat curve of radius 50 m at 20 m/s. How much friction force must the road supply?', a:8000, unit:'N', why:'F = mv²/r = 1000 × 400 / 50 = 8000 N, pointed toward the curve\'s center. That\'s static friction.'},
+  {t:'mc', q:'How should "centripetal force" appear on a free-body diagram?', c:['It shouldn\'t; label the real force doing the job','As an arrow toward the center','As an arrow away from the center','As a dashed arrow'], a:0, why:'It\'s the name for the net inward force, not a new interaction. Label tension, gravity, friction, or normal.'},
+  {t:'num', q:'What is the minimum speed at the top of a loop with radius 2.5 m? (g = 9.8 m/s²)', a:4.95, unit:'m/s', why:'At minimum speed F_N = 0, so mg = mv²/r and v = √(9.8 × 2.5) ≈ 4.95 m/s.'},
+  {t:'fbd', q:'A roller coaster car is upside down at the top of a loop. Pick every force on the car.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from the track','F_N',-90,1),F('nu','Normal pointing up','F_N',90,0),F('c','Centripetal force','F_c',-90,0),F('m','Force of motion (forward)','F_m',0,0)], why:'Both gravity and the track push toward the center, which is downward here. Together they provide mv²/r. There\'s no extra centripetal force.'},
+  {t:'tiles', q:'Build the top-of-loop equation (toward the center is positive).', tiles:['F_N','+','mg','=','mv²/r','−','ma'], ans:['F_N','+','mg','=','mv²/r'], why:'Both forces point toward the center, so they add to give the required mv²/r.'},
+  {t:'num', q:'A 0.2 kg stone on a 0.5 m string makes one horizontal circle every 0.5 s. Find the string tension. (Ignore gravity\'s sag.)', a:15.8, unit:'N', why:'v = 2πr/T = 2π(0.5)/0.5 ≈ 6.28 m/s. T = mv²/r = 0.2 × 39.5 / 0.5 ≈ 15.8 N.'},
+  {t:'mc', q:'A car drives through the bottom of a dip in the road. Compared with mg, the normal force on the car is…', c:['Greater','Less','Equal','Zero'], a:0, why:'The center is above you, so the net force must point up: F_N − mg = mv²/r. That makes F_N > mg, and you feel heavier.'},
+ ]},
+
+{id:'boss-loop', kind:'boss', title:'FRQ: The loop-the-loop track', year:'2024', qnum:'Q1 (b–c)', src:SRC.y24,
+ intro:`<p>A block of mass M is released from rest at a height of <b>6R</b> and slides down a frictionless track with two circular loops of radius <b>R</b>. Point B is the top of the first loop, at a height of <b>2R</b>. Point C is the top of the second loop. The block never leaves the track.</p>`,
+ steps:[
+  {t:'mc', q:'Using conservation of energy, what is the block\'s speed at Point B?', c:['√(8gR)','√(12gR)','√(4gR)','√(2gR)'], a:0, why:'Mg(6R) = Mg(2R) + ½Mv², so v² = 8gR and v = √(8gR).'},
+  {t:'fbd', q:'Draw the forces on the block as it slides through the top of a loop (Point C).', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from the track','F_N',-90,1),F('nu','Normal pointing up','F_N',90,0),F('c','Centripetal force','F_c',-90,0),F('fw','Force of motion (forward)','F_m',0,0)], why:'Only two forces, both pointing down toward the loop\'s center. No centripetal arrow and no forward force.'},
+  {t:'mc', q:'A student claims 4R is the minimum release height for the block to get through Point C without losing contact. What condition actually sets the minimum?', c:['At C, the normal force drops to zero so gravity alone provides mv²/R','At C, the speed must be zero','At C, the normal force equals mg','The block must have zero potential energy at C'], a:0, why:'Losing contact means F_N would have to go negative. The limit is F_N = 0, where mg = mv²/R, so v² = gR. A speed of zero at the top would mean it had already fallen off.'},
+  {t:'num', q:'Extend it: if C is also 2R high, what is the true minimum release height, in units of R?', a:2.5, tol:0.02, unit:'× R', why:'Mgh = Mg(2R) + ½M(gR) gives h = 2.5R. So 4R is more than needed; the claim gets the minimum wrong.'},
+ ],
+ model:`<p><b>(b)</b> Mg(6R) = Mg(2R) + ½Mv<sub>B</sub>², so v<sub>B</sub> = √(8gR).</p><p><b>(c)(i)</b> Two downward arrows on the dot: F<sub>g</sub> and F<sub>N</sub> (the track pushes toward the center).</p><p><b>(c)(ii)</b> The block only needs F<sub>N</sub> ≥ 0 at C, which means v<sub>C</sub>² ≥ gR. That requires a release height lower than 4R, so 4R isn\'t the minimum. Compare your wording with the scoring guidelines.</p>`},
+
+{id:'boss-final', kind:'boss', title:'Final FRQ: The rising block', year:'2025', qnum:'Q4', src:SRC.y25,
+ intro:`<p>A swimmer holds a block of mass m at rest underwater, then lets go. The block <b>accelerates upward</b>. Friction is negligible.</p><p>Scenario 1: fresh water, density ρ₁, initial acceleration a₁. Scenario 2: salt water, density ρ₂ &gt; ρ₁, initial acceleration a₂.</p><p>New tool: water pushes up with a <b>buoyant force</b> F<sub>B</sub> = ρVg, where V is the block\'s volume. Everything else is Newton\'s second law.</p>`,
+ steps:[
+  {t:'fbd', q:'Pick every force on the block just after it is released.', f:[F('g','Gravity','F_g',-90,1),F('b','Buoyant force from water','F_B',90,1),F('h','Swimmer\'s hand','F_hand',90,0),F('n','Normal force','F_N',90,0)], why:'The hand let go, so it exerts nothing. Gravity pulls down; the water pushes up with the buoyant force.'},
+  {t:'mc', q:'Compare a₁ (fresh water) with a₂ (salt water).', c:['a₁ < a₂','a₁ > a₂','a₁ = a₂','Can\'t tell'], a:0, why:'Gravity is the same in both. Salt water is denser, so its buoyant force is larger, giving a bigger upward net force on the same mass.'},
+  {t:'mc', q:'Starting from Newton\'s second law, derive the initial upward acceleration in terms of m, V, ρ, and g.', c:['a = (ρVg − mg) / m','a = (mg − ρVg) / m','a = ρVg / m','a = (ρV − m)g / V'], a:0, why:'Up is positive: ΣF = F_B − F_g = ρVg − mg = ma. Divide by m.'},
+  {t:'mc', q:'Is your expression consistent with your answer comparing a₁ and a₂?', c:['Yes: a increases as ρ increases','No: a decreases as ρ increases','No: a doesn\'t depend on ρ','Only if V changes'], a:0, why:'In a = ρVg/m − g, ρ appears in a positive term. Bigger ρ gives bigger a, matching a₂ > a₁.'},
+ ],
+ model:`<p><b>(A)</b> a₁ &lt; a₂. The gravitational force on the block is the same in both tanks. The buoyant force is larger in the denser salt water, so the upward net force, and the acceleration, is larger.</p><p><b>(B)</b> ρVg − mg = ma, so a = (ρVg − mg)/m.</p><p><b>(C)</b> Consistent: a grows with ρ, and ρ₂ &gt; ρ₁.</p><p>Notice the prompt asks for "ALL forces" in part A. Name both gravity and buoyancy.</p>`},
+];
+
+/* ---------- from your class: worksheet levels (answers use g = 10 like the class; alt = g = 9.8) ---------- */
+const CW1=`<b>Classwork 1.</b> A 2.0 kg block sits on a horizontal surface where μ<sub>s</sub> = 0.40.`;
+const CW2=`<b>Classwork 2.</b> A 3.0 kg block is pushed along a horizontal surface and released at 5.0 m/s. It slides 8.0 m before stopping.`;
+const J1=`<b>Joined bodies 1.</b> A 10 kg block on a frictionless table is tied over a pulley to a hanging 2.0 kg block.`;
+const J2=`<b>Joined bodies 2.</b> A (3.2 kg) and B (2.4 kg) hang on either side of a massless, frictionless pulley. A starts 0.5 m above the floor.`;
+const B3=`<b>Problem set 1.</b> Three touching blocks on a frictionless table. A 20 N force pushes M₁ to the right. Your sheet doesn\'t give masses, so use M₁ = 2 kg, M₂ = 3 kg, M₃ = 5 kg.`;
+const TR=`<b>Problem set 2.</b> A 20 N string pulls a 20 kg block, which pulls a 10 kg block by a string, which pulls a 5 kg block. No friction.`;
+const TRF=`<b>Problem set 3.</b> Same three blocks, now with 12 N of friction on the 20 kg block and 3 N on the 5 kg block.`;
+const ST=`<b>Problem set 4.</b> A 2 kg block rides on top of a 5 kg block. 20 N pushes the 5 kg block right; the table puts 15 N of friction on it. The top block doesn\'t slip.`;
+const EL=`<b>Elevator 1.</b> A 1000 kg elevator hangs from a steel cable. Up is positive.`;
+const GL=`<b>Elevator 2.</b> A 50 kg girl stands on the elevator floor.`;
+const CLASS = [
+{id:'c-fric', kind:'lesson', tag:'Class notes', title:'Friction: notes & classwork', topic:'coefficient of friction',
+ learn:[
+  {h:'Where friction comes from', body:`<p>Zoom in far enough and even smooth surfaces are jagged "mountains." They only touch at a few <b>contact points</b>, and those points interlock. That\'s where friction acts.</p><p>Rougher surfaces have bigger mountains, so more friction. It depends on the texture of <b>both</b> surfaces, which is also why friction lab results bounce around.</p>`},
+  {h:'What sets the size', body:`<p>The real factor isn\'t weight, it\'s how hard the surfaces are <b>pressed together</b>: the normal force. Lab results show F<sub>f</sub> ∝ F<sub>N</sub>, so</p><div class="eqblock">F<sub>f</sub> = μF<sub>N</sub></div><p>μ has no units (it\'s a ratio of two forces). Contact area doesn\'t matter: double the area and each square centimeter gets half the push.</p>`},
+  {h:'Two coefficients', body:`<p><b>Already moving:</b> F<sub>f</sub> = μ<sub>k</sub>F<sub>N</sub>. <b>Not moving yet:</b> F<sub>f</sub> ≤ μ<sub>s</sub>F<sub>N</sub>, where μ<sub>s</sub>F<sub>N</sub> is the most it can be.</p><p>μ<sub>s</sub> is bigger because starting means lifting surface 1 up over the mountains of surface 2.</p><p><b>Your teacher\'s warning:</b> things don\'t stay put because of inertia. Without friction, even an elephant accelerates when you push it, just slowly.</p>`},
+ ],
+ qs:[
+  {t:'num', q:'It takes 0.8 N to just start a 2.5 N block moving across the bench. Find μs.', a:0.32, unit:'', why:'μs = Ff / FN = 0.8 / 2.5 = 0.32. No units, since it\'s a ratio of two forces.'},
+  {t:'num', q:'A similar block weighing 4.5 N sits on the same bench. What force just starts it moving?', a:1.44, unit:'N', why:'F = μs·FN = 0.32 × 4.5 = 1.44 N.'},
+  {t:'tf', q:'Doubling a block\'s contact area doubles the friction on it.', a:false, why:'More area means each square centimeter is pressed down half as hard, so the total friction stays about the same.'},
+  {t:'mc', q:'What actually sets the size of the friction force?', c:['How hard the surfaces press together (the normal force)','The object\'s weight, in every situation','The contact area','How fast it slides'], a:0, why:'Weight only matters because on flat ground it sets the normal force. Push down on a block, or tilt the surface, and FN changes.'},
+  {t:'mc', q:'You gently push a heavy crate and it doesn\'t move. Why?', c:['Static friction matches your push','Its inertia is too big to accelerate','Heavy objects need a minimum force to move','Gravity holds it back horizontally'], a:0, why:'This is the warning from your notes. On a frictionless floor any push would accelerate it, just slowly.'},
+  {t:'mc', q:'Why is μs usually bigger than μk?', c:['Starting means lifting over the surface "mountains"; once moving it skims across them','Moving objects weigh less','Kinetic friction only acts at high speed','The normal force drops when moving'], a:0, why:'Your notes explain it with the interlocking contact points.'},
+  {t:'num', ctx:CW1, q:'What horizontal force must be applied to get the block moving?', a:8, alt:7.84, unit:'N', why:'F = μs·mg = 0.40 × 2.0 × 10 = 8.0 N.'},
+  {t:'num', ctx:CW1, q:'A 6.0 N horizontal force is applied. What is the friction force?', a:6, unit:'N', why:'6.0 N is less than the 8.0 N maximum, so the block stays put and static friction just matches the push: 6.0 N.'},
+  {t:'num', ctx:CW2, q:'Find μk for the pair of surfaces.', a:0.156, alt:0.159, tol:0.04, unit:'', why:'v² = 2ad gives a = 25 / 16 = 1.56 m/s². Friction is the only horizontal force, so μk·g = a and μk = 1.56 / 10 ≈ 0.16.'},
+ ]},
+
+{id:'c-hw', kind:'lesson', tag:'Homework', title:'Friction homework set',
+ qs:[
+  {t:'num', ctx:'<b>1.</b> Abe weighs 420 N and steps in spilled water. μk drops to 0.040.', q:'What is the friction force between Abe and the slippery floor?', a:16.8, unit:'N', why:'F = μk·FN = 0.040 × 420 = 16.8 N. His weight is already in newtons, so no g needed.'},
+  {t:'num', ctx:'<b>2.</b> Kitty pushes an 82 kg cabinet at steady speed. The floor resists with 320 N of friction.', q:'Find μk between cabinet and floor.', a:0.39, alt:0.398, unit:'', why:'μk = 320 / (82 × 10) = 0.39.'},
+  {t:'num', ctx:'<b>3.</b> Casey (30 kg) slides across a waxed floor in socks. μk = 0.12.', q:'What friction force opposes Casey\'s motion?', a:36, alt:35.3, unit:'N', why:'F = 0.12 × 30 × 10 = 36 N.'},
+  {t:'num', ctx:'<b>4.</b> Ryan pulls his 70 kg dog across the floor. μs = 0.50.', q:'(A) What friction force must Ryan overcome?', a:350, alt:343, unit:'N', why:'Max static friction = 0.50 × 70 × 10 = 350 N.'},
+  {t:'num', ctx:'<b>4.</b> Ryan pulls his 70 kg dog across the floor. μs = 0.50.', q:'(B) Ryan pulls with 400 N. What is the net force on the dog?', a:50, alt:57, unit:'N', why:'400 − 350 = 50 N. (Like the sheet, this assumes friction stays at 350 N once the dog slides.)'},
+  {t:'num', ctx:'<b>4.</b> Ryan pulls his 70 kg dog across the floor. μs = 0.50.', q:'(C) What is the dog\'s acceleration?', a:0.714, alt:0.814, unit:'m/s²', why:'a = 50 / 70 ≈ 0.71 m/s².'},
+  {t:'num', ctx:'<b>5.</b> A 5.5 kg watermelon on a friction-free table accelerates at 4.2 m/s² from a nose push.', q:'Find the horizontal force from the nose.', a:23.1, unit:'N', why:'No friction, so the nose is the net force: F = ma = 5.5 × 4.2 = 23.1 N.'},
+  {t:'num', ctx:'<b>6.</b> A 25 kg chair needs 65 N to start moving and 27 N to keep moving at constant velocity.', q:'Find μs.', a:0.26, alt:0.265, unit:'', why:'μs = 65 / (25 × 10) = 0.26.'},
+  {t:'num', ctx:'<b>6.</b> A 25 kg chair needs 65 N to start moving and 27 N to keep moving at constant velocity.', q:'Find μk.', a:0.108, alt:0.110, unit:'', why:'Constant velocity means friction = 27 N, so μk = 27 / 250 ≈ 0.11.'},
+  {t:'num', ctx:'<b>7.</b> A 1254 kg sports car starts from rest with a 4400 N driving force against 280 N of friction.', q:'(a) What acceleration is produced?', a:3.29, unit:'m/s²', why:'a = (4400 − 280) / 1254 ≈ 3.29 m/s².'},
+  {t:'num', ctx:'<b>7.</b> A 1254 kg sports car starts from rest with a 4400 N driving force against 280 N of friction.', q:'(b) How far does it go in 9 s?', a:133, unit:'m', why:'d = ½at² = ½ × 3.29 × 81 ≈ 133 m.'},
+ ]},
+
+{id:'c-incline', kind:'boss', badge:'MAX', tag:'Challenge problem', title:'The 18° slope',
+ intro:`<p>A student measures a <b>50.0 kg</b> block sliding down an <b>18°</b> slope at a <b>constant velocity</b> of 0.50 m/s. This one is all about what constant velocity tells you.</p><div class="fig">${FIG.incline18}</div>`,
+ steps:[
+  {t:'fbd', q:'Pick every force on the sliding block.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal, perpendicular to slope','F_N',72,1),F('fu','Friction up the slope','F_f',162,1),F('fd','Friction down the slope','F_f',-18,0),F('m','Force of motion down the slope','F_m',-18,0)], why:'Gravity, normal, and kinetic friction pointing up the slope (opposite the sliding).'},
+  {t:'mc', q:'What does "constant velocity" tell you?', c:['Friction exactly balances gravity\'s pull down the slope','There is no friction','Gravity has no component along the slope','The net force points down the slope'], a:0, why:'Constant velocity means ΣF = 0 along the slope: μk·mg·cosθ = mg·sinθ.'},
+  {t:'num', q:'(a) Find μk.', a:0.325, unit:'', why:'μk·mg·cosθ = mg·sinθ, so μk = tan 18° ≈ 0.32. The mass cancels.'},
+  {t:'mc', q:'(b) A student says pushing down on the block, perpendicular to the slope, will stop it. Agree?', c:['Agree: more normal force means more friction than gravity\'s pull, so it slows and stops','Disagree: a perpendicular push changes nothing along the slope','Disagree: it will speed up','Agree: pushing cancels gravity'], a:0, why:'Pushing in raises FN, which raises friction. Gravity\'s component along the slope doesn\'t change, so the net force now points up the slope and the block decelerates.'},
+  {t:'mc', q:'(c) He says adding masses on top will stop it. Agree?', c:['Disagree: extra mass raises gravity\'s pull and friction by the same factor, so it keeps a constant velocity','Agree: more weight means more friction','Agree: heavier things slow down','Disagree: it will speed up'], a:0, why:'Both mg·sinθ and μk·mg·cosθ scale with m. They stay balanced.'},
+  {t:'mc', q:'(d) A third student tilts the slope up from flat until the block just starts to slide. Bigger or smaller than 18°?', c:['Bigger, because μs > μk','Smaller','Exactly 18°','It never starts'], a:0, why:'Starting from rest needs tanθ = μs, and μs is usually greater than μk = tan 18°.'},
+  {t:'mc', q:'(e) Once it starts moving in her experiment, does it go at constant velocity?', c:['No, it accelerates: kinetic friction is smaller than the static friction that was holding it','Yes, constant velocity','It stops again right away','It slides back up'], a:0, why:'At that steeper angle, gravity\'s pull down the slope beats kinetic friction, so there\'s a net force down the slope.'},
+ ],
+ model:`<p><b>(a)</b> μ<sub>k</sub> = tan 18° ≈ 0.32. <b>(b)</b> Agree: a bigger F<sub>N</sub> means more friction, so the net force points up the slope and the block stops. <b>(c)</b> Disagree: both forces scale with mass, so the velocity stays constant. <b>(d)</b> Bigger than 18°, since μ<sub>s</sub> &gt; μ<sub>k</sub>. <b>(e)</b> It accelerates, because kinetic friction is less than the static friction it just broke free from.</p>`},
+
+{id:'c-joined', kind:'lesson', tag:'Worksheet', title:'Joined bodies (pulleys)', topic:'Atwood machine pulley',
+ learn:[
+  {h:'One system, then isolate', body:`<p>Connected blocks share one acceleration. Treat them as one system: only <b>external</b> forces count, and the string tension is internal.</p><div class="eqblock">a = (net external force) / (total mass)</div><p>Then find the tension by drawing one block alone, where tension <b>is</b> external.</p>`, fig:'pulleyTable'},
+  {h:'Two hanging masses', body:`<p>The heavier side goes down. Gravity on each side fights the other:</p><div class="eqblock">a = (m<sub>A</sub> − m<sub>B</sub>)g / (m<sub>A</sub> + m<sub>B</sub>)</div><p>The tension lands between the two weights: bigger than the light one\'s, smaller than the heavy one\'s.</p>`, fig:'atwood'},
+ ],
+ qs:[
+  {t:'tiles', ctx:J1, fig:'pulleyTable', q:'Treat both blocks as one system. Build the equation for a.', tiles:['2.0g','=','(10 + 2.0)a','10a','−','T'], ans:['2.0g','=','(10 + 2.0)a'], why:'The only external force along the string direction is the hanging block\'s weight. It accelerates all 12 kg.'},
+  {t:'num', ctx:J1, fig:'pulleyTable', q:'(a) Find the acceleration of the system.', a:1.67, alt:1.63, unit:'m/s²', why:'a = (2.0 × 10) / 12 ≈ 1.67 m/s².'},
+  {t:'num', ctx:J1, fig:'pulleyTable', q:'(b) Find the tension in the string.', a:16.7, alt:16.3, unit:'N', why:'The string is the only horizontal force on the 10 kg block: T = 10 × 1.67 ≈ 16.7 N.'},
+  {t:'mc', ctx:J1, q:'How does that tension compare with the hanging block\'s 20 N weight?', c:['Smaller, because the hanging block accelerates downward','Equal','Bigger','Zero'], a:0, why:'If T equaled 20 N the hanging block would have zero net force. It speeds up downward, so T < mg.'},
+  {t:'num', ctx:J2, fig:'atwood', q:'(a) Find the acceleration of the system.', a:1.43, alt:1.40, unit:'m/s²', why:'a = (3.2 − 2.4) × 10 / 5.6 ≈ 1.43 m/s². A goes down.'},
+  {t:'num', ctx:J2, fig:'atwood', q:'(b) Find the tension in the string.', a:27.4, alt:26.9, unit:'N', why:'On B (accelerating up): T − mg = ma, so T = 2.4 × (10 + 1.43) ≈ 27.4 N. Check: it\'s between B\'s weight (24 N) and A\'s (32 N).'},
+  {t:'num', ctx:J2, fig:'atwood', q:'(c) A is released from rest 0.5 m above the floor. How fast is it going just before it lands?', a:1.2, alt:1.18, unit:'m/s', why:'v² = 2ad = 2 × 1.43 × 0.5, so v ≈ 1.2 m/s.'},
+  {t:'num', ctx:'<b>Problem set 5.</b> A 5 kg block and a 3 kg block hang over a pulley and are released.', q:'(a) Find the acceleration.', a:2.5, alt:2.45, unit:'m/s²', why:'a = (5 − 3) × 10 / 8 = 2.5 m/s².'},
+  {t:'num', ctx:'<b>Problem set 5.</b> A 5 kg block and a 3 kg block hang over a pulley and are released.', q:'(b) Find the tension.', a:37.5, alt:36.8, unit:'N', why:'On the 3 kg block: T = 3 × (10 + 2.5) = 37.5 N.'},
+ ]},
+
+{id:'c-sys', kind:'lesson', tag:'Problem set', title:'Newton\'s 3rd law & systems', topic:'Newton\'s third law systems of objects',
+ learn:[
+  {h:'Pushes passed down a line', body:`<p>When blocks push each other, M₁ pushes M₂ and M₂ pushes back on M₁ just as hard. That\'s a 3rd law pair.</p><p>Each contact force only has to accelerate the blocks <b>ahead</b> of it, so the forces shrink down the line: F<sub>1 on 2</sub> moves M₂ + M₃, but F<sub>2 on 3</sub> only moves M₃.</p>`, fig:'blocks3'},
+  {h:'Strings work the same way', body:`<p>A string\'s tension accelerates everything <b>behind</b> it. Use the whole train for a, then pick the blocks behind a string to find its tension.</p><p>With friction, check first whether the pull beats the total friction. If it does: a = (pull − total friction) / total mass.</p>`, fig:'train'},
+ ],
+ qs:[
+  {t:'num', ctx:B3, fig:'blocks3', q:'(i) Find the acceleration of the blocks.', a:2, unit:'m/s²', why:'a = 20 / (2 + 3 + 5) = 2 m/s².'},
+  {t:'num', ctx:B3, fig:'blocks3', q:'(ii) Find the force M₁ puts on M₂.', a:16, unit:'N', why:'It has to accelerate M₂ and M₃: (3 + 5) × 2 = 16 N.'},
+  {t:'num', ctx:B3, fig:'blocks3', q:'(iii) Find the force M₂ puts on M₃.', a:10, unit:'N', why:'It only has to accelerate M₃: 5 × 2 = 10 N.'},
+  {t:'fbd', ctx:B3, q:'Draw the FBD for the middle block, M₂.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from table','F_N',90,1),F('p1','Push from M₁','F_1on2',0,1),F('p3','Push from M₃','F_3on2',180,1),F('a','The 20 N applied force','F_app',0,0)], why:'The 20 N acts on M₁ only. M₂ feels M₁ pushing right (16 N) and M₃ pushing back left (10 N), the partner of M₂\'s push on M₃.'},
+  {t:'mc', ctx:B3, q:'How hard, and which way, does M₂ push on M₁?', c:['16 N to the left','16 N to the right','20 N to the left','10 N to the left'], a:0, why:'3rd law partner of M₁ on M₂ (16 N right): same size, opposite direction.'},
+  {t:'num', ctx:TR, fig:'train', q:'Find the acceleration of the system.', a:0.571, unit:'m/s²', why:'a = 20 / (20 + 10 + 5) ≈ 0.57 m/s².'},
+  {t:'num', ctx:TR, fig:'train', q:'Find the tension in the string between the 10 kg and 20 kg blocks.', a:8.57, unit:'N', why:'That string pulls the 10 kg and 5 kg blocks: T = 15 × 0.571 ≈ 8.6 N.'},
+  {t:'mc', ctx:TRF, q:'Is the 20 N force enough to accelerate the blocks?', c:['Yes: total friction is 15 N, less than 20 N','No: 20 N must beat each block\'s friction separately','No: friction is more than 20 N','Only if the 10 kg block has friction too'], a:0, why:'Treat the train as one system: 12 + 3 = 15 N of friction against a 20 N pull.'},
+  {t:'num', ctx:TRF, q:'Find their acceleration.', a:0.143, tol:0.04, unit:'m/s²', why:'a = (20 − 15) / 35 ≈ 0.14 m/s².'},
+  {t:'num', ctx:ST, fig:'stack', q:'(a) Find the acceleration of the blocks.', a:0.714, unit:'m/s²', why:'Both move together: a = (20 − 15) / 7 ≈ 0.71 m/s².'},
+  {t:'num', ctx:ST, fig:'stack', q:'(b) What friction force must act between the two blocks?', a:1.43, unit:'N', why:'Friction is the only horizontal force on the 2 kg block: F = 2 × 0.714 ≈ 1.43 N.'},
+  {t:'mc', ctx:ST, q:'Which way does friction from the bottom block push the top block?', c:['Forward (right): it\'s what accelerates the top block','Backward (left)','Downward','There is none'], a:0, why:'The top block speeds up to the right, so the force on it must point right. Its 3rd law partner pushes the bottom block left.'},
+ ]},
+
+{id:'c-elev', kind:'lesson', tag:'Worksheet', title:'Elevators & apparent weight', topic:'elevator apparent weight',
+ learn:[
+  {h:'The cable', body:`<p>Up is positive. Two forces act on the elevator: tension up, gravity down.</p><div class="eqblock">T − mg = ma &nbsp;→&nbsp; T = m(g + a)</div><p>At rest or at <b>any</b> constant speed, a = 0 and T = mg.</p>`},
+  {h:'How heavy you feel', body:`<p>You judge your weight by the floor pushing on your feet: the <b>normal force</b>. A bathroom scale reads exactly that.</p><div class="eqblock">F<sub>N</sub> = m(g + a)</div><p>Accelerating up: you feel heavier. Accelerating down: lighter. Free fall (a = −g): weightless, F<sub>N</sub> = 0.</p>`},
+ ],
+ qs:[
+  {t:'num', ctx:EL, q:'(a) What is the tension when the elevator is static?', a:10000, alt:9800, unit:'N', why:'a = 0, so T = mg = 1000 × 10 = 10,000 N.'},
+  {t:'num', ctx:EL, q:'(b) Accelerating up at 2 m/s²?', a:12000, alt:11800, unit:'N', why:'T = m(g + a) = 1000 × 12 = 12,000 N.'},
+  {t:'num', ctx:EL, q:'(c) Accelerating down at 1 m/s²?', a:9000, alt:8800, unit:'N', why:'a = −1, so T = 1000 × (10 − 1) = 9,000 N.'},
+  {t:'num', ctx:EL, q:'(d) Moving at a constant 3 m/s?', a:10000, alt:9800, unit:'N', why:'Constant speed means a = 0. The 3 m/s is a distractor: T = mg = 10,000 N.'},
+  {t:'fbd', ctx:GL, q:'What are the 2 forces acting on her?', f:[F('g','Gravity from Earth','F_g',-90,1),F('n','Normal force from the floor','F_N',90,1),F('t','Tension from the cable','F_T',90,0),F('e','Force of the elevator moving','F_e',90,0)], why:'Only Earth and the floor act on her. The cable pulls the elevator, not her.'},
+  {t:'num', ctx:GL, q:'(a) Normal force when the elevator is static?', a:500, alt:490, unit:'N', why:'F_N = mg = 50 × 10 = 500 N.'},
+  {t:'num', ctx:GL, q:'(b) Accelerating up at 2 m/s²?', a:600, alt:590, unit:'N', why:'F_N = 50 × (10 + 2) = 600 N.'},
+  {t:'num', ctx:GL, q:'(c) Accelerating down at 1 m/s²?', a:450, alt:440, unit:'N', why:'F_N = 50 × (10 − 1) = 450 N.'},
+  {t:'num', ctx:GL, q:'(d) In free fall (accelerating down at g)?', a:0, unit:'N', why:'F_N = 50 × (10 − 10) = 0. She feels weightless.'},
+  {t:'mc', ctx:GL, q:'How do answers (a)–(d) match what you feel in an elevator?', c:['Heavier speeding up going up, lighter when accelerating down, weightless in free fall','You always feel the same, since gravity doesn\'t change','Heavier whenever the elevator moves down','Lighter whenever it moves fast'], a:0, why:'You feel the normal force, and it changes with acceleration, not with velocity.'},
+  {t:'tf', q:'Riding down at a constant speed, you feel lighter than normal.', a:false, why:'Constant speed means a = 0, so F_N = mg. You only feel lighter while the elevator is accelerating downward (like when it starts going down).'},
+ ]},
+
+{id:'c-elevap', kind:'boss', tag:'AP question', title:'The elevator a–t graph',
+ intro:`<p>A student of mass m stands on a platform scale in an elevator. Up is positive. An inspector gives the student this graph of the elevator\'s acceleration over time (redrawn from your worksheet, values approximate):</p><div class="fig">${FIG.elevGraph}</div>`,
+ steps:[
+  {t:'fbd', q:'(a) Draw a free-body diagram for the student.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal force from the scale','F_N',90,1),F('ma','Net force "ma"','ma',90,0),F('e','Force of the elevator moving','F_e',90,0)], why:'Two forces: gravity down, the scale pushing up. Never draw ma as a force.'},
+  {t:'mc', q:'(b) Derive the scale reading in terms of a, m, and g.', c:['F_N = m(g + a)','F_N = m(g − a)','F_N = ma','F_N = mg'], a:0, why:'Up positive: F_N − mg = ma, so F_N = m(g + a). It works for negative a too.'},
+  {t:'mc', q:'(i) During what interval is the scale\'s force on the student greatest?', c:['About 12 s to 16 s','About 2 s to 4 s','About 7 s to 10 s','About 17 s to 20 s'], a:0, why:'F_N = m(g + a) is largest when a is the most positive: the +1.2 m/s² plateau.'},
+  {t:'num', q:'(ii) Calculate that maximum force for a 45 kg student. Read a ≈ 1.2 m/s² from the graph.', a:504, alt:495, unit:'N', why:'F_N = 45 × (10 + 1.2) ≈ 504 N (495 N with g = 9.8).'},
+  {t:'mc', q:'During what interval(s) is the elevator\'s speed constant?', c:['When a = 0: about 7–10 s and 17–20 s','About 12–16 s, where the graph is flat','About 2–4 s, where the graph is flat','Never'], a:0, why:'Constant speed means zero acceleration. A flat line at 1.2 m/s² still means speeding up. This trap catches lots of people.'},
+ ],
+ model:`<p><b>(a)</b> Dot with F<sub>g</sub> down and F<sub>N</sub> (from the scale) up. <b>(b)</b> F<sub>N</sub> − mg = ma, so F<sub>N</sub> = m(g + a). <b>(i)</b> The largest positive a: about 12–16 s. <b>(ii)</b> 45(10 + 1.2) ≈ 500 N. <b>(c)</b> Speed is constant only where a = 0, about 7–10 s and 17–20 s.</p>`},
+];
+
+/* ---------- from your class: practice FRQ packets ---------- */
+const FAN=`<b>Fan-block.</b> A block has a fan on a pivot, so the fan\'s angle θ above horizontal can be set from 0° to 90°. At θ = 0 the block speeds up along the track even though there\'s friction.`;
+const posOK=mini([{f:x=>0.5+0.45*x*x,c:'field',l:'m₁'},{f:x=>0.5-0.5*x*x,c:'force',l:'m₂'}],'t','y');
+const posLin=mini([{f:x=>0.5+0.45*x,c:'field',l:'m₁'},{f:x=>0.5-0.5*x,c:'force',l:'m₂'}],'t','y');
+const posBad=mini([{f:x=>0.5+0.9*x-0.45*x*x,c:'field',l:'m₁'},{f:x=>0.5-x+0.5*x*x,c:'force',l:'m₂'}],'t','y');
+const posDown=mini([{f:x=>0.5-0.25*x*x,c:'field',l:'m₁'},{f:x=>0.5-0.5*x*x,c:'force',l:'m₂'}],'t','y');
+const wCos=mini([{f:x=>0.92*Math.cos(x*Math.PI/2),c:'force'}],'θ','W');
+const wLin=mini([{f:x=>0.92*(1-x),c:'force'}],'θ','W');
+const wFlat=mini([{f:x=>0.6,c:'force'}],'θ','W');
+const wUp=mini([{f:x=>0.92*Math.sin(x*Math.PI/2),c:'force'}],'θ','W');
+const FRQS = [
+{id:'p-angles', kind:'lesson', tag:'Forces at angles', title:'Angled forces & components', topic:'forces at an angle components',
+ learn:[
+  {h:'Split it into components', body:`<p>A force F at angle θ above the horizontal does two jobs at once:</p><div class="eqblock">F<sub>x</sub> = F cosθ &nbsp;&nbsp; F<sub>y</sub> = F sinθ</div><p>On a free-body diagram, draw the <b>one angled arrow</b>. Components only belong in your math.</p>`, fig:'fanBlock'},
+  {h:'Angles change the normal force', body:`<p>Tilt a force upward and it lifts part of the weight, so the surface pushes less:</p><div class="eqblock">F<sub>N</sub> = mg − F sinθ</div><p>Less F<sub>N</sub> means less friction. Push down at an angle and F<sub>N</sub> = mg + F sinθ instead.</p><p>A force only does work with the part along the motion: <span class="eq">W = Fd cosθ</span>.</p>`},
+ ],
+ qs:[
+  {t:'num', q:'A rope pulls with 20 N at 30° above the horizontal. Find the horizontal component.', a:17.3, unit:'N', why:'Fx = 20 cos 30° ≈ 17.3 N.'},
+  {t:'num', q:'Same rope: find the vertical component.', a:10, unit:'N', why:'Fy = 20 sin 30° = 10 N.'},
+  {t:'mc', q:'You pull a sled with a rope angled upward. Compared with mg, the normal force on the sled is…', c:['Smaller','Larger','Equal','Zero'], a:0, why:'The rope\'s upward component holds up part of the weight, so the snow pushes less: F_N = mg − F sinθ.'},
+  {t:'fbd', q:'A sled is pulled across snow by a rope angled 30° upward, with friction. Pick every force on the sled.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from snow','F_N',90,1),F('t','Tension along the rope (30° up)','F_T',30,1),F('fr','Kinetic friction','F_f',180,1),F('th','Horizontal part of tension','F_Tx',0,0)], why:'Draw the tension once, along the rope. Its components aren\'t separate forces.'},
+  {t:'num', ctx:'A 0.50 kg fan-block has its fan at θ = 30°, giving a 2.0 N force. μk = 0.20.', fig:'fanBlock', q:'Find the normal force on the block.', a:4.0, alt:3.9, unit:'N', why:'F_N = mg − F sinθ = 5.0 − 2.0 × 0.5 = 4.0 N.'},
+  {t:'num', ctx:'A 0.50 kg fan-block has its fan at θ = 30°, giving a 2.0 N force. μk = 0.20.', q:'Find the friction force.', a:0.8, alt:0.78, unit:'N', why:'f = μk·F_N = 0.20 × 4.0 = 0.80 N.'},
+  {t:'num', ctx:'A 0.50 kg fan-block has its fan at θ = 30°, giving a 2.0 N force. μk = 0.20.', q:'Find the block\'s acceleration.', a:1.86, alt:1.90, unit:'m/s²', why:'a = (F cosθ − f) / m = (1.73 − 0.80) / 0.50 ≈ 1.86 m/s².'},
+  {t:'mc', q:'The fan is turned to θ = 90° (straight up) and the block stays on the track. What does the fan do now?', c:['Only reduces the normal force; no push along the track','Pushes the block forward at full strength','Increases friction','Nothing at all'], a:0, why:'cos 90° = 0, so there\'s no horizontal push. sin 90° = 1, so it lifts with its full force.'},
+  {t:'num', q:'A 2.0 N force acts at 60° to the direction of motion while an object moves 1.5 m. How much work does it do?', a:1.5, unit:'J', why:'W = Fd cosθ = 2.0 × 1.5 × cos 60° = 1.5 J.'},
+ ]},
+
+{id:'p-fan', kind:'boss', tag:'Practice FRQ', title:'The fan-block',
+ intro:`<p>${FAN.replace(/<\/?b>/g,'')} The student has normal school lab equipment. Assume the air\'s force F on the fan is the same at every angle.</p><div class="fig">${FIG.fanBlock}</div>`,
+ steps:[
+  {t:'mc', ctx:'(a) Measure the force F the air exerts on the fan-block.', q:'Which method measures F without friction getting in the way?', c:['Point the fan straight up with the block on a scale; F = how much the reading drops when the fan turns on','Time the block along the track with the fan horizontal and use F = ma','Weigh the block with the fan off','Measure how fast the fan blades spin'], a:0, why:'At θ = 90° the air pushes straight up, so the scale reads mg − F. No friction is involved. (Putting it on a low-friction cart and using F = ma also works.)'},
+  {t:'mc', ctx:'(b) Use the fan-block, fan on, to find μk with the track.', q:'Which measurements does the student need?', c:['Mass (balance), plus distance and time from rest (meterstick, stopwatch) with the fan at θ = 0','Only the mass','Only the time to cross the track','The fan angle and the fan speed'], a:0, why:'Distance and time from rest give the acceleration: a = 2d/t². Mass and F (from part a) then let you solve for friction.'},
+  {t:'mc', q:'Which step reduces experimental uncertainty?', c:['Repeat several trials from rest, average the times, and use a long distance','Do one quick trial','Change the fan angle every trial','Start the block with a push'], a:0, why:'Averaging cuts random timing error, and a longer distance makes the reaction-time error a smaller fraction of t.'},
+  {t:'fbd', ctx:'(b iv) The fan-block during that experiment: fan at θ = 0, block sliding right.', q:'Draw and label the forces on the fan-block system.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from track','F_N',90,1),F('f','Kinetic friction','F_f',180,1),F('air','Force from the air on the fan','F_air',0,1),F('m','Force of motion','F_m',0,0)], why:'Four forces. The air pushes the fan forward, so that arrow points the way it moves.'},
+  {t:'mc', q:'(c) How should the data be analyzed to get μk?', c:['μk = (F − ma) / (mg), with a = 2d/t²','μk = (F + ma) / (mg)','μk = ma / (mg)','μk = F / (mg)'], a:0, why:'Horizontally: F − μk·mg = ma, so μk = (F − ma)/(mg). Vertically F_N = mg because θ = 0.'},
+  {t:'mc', html:true, ctx:'(d) Now the block rides on a low-friction cart. The system travels a fixed distance D at different angles θ.', q:'Which graph shows the work done by the air as a function of θ?', c:[wCos,wLin,wFlat,wUp], ansText:'A cosine curve: largest at 0°, falling to zero at 90°', a:0, why:'W = FD cosθ. It\'s flat near 0°, then drops faster, reaching zero at 90°. It isn\'t a straight line.'},
+ ],
+ model:`<p><b>(a)</b> Set the fan to 90° with the block on a scale. F equals the drop in the reading when the fan turns on (or use a low-friction cart and F = ma). <b>(b)</b> With θ = 0, measure the mass with a balance, then distance d and time t from rest with a meterstick and stopwatch. Repeat and average. FBD: F<sub>g</sub>, F<sub>N</sub>, F<sub>f</sub> backward, F<sub>air</sub> forward. <b>(c)</b> a = 2d/t², then μ<sub>k</sub> = (F − ma)/(mg). <b>(d)</b> W = FD cosθ: a cosine curve from FD at 0° down to 0 at 90°.</p>`},
+
+{id:'p-4h', kind:'boss', tag:'Practice FRQ', title:'Two blocks, one string of length 4h',
+ intro:`<p>Blocks A and B each have mass m and are tied together by a string of length <b>4h</b>. A sits on a <b>smooth</b> table that is <b>2h</b> high. B hangs over the edge and is released from rest at time t = 0, a height <b>h</b> above the floor. Give answers in terms of h, m, and g.</p><div class="fig">${FIG.fourH}</div>`,
+ steps:[
+  {t:'mc', q:'(a) What is the acceleration of B as it falls?', c:['g/2','g','g/4','2g'], a:0, why:'System of both blocks: the only external pull along the string is B\'s weight mg, and it accelerates 2m. a = mg/2m = g/2.'},
+  {t:'mc', q:'(b) At what time t₁ does B hit the floor?', c:['2√(h/g)','√(2h/g)','√(h/g)','4√(h/g)'], a:0, why:'h = ½(g/2)t₁², so t₁² = 4h/g and t₁ = 2√(h/g).'},
+  {t:'mc', q:'(c) Describe A\'s motion from t = 0 until B lands.', c:['Speeds up toward the edge with a constant acceleration of g/2','Moves at constant velocity','Stays at rest','Slows down'], a:0, why:'The string pulls A with a constant tension, so A speeds up uniformly at g/2, just like B.'},
+  {t:'mc', q:'(d) Describe A\'s motion after B lands, until A leaves the table.', c:['Constant speed √(gh): the string goes slack, so there\'s no horizontal force','Keeps speeding up at g/2','Slows to a stop from friction','Speeds up at g'], a:0, why:'The table is smooth and the string is slack. First law: A keeps v = (g/2)·t₁ = √(gh).'},
+  {t:'mc', q:'(e) How far apart do the two blocks land?', c:['2h','h','3h','4h'], a:0, why:'B lands right below the edge. A leaves the edge at √(gh) and falls 2h, which takes 2√(h/g). It travels √(gh) × 2√(h/g) = 2h sideways.'},
+ ],
+ model:`<p><b>(a)</b> a = g/2. <b>(b)</b> t<sub>1</sub> = 2√(h/g). <b>(c)</b> A speeds up uniformly toward the edge at g/2. <b>(d)</b> The string goes slack and the table is smooth, so A moves at a constant √(gh). <b>(e)</b> A becomes a projectile launched horizontally at √(gh) from height 2h. It lands 2h from the table, and B is directly below the edge, so they land 2h apart.</p>`},
+
+{id:'p-jb1', kind:'boss', tag:'Joined bodies · Q1', title:'Measuring μk with a pulley',
+ intro:`<p>A student wants the coefficient of kinetic friction between block 1 (mass m<sub>1</sub>) and a wooden table. Block 1 is tied over a pulley to hanging block 2 (mass m<sub>2</sub>). Normal lab equipment, but no electronic sensors.</p><div class="fig">${FIG.pulleyGen}</div>`,
+ steps:[
+  {t:'mc', q:'(a i) What should be measured, and with what?', c:['m₁ and m₂ (balance), plus drop height and fall time of m₂ (meterstick, stopwatch)','Only m₁ and m₂','Only the time','The string length and pulley size'], a:0, why:'The masses go into Newton\'s 2nd law. Height and time give the acceleration.'},
+  {t:'mc', q:'(b) How do you get the acceleration from the data?', c:['Average the times, then use h = ½at² from rest: a = 2h/t²','a = h/t','a = g','Average the two masses'], a:0, why:'Released from rest, so h = ½at². Both blocks share this acceleration because they share the string.'},
+  {t:'mc', q:'(c) Derive μk in terms of m₁, m₂, and a.', c:['μk = [m₂g − (m₁ + m₂)a] / (m₁g)','μk = [m₂g + (m₁ + m₂)a] / (m₁g)','μk = m₂ / m₁','μk = (m₂g − m₁a) / (m₂g)'], a:0, why:'Block 1: T − μk·m₁g = m₁a. Block 2: m₂g − T = m₂a. Add them: m₂g − μk·m₁g = (m₁ + m₂)a.'},
+  {t:'mc', q:'(d) A large mass is stuck on top of block 1 and the experiment is repeated. What happens to μk?', c:['Stays the same: μ depends on the two surfaces, not on mass','Increases','Decreases','Depends on how fast it moves'], a:0, why:'Extra mass changes the friction force, but not the roughness of the surfaces, which is all μ measures.'},
+  {t:'fbd', ctx:'(e) The string is cut while block 1 is sliding right.', q:'Forces on block 1 right after the cut:', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from table','F_N',90,1),F('f','Kinetic friction','F_f',180,1),F('t','Tension','F_T',0,0),F('m','Force of motion','F_m',0,0)], why:'No more tension. It\'s still sliding, so kinetic friction still points backward.'},
+  {t:'fbd', ctx:'(e) The string is cut while block 2 is falling.', q:'Forces on block 2 right after the cut:', f:[F('g','Gravity','F_g',-90,1),F('t','Tension','F_T',90,0),F('a','Air resistance','F_air',90,0)], why:'With the string cut, only gravity is left. It\'s in free fall.'},
+ ],
+ model:`<p><b>(a)</b> Measure m<sub>1</sub> and m<sub>2</sub> with a balance, and the drop height h and fall time t of block 2 with a meterstick and stopwatch. Repeat and average. <b>(b)</b> a = 2h/t². <b>(c)</b> μ<sub>k</sub> = [m<sub>2</sub>g − (m<sub>1</sub> + m<sub>2</sub>)a] / (m<sub>1</sub>g). <b>(d)</b> Stays the same. <b>(e)</b> Block 1: F<sub>g</sub>, F<sub>N</sub>, friction backward. Block 2: F<sub>g</sub> only.</p>`},
+
+{id:'p-jb2', kind:'boss', tag:'Joined bodies · Q2', title:'Atwood machine: measuring g',
+ intro:`<p>Two blocks hang on either side of a light, frictionless pulley, with <b>m<sub>1</sub> &lt; m<sub>2</sub></b>. They are released from rest with their centers at the same height h above the floor.</p><div class="fig">${FIG.atwoodEq}</div>`,
+ steps:[
+  {t:'mc', html:true, q:'(a) Which graph shows each block\'s height until m₂ hits the floor?', c:[posOK,posLin,posBad,posDown], ansText:'Two curves from h: m₁ curving up faster and faster, m₂ curving down to 0', a:0, why:'Both speed up from rest at the same constant acceleration, so position vs. time is a parabola. m₁ goes up (concave up) and m₂ goes down (concave down) by the same amount.'},
+  {t:'mc', q:'(b) Derive the acceleration of block 1.', c:['a = (m₂ − m₁)g / (m₁ + m₂)','a = (m₂ + m₁)g / (m₂ − m₁)','a = m₂g / m₁','a = g'], a:0, why:'Whole system: net external force (m₂ − m₁)g acts on total mass m₁ + m₂. Tension is internal.'},
+  {t:'mc', q:'(c) Both masses are doubled. The acceleration…', c:['Stays the same','Increases','Decreases','Doubles'], a:0, why:'The net force doubles and so does the total mass. The 2s cancel.'},
+  {t:'mc', q:'(d) How could you use this setup to measure g?', c:['Measure both masses, the drop height h, and the time t for m₂ to land; a = 2h/t²; then g = a(m₁ + m₂)/(m₂ − m₁). Repeat and average.','Time one rotation of the pulley','Measure only the masses','Drop m₂ alone without the string'], a:0, why:'Rearranging part (b) gives g from the measured a and masses.'},
+  {t:'num', ctx:'Try it with numbers: m₁ = 0.20 kg, m₂ = 0.25 kg. m₂ falls 1.0 m in an average of 1.35 s.', q:'What value of g does this give?', a:9.88, unit:'m/s²', why:'a = 2(1.0)/1.35² ≈ 1.10 m/s². g = 1.10 × 0.45 / 0.05 ≈ 9.9 m/s².'},
+ ],
+ model:`<p><b>(a)</b> Two parabolas starting at h: m<sub>1</sub> curving upward, m<sub>2</sub> curving down to the floor at t<sub>f</sub>. <b>(b)</b> a = (m<sub>2</sub> − m<sub>1</sub>)g/(m<sub>1</sub> + m<sub>2</sub>). <b>(c)</b> Stays the same, because the doubling cancels. <b>(d)</b> Measure the masses, the drop height, and the fall time over repeated trials. Find a = 2h/t², then solve for g.</p>`},
+
+{id:'p-jb3', kind:'boss', tag:'Joined bodies · Q3', title:'Climbing the rope',
+ intro:`<p>A light rope runs over a light, frictionless pulley. Student A (mass m<sub>A</sub>) stands on the ground holding one end. Student B (mass m<sub>B</sub> &lt; m<sub>A</sub>) hangs from the other end, then starts climbing with constant acceleration a upward.</p><div class="fig">${FIG.rope}</div>`,
+ steps:[
+  {t:'mc', q:'(a) Derive the tension in the rope.', c:['F_T = m_B(g + a)','F_T = m_B(g − a)','F_T = m_B a','F_T = m_A g'], a:0, why:'On B: F_T − m_B·g = m_B·a, so F_T = m_B(g + a). To accelerate up, B has to pull harder than its own weight.'},
+  {t:'fbd', ctx:'Student A is still standing on the ground while B climbs.', q:'Pick every force on Student A.', f:[F('g','Gravity','F_g',-90,1),F('t','Tension from the rope','F_T',90,1),F('n','Normal from the floor','F_N',90,1),F('b','Force from Student B','F_B',-90,0)], why:'B only touches the rope. A feels the rope pulling up, the floor pushing up, and gravity.'},
+  {t:'mc', q:'(b) When B starts climbing, how does the floor\'s force on A change?', c:['Decreases: tension pulls A up harder, so the floor pushes less','Increases','Stays the same','Becomes negative'], a:0, why:'A is still at rest: F_N + F_T = m_A·g. Tension goes from m_B·g up to m_B(g + a), so F_N drops by m_B·a.'},
+  {t:'mc', q:'(c) B climbs even harder and A is lifted off the floor. Rank the forces on A.', c:['F_T > m_A g > F_N = 0','m_A g > F_T > F_N','F_T = m_A g > F_N','F_N > F_T > m_A g'], a:0, why:'Off the floor means no contact, so F_N = 0. A accelerates upward, so the net force points up and F_T must beat gravity.'},
+  {t:'num', ctx:'With numbers: m_B = 50 kg climbs with a = 1.0 m/s².', q:'Find the tension.', a:550, alt:540, unit:'N', why:'F_T = 50 × (10 + 1) = 550 N.'},
+  {t:'num', ctx:'With numbers: m_B = 50 kg climbs with a = 1.0 m/s², and m_A = 60 kg stays on the floor.', q:'Find the floor\'s normal force on A.', a:50, alt:48, unit:'N', why:'F_N = m_A·g − F_T = 600 − 550 = 50 N.'},
+ ],
+ model:`<p><b>(a)</b> F<sub>T</sub> = m<sub>B</sub>(g + a). <b>(b)</b> Decreases. A stays at rest, so F<sub>N</sub> = m<sub>A</sub>g − F<sub>T</sub>, and the tension went up. <b>(c)</b> F<sub>T</sub> &gt; m<sub>A</sub>g &gt; F<sub>N</sub>. Once A leaves the floor, the normal force is zero. A accelerates upward, so the net force is up and the tension must be bigger than A\'s weight.</p>`},
+
+{id:'p-jb4', kind:'boss', tag:'Joined bodies · Q4', title:'Stacked blocks + a hanging weight',
+ intro:`<p>Block B (M<sub>B</sub>) sits on block A (M<sub>A</sub>) on a table. A string from A runs over a frictionless pulley to hanging block C (M<sub>C</sub>). Table–A friction: μ<sub>sA</sub>, μ<sub>kA</sub>. A–B friction: μ<sub>sB</sub>, μ<sub>kB</sub>.</p><div class="fig">${FIG.stackHang}</div>`,
+ steps:[
+  {t:'mc', q:'(a i) C is at rest. What is the tension?', c:['M_C g','(M_A + M_B)g','M_C g − μ_sA(M_A + M_B)g','0'], a:0, why:'C has zero acceleration: F_T = M_C·g.'},
+  {t:'mc', q:'(a ii) Still at rest. What is the friction force between A and the table?', c:['M_C g: static friction just matches the tension','μ_sA(M_A + M_B)g, always','μ_kA(M_A + M_B)g','0'], a:0, why:'Static friction is only as big as it needs to be. A + B is at rest, so friction balances the tension: f = M_C·g. μ_sA(M_A + M_B)g is the maximum, which you reach only right before slipping. (Your answer key writes the maximum. Ask your teacher if they meant "just about to slip.")'},
+  {t:'mc', q:'(b) C now falls at constant speed. What is the friction between A and the table?', c:['μ_kA(M_A + M_B)g, and it also equals M_C g','μ_sA(M_A + M_B)g','μ_kA·M_A·g','0'], a:0, why:'Sliding means kinetic friction. B sits on A, so the table pushes up with (M_A + M_B)g. Constant speed also means this equals the tension, M_C·g.'},
+  {t:'mc', q:'(c) C speeds up and all blocks move together. Find the acceleration.', c:['a = [M_C − μ_kA(M_A + M_B)]g / (M_A + M_B + M_C)','a = M_C g / (M_A + M_B + M_C)','a = [M_C − μ_kA M_A]g / (M_A + M_C)','a = (M_C − M_A − M_B)g / (M_A + M_B + M_C)'], a:0, why:'All three blocks as one system: C\'s weight drives it, table friction resists, and the friction between A and B is internal.'},
+  {t:'fbd', ctx:'Blocks A and B accelerate to the right together.', q:'Pick every force on block B.', f:[F('g','Gravity','F_g',-90,1),F('n','Normal from A','F_N',90,1),F('f','Static friction from A (forward)','F_f',0,1),F('fb','Friction from A (backward)','F_f',180,0),F('t','Tension','F_T',0,0)], why:'The string isn\'t tied to B. The only thing that can speed B up is static friction from A, pointing forward.'},
+  {t:'mc', q:'(d) As the system\'s acceleration increases, what happens to the friction between A and B?', c:['It grows (it equals M_B·a) until it reaches μ_sB·M_B·g; then B slips and friction drops to μ_kB·M_B·g','It stays the same','It shrinks right away','It\'s always zero'], a:0, why:'B needs F = M_B·a to keep up. Static friction can supply that only up to its maximum. Past that, B slides and kinetic friction (smaller) takes over.'},
+ ],
+ model:`<p><b>(a)</b> F<sub>T</sub> = M<sub>C</sub>g. Friction with the table = M<sub>C</sub>g (static, matching the tension, up to μ<sub>sA</sub>(M<sub>A</sub> + M<sub>B</sub>)g). <b>(b)</b> F<sub>T</sub> = M<sub>C</sub>g and f = μ<sub>kA</sub>(M<sub>A</sub> + M<sub>B</sub>)g. <b>(c)</b> a = [M<sub>C</sub> − μ<sub>kA</sub>(M<sub>A</sub> + M<sub>B</sub>)]g / (M<sub>A</sub> + M<sub>B</sub> + M<sub>C</sub>). <b>(d)</b> Friction on B rises with a (f = M<sub>B</sub>a) until it hits μ<sub>sB</sub>M<sub>B</sub>g. Then B slips, friction drops to the kinetic value, and B eventually slides off.</p>`},
+];
+
+/* ---------- MCQ sets in the style of the class's AP Classroom practice (original questions) ---------- */
+const PUSH=`Two identical boxes of mass M sit on a floor with friction coefficient μ. Box 1 is <b>pushed</b> with force F₀ aimed θ <b>below</b> the horizontal. Box 2 is <b>pulled</b> with the same F₀ aimed θ <b>above</b> the horizontal.`;
+const RAMP=`A box of mass m is on a ramp at angle θ. <b>+x points up the ramp.</b> Kinetic friction has magnitude f.`;
+const MT=`A 3.0 kg block on a frictionless table is tied over a light pulley to a hanging 1.0 kg block and released from rest. (g = 10 m/s²)`;
+const TWO=`Blocks of 2.0 kg and 3.0 kg touch on a frictionless table. A force F pushes the 2.0 kg block, which pushes the 3.0 kg block with 6.0 N.`;
+const spd=(a,b,la,lb)=>mini([{f:a,c:'force',l:la},{f:b,c:'field',l:lb}],'t','v');
+const sOK=spd(x=>0.35,x=>0.35+0.55*x,'1','2'), sBoth=spd(x=>0.35+0.6*x,x=>0.35+0.3*x,'1','2'), sFlat=spd(x=>0.3,x=>0.6,'1','2'), sDrop=spd(x=>0.35-0.3*x,x=>0.35,'1','2');
+const MCQ = [
+{id:'m-angles', kind:'lesson', tag:'MCQ set 1', title:'Angled pushes & ramps',
+ learn:[
+  {h:'How these MCQs work', body:`<p><b>1.</b> Write ΣF = ma along each axis <b>before</b> you look at the choices.</p><p><b>2.</b> For symbolic answers, test an extreme case. Set θ = 0 or μ = 0 and see which choice still makes sense.</p><p><b>3.</b> Use the sign convention the question gives you (like "+x up the ramp"), even if it isn\'t the one you\'d pick.</p>`},
+ ],
+ qs:[
+  {t:'mc', ctx:PUSH, fig:'pushPull', q:'Which expression gives the acceleration of box 1 (the pushed box)?', c:['[F₀cosθ − μ(Mg + F₀sinθ)] / M','[F₀cosθ − μ(Mg − F₀sinθ)] / M','[F₀cosθ + μ(Mg + F₀sinθ)] / M','(F₀ − μMg) / M'], a:0, why:'Pushing down adds F₀sinθ to the normal force, so friction is μ(Mg + F₀sinθ). Check with θ = 0: you get (F₀ − μMg)/M, as expected.'},
+  {t:'mc', ctx:PUSH, q:'Which expression gives the acceleration of box 2 (the pulled box)?', c:['[F₀cosθ − μ(Mg − F₀sinθ)] / M','[F₀cosθ − μ(Mg + F₀sinθ)] / M','[F₀cosθ + μ(Mg − F₀sinθ)] / M','[F₀sinθ − μMg] / M'], a:0, why:'Pulling up lifts part of the weight: F_N = Mg − F₀sinθ. Friction always subtracts from the forward push.'},
+  {t:'mc', ctx:PUSH, q:'Which box has the larger friction force on it?', c:['Box 1, the pushed one','Box 2, the pulled one','They are equal','It depends on μ'], a:0, why:'Same μ, but box 1 is pressed harder into the floor (Mg + F₀sinθ vs Mg − F₀sinθ).'},
+  {t:'mc', html:true, ctx:'Both boxes start with the same speed. The push on box 1 is just strong enough to keep it moving at constant speed.', q:'Which speed–time graph could show both boxes? (1 = pushed box, 2 = pulled box)', c:[sOK,sBoth,sFlat,sDrop], ansText:'Box 1 (push): flat line. Box 2 (pull): straight line rising from the same starting speed', a:0, why:'Box 1 has zero net force, so its speed stays constant. Box 2 has the same forward component but less friction, so it has a constant positive acceleration: a straight rising line.'},
+  {t:'mc', ctx:RAMP, fig:'rampUp', q:'The box slides DOWN the ramp. Which equation gives its acceleration a?', c:['f − mg sinθ = ma','−f − mg sinθ = ma','mg sinθ − f = ma','mg cosθ − f = ma'], a:0, why:'Sliding down means friction points up the ramp (+x). Gravity\'s component points down the ramp (−x). The result a is negative, which is fine.'},
+  {t:'mc', ctx:RAMP, fig:'rampUp', q:'The box is launched UP the ramp instead. Which equation applies while it slides up?', c:['−f − mg sinθ = ma','f − mg sinθ = ma','mg sinθ − f = ma','−f + mg sinθ = ma'], a:0, why:'Sliding up, friction now points down the ramp. Both forces along the ramp point in −x.'},
+  {t:'mc', ctx:RAMP, q:'Compared with sliding down, the box\'s acceleration while sliding up is…', c:['Larger in size','Smaller in size','The same','Zero'], a:0, why:'Going up, friction and gravity team up (f + mg sinθ). Going down, they oppose each other (mg sinθ − f).'},
+  {t:'mc', q:'A block sits at rest on a ramp at angle θ. μs is known. What is the static friction force on it?', c:['mg sinθ','μs·mg cosθ','μs·mg','mg cosθ'], a:0, why:'Static friction matches what\'s needed to hold the block: mg sinθ. μs·mg cosθ is only reached right at the slipping point.'},
+  {t:'tf', q:'Pulling a box at an upward angle always gives a bigger acceleration than pulling horizontally with the same force.', a:false, why:'Tilting the pull reduces friction but also cuts the forward component to F cosθ. At steep angles you lose more push than you save in friction.'},
+ ]},
+
+{id:'m-joined', kind:'lesson', tag:'MCQ set 2', title:'Joined blocks & pulleys',
+ qs:[
+  {t:'mc', ctx:MT, fig:'pulleyGen', q:'The acceleration of the 3.0 kg block is most nearly', c:['2.5 m/s²','3.3 m/s²','7.5 m/s²','10 m/s²','0'], a:0, why:'Only the hanging weight (10 N) drives all 4.0 kg: a = 10 / 4 = 2.5 m/s².'},
+  {t:'mc', ctx:MT, q:'The tension in the string is most nearly', c:['7.5 N','10 N','2.5 N','30 N'], a:0, why:'Tension is the only horizontal force on the 3.0 kg block: T = 3.0 × 2.5 = 7.5 N. It\'s less than 10 N because the hanging block accelerates downward.'},
+  {t:'mc', ctx:TWO, q:'The acceleration of the two blocks is', c:['2.0 m/s²','3.0 m/s²','1.2 m/s²','1.0 m/s²'], a:0, why:'Look at the 3.0 kg block alone: the only horizontal force on it is 6.0 N, so a = 6.0 / 3.0 = 2.0 m/s².'},
+  {t:'mc', ctx:TWO, q:'The applied force F is', c:['10 N','6.0 N','4.0 N','15 N'], a:0, why:'Both blocks together: F = (2.0 + 3.0) × 2.0 = 10 N.'},
+  {t:'mc', ctx:TWO, q:'How hard does the 3.0 kg block push back on the 2.0 kg block?', c:['Exactly 6.0 N','Less than 6.0 N','More than 6.0 N','Zero, since they move together'], a:0, why:'Newton\'s 3rd law: always equal and opposite, even while accelerating.'},
+  {t:'mc', ctx:'An Atwood machine holds a 4.0 kg block and a 1.0 kg block over a light pulley. They\'re released from rest. (g = 10 m/s²)', q:'The speed of the 4.0 kg block after 1.0 s is most nearly', c:['6.0 m/s','10 m/s','3.0 m/s','2.0 m/s'], a:0, why:'a = (4 − 1)(10) / 5 = 6.0 m/s². From rest, v = at = 6.0 m/s.'},
+  {t:'mc', ctx:'Block X (mass M) on a frictionless table is tied over a light pulley to hanging block Y (mass 3M). Released from rest.', q:'Which way does the two-block system\'s center of mass move, and what is X\'s acceleration?', c:['Down and to the right; 3g/4','Straight down; 3g/4','Down and to the right; g','To the right only; 3g/4'], a:0, why:'X moves right and Y moves down, so the center of mass moves down and to the right. a = 3Mg / 4M = 3g/4.'},
+ ]},
+
+{id:'m-com', kind:'lesson', tag:'MCQ set 3', title:'Center of mass & 3rd law traps',
+ qs:[
+  {t:'mc', ctx:'A ring is fixed to a uniform 1.0 m board at the 10 cm mark, then moved to the 50 cm mark (the board\'s center). The ring and the board both have real mass.', q:'Which could be how far the system\'s center of mass moved?', c:['15 cm','Zero','40 cm','50 cm'], a:0, why:'Before, the center of mass sits somewhere between 10 cm and 50 cm. After, it\'s exactly at 50 cm. So it moves more than 0 and less than 40 cm.'},
+  {t:'mc', ctx:'Two uniform rods are identical except that one has a much bigger, heavier end cap.', q:'Compare the distances from each cap to its rod\'s center of mass.', c:['Shorter for the big-cap rod','Longer for the big-cap rod','The same','Depends on orientation'], a:0, why:'More mass at the cap pulls the center of mass toward it.'},
+  {t:'mc', q:'A child raises a box with increasing speed. How does the force of the box on the child\'s hand compare?', c:['It equals the hand\'s push on the box, and both are bigger than the box\'s weight','It equals the box\'s weight','It\'s less than the hand\'s push, since the box goes up','It\'s zero once the box moves'], a:0, why:'Third law: box-on-hand = hand-on-box. Speeding up upward means a net upward force, so the hand pushes more than mg.'},
+  {t:'mc', ctx:'A student holds a backpack still, then lowers it while slowing it down.', q:'While the pack moves down and slows, the force of the pack on the hand is…', c:['Bigger than when it was held still','Smaller than when it was held still','The same as when it was held still','Zero'], a:0, why:'Moving down and slowing means the acceleration points UP. So the hand pushes more than mg, and by the 3rd law the pack pushes back just as hard.'},
+  {t:'mc', ctx:'Two skaters stand at rest on ice and push off each other. The 40 kg skater glides left at 3 m/s.', q:'What does the center of mass of the pair do afterward?', c:['Stays at rest in the same place','Moves left','Moves right','Moves left at 3 m/s'], a:0, why:'The push is internal. No net external force acts, so the center of mass keeps its velocity: zero.'},
+ ]},
+];
+
+const SECTIONS=[
+  {key:'unit', eyebrow:'AP Physics 1 · Unit 2', title:'Force and Translational Dynamics', meta:'9 topics · 5 real FRQs', nodes:MAIN},
+  {key:'class', eyebrow:'From your class', title:'Friction, pulleys, systems & elevators', meta:'Your worksheets, every problem', nodes:CLASS},
+  {key:'frq', eyebrow:'From your class', title:'Practice FRQs: joined bodies & angles', meta:'7 levels from your FRQ packets', nodes:FRQS},
+  {key:'mcq', eyebrow:'From your class', title:'MCQ practice: Forces 1 style', meta:'21 new questions like your AP Classroom set', nodes:MCQ},
+];
+const NODES = SECTIONS.flatMap(s=>s.nodes.map(n=>(n.sec=s,n)));
+
+/* ---------- state ---------- */
+const KEY='forcepath-v1';
+const dayStr=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const DEF={xp:0,done:{},open:{},streak:0,last:null,day:null,dayXp:0,sound:true,skip:false,goal:50,onboarded:false,place:null,focus:[],updated:0};
+let S={...DEF};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s) S={...S,...s};}catch(e){}
+
+/* progress follows the viewer's Claude account (db: data/users/<id>/progress); the browser copy is a cache */
+let ACCT={state:'loading',me:null}, REF=null, cloudBody='', saveTimer=null, saving=Promise.resolve();
+const save=()=>{S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  if(REF){clearTimeout(saveTimer);saveTimer=setTimeout(pushCloud,800);}};
+function pushCloud(){
+  if(!REF) return; const body=JSON.stringify({...S,sound:undefined});
+  if(body===cloudBody) return;
+  saving=saving.then(()=>REF.set(JSON.parse(body))).then(()=>{cloudBody=body;}).catch(e=>{
+    if(e&&(e.code==='invalid_argument'||e.code==='revoked'||e.code==='not_granted')){REF=null;ACCT.state='device';renderAcct();}});
+}
+function merge(a,b){
+  const o={...DEF,...a};
+  o.xp=Math.max(a.xp||0,b.xp||0);
+  o.done={...(b.done||{}),...(a.done||{})}; o.open={...(b.open||{}),...(a.open||{})};
+  const lat=(b.last||'')>(a.last||'')?b:a; o.streak=lat.streak||0; o.last=lat.last||null;
+  if(a.day===b.day) o.dayXp=Math.max(a.dayXp||0,b.dayXp||0); else {const d=(b.day||'')>(a.day||'')?b:a; o.day=d.day; o.dayXp=d.dayXp||0;}
+  const nw=(b.updated||0)>(a.updated||0)?b:a; o.goal=nw.goal||50; o.skip=!!nw.skip; o.updated=nw.updated||0;
+  o.onboarded=!!(a.onboarded||b.onboarded);
+  const pb=(b.place&&b.place.date)||0, pa=(a.place&&a.place.date)||0;
+  if(pb>pa){o.place=b.place;o.focus=b.focus||[];} else {o.place=a.place;o.focus=a.focus||[];}
+  return o;
+}
+async function initCloud(){
+  const c=window.claude;
+  if(!c||!c.use){ACCT={state:'device',me:null,web:true};return;}
+  try{
+    const [db,user]=await Promise.all([c.use('db'),c.use('user')]);
+    const me=user?await user.me():null; ACCT.me=me;
+    if(!db||!me||!me.id){ACCT.state='device';return;}
+    const ref=db.doc('data/users/'+me.id+'/progress');
+    const snap=await Promise.race([ref.get(),new Promise((_,rej)=>setTimeout(()=>rej({code:'timeout'}),10000))]);
+    if(snap.exists){const d=snap.data(); cloudBody=JSON.stringify(d); S=merge(S,d);}
+    REF=ref; ACCT.state='synced'; rollDay();
+    try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+    pushCloud();
+  }catch(e){ACCT.state='device';}
+}
+function rollDay(){const t=dayStr(); if(S.day!==t){S.day=t;S.dayXp=0;}
+  if(S.last){const y=new Date();y.setDate(y.getDate()-1); if(S.last!==t && S.last!==dayStr(y)) S.streak=0;}}
+function addXp(n){rollDay();const t=dayStr();S.xp+=n;S.dayXp+=n;
+  if(S.last!==t){const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===dayStr(y))?S.streak+1:1;S.last=t;}save();}
+rollDay();
+const goal=()=>S.goal||50;
+
+/* ---------- sound ---------- */
+let AC=null;
+function tone(seq){ if(!S.sound) return; try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  let t=AC.currentTime; seq.forEach(([f,d,type='sine'])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02);t+=d*.8;});}catch(e){} }
+const sGood=()=>tone([[660,.12],[990,.2]]), sBad=()=>tone([[240,.18,'triangle'],[180,.26,'triangle']]), sWin=()=>tone([[523,.14],[659,.14],[784,.14],[1047,.35]]);
+
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const h=(html)=>{const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild;};
+const shuffle=(a)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const esc=(s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const symHtml=(s)=>{const [a,b]=s.split('_');return b?`${esc(a)}<sub>${esc(b)}</sub>`:esc(a);};
+const unlocked=(n)=>{const a=n.sec.nodes,i=a.indexOf(n);return S.skip||i===0||!!S.open[n.id]||!!S.done[a[i-1].id];};
+const tagOf=(n)=>n.year?`${n.year} · ${n.qnum}`:n.tag||`Topic ${n.id}`;
+
+/* ---------- app shell ---------- */
+let tab='path';
+function renderShell(){
+  const app=$('#app');
+  app.innerHTML=`
+  <header class="top"><div class="wrap">
+    <div class="brand">${newt('happy')}<span>Nush's Physics Prep</span></div>
+    <div class="stats">
+      <span class="stat streak" title="Day streak">${I.flame}<span id="st-streak">${S.streak}</span></span>
+      <span class="stat xp" title="Total XP">${I.bolt}<span id="st-xp">${S.xp}</span></span>
+      <button class="iconbtn" id="snd" aria-label="Toggle sound">${S.sound?I.sound:I.mute}</button>
+      <button class="acct" id="acct" aria-label="Your account and progress">${acctHtml()}</button>
+    </div></div></header>
+  <div class="wrap"><div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="path" aria-selected="${tab==='path'}">${I.map}Path</button>
+    <button class="tab" role="tab" data-tab="exams" aria-selected="${tab==='exams'}">${I.file}Past exams</button>
+  </div></div>
+  <main id="view"></main>`;
+  $('#snd').onclick=()=>{S.sound=!S.sound;save();$('#snd').innerHTML=S.sound?I.sound:I.mute;};
+  $('#acct').onclick=openAccount;
+  app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderShell();});
+  tab==='path'?renderPath():renderExams();
+}
+
+const OFF=[0,58,84,58,0,-58,-84,-58];
+function renderPath(){
+  const pct=Math.min(1,S.dayXp/goal()), C=2*Math.PI*26;
+  const html=SECTIONS.map((sec,si)=>{
+    const done=sec.nodes.filter(n=>S.done[n.id]).length;
+    const cur=sec.nodes.find(n=>!S.done[n.id]&&unlocked(n));
+    const rows=sec.nodes.map((n,li)=>{
+      const st=S.done[n.id]?'done':unlocked(n)?'open':'locked';
+      const icon=st==='locked'?I.lock:n.kind==='boss'?`<span class="tag">${n.badge||'FRQ'}</span>`:st==='done'?I.check:I.star;
+      const x=OFF[li%OFF.length];
+      const lab=`<b>${esc(tagOf(n))}${(S.focus||[]).includes(n.id)&&!S.done[n.id]?' <span class="focus-tag">Focus</span>':''}</b>${esc(n.title.replace(/^(Final )?FRQ: /,''))}`;
+      return `<li class="row ${st} ${n.kind==='boss'?'bossrow':''}" style="--x:${x}px">
+        ${n===cur?`<span class="bubble">${n.kind==='boss'?'Boss':'Start'}</span>`:''}
+        <button class="node ${st} k-${n.kind}" data-id="${n.id}" aria-label="${esc(n.title)}${st==='locked'?' (locked)':''}">${icon}</button>
+        <div class="label">${lab}</div></li>`;
+    }).join('');
+    return `<section class="banner ${sec.key}">
+      <small>${esc(sec.eyebrow)}</small>
+      <h1>${esc(sec.title)}</h1>
+      ${si===0?`<div class="goal" title="Daily goal: ${goal()} XP"><svg viewBox="0 0 62 62"><circle cx="31" cy="31" r="26" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="7"/><circle cx="31" cy="31" r="26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/></svg><span>${S.dayXp}<br>/${goal()}</span></div>`:''}
+      <div class="meta"><span>${done} of ${sec.nodes.length} done</span><span>${esc(sec.meta)}</span></div>
+    </section><ol class="path">${rows}</ol>`;
+  }).join('');
+  $('#view').innerHTML=`<div class="wrap">${todayCard()}${html}
+    <p class="hint" style="padding-bottom:60px">Unit 2 lessons and practice questions are original, in AP style. FRQ levels are built from real released College Board free-response questions and link to the official PDFs. "From your class" levels use your worksheets with g = 10 m/s² (9.8 is accepted too). Tap a locked level to test your way to it.</p>
+  </div>`;
+  $('#view').querySelectorAll('.node').forEach(b=>b.onclick=()=>{const n=NODES.find(x=>x.id===b.dataset.id); if(!unlocked(n)){openJump(n);return;} startNode(n);});
+  $('#view').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const n=NODES.find(x=>x.id===b.dataset.go); if(n) startNode(n);});
+  const pt=$('#place-go'); if(pt) pt.onclick=startPlacement;
+}
+
+/* the "today" card: greeting, what to do next, and the focus areas from the placement test */
+function nextUp(){
+  const f=(S.focus||[]).map(id=>NODES.find(n=>n.id===id)).find(n=>n&&!S.done[n.id]);
+  return f||NODES.find(n=>n.sec===SECTIONS[0]&&!S.done[n.id]&&unlocked(n))||NODES.find(n=>!S.done[n.id]&&unlocked(n));
+}
+function todayCard(){
+  const first=((ACCT.me&&ACCT.me.name)||'').split(' ')[0];
+  const hr=new Date().getHours(), hi=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+  const nx=nextUp();
+  const focus=(S.focus||[]).map(id=>NODES.find(n=>n.id===id)).filter(n=>n&&!S.done[n.id]);
+  return `<section class="today">
+    <div class="today-top">${newt(S.dayXp>=goal()?'wow':'happy')}<div class="today-txt">
+      <small>${hi}${first?', '+esc(first):''}</small>
+      <h2>${S.dayXp>=goal()?'Daily goal done. Nice work.':nx?`Next up: ${esc(nx.title.replace(/^(Final )?FRQ: /,''))}`:'You finished every level.'}</h2>
+      <p>${S.dayXp} of ${goal()} XP today${S.streak?` · ${S.streak} day streak`:''}</p></div></div>
+    <div class="today-act">
+      ${nx?`<button class="btn" data-go="${nx.id}">${S.done[NODES[0].id]||S.xp?'Continue':'Start'}</button>`:''}
+      ${S.place?'':`<button class="btn ghost" id="place-go">Find my level</button>`}
+    </div>
+    ${focus.length?`<div class="focus-row"><span>Your focus</span>${focus.slice(0,4).map(n=>`<button class="fchip-go" data-go="${n.id}">${esc(n.title.replace(/^(Final )?FRQ: /,''))}</button>`).join('')}</div>`:''}
+  </section>`;
+}
+
+function renderExams(){
+  const yr=(y,src,items)=>`<article class="year"><header><h3>${y} AP Physics 1 FRQs</h3><div class="links">
+    <a class="pill" href="${src.frq}" target="_blank" rel="noopener">${I.file}Questions</a>
+    <a class="pill" href="${src.sg}" target="_blank" rel="noopener">${I.check}Scoring</a></div></header>
+    ${items?`<ul class="qlist">${items.map(([q,t,tags])=>`<li><span class="qn">${q}</span><span>${t}${tags.map(x=>`<span class="chip">${x}</span>`).join('')}</span></li>`).join('')}</ul>`:'<p>Not mapped yet. Open the PDF and look for free-body diagrams, Newton\'s laws, friction, springs, and circular motion.</p>'}</article>`;
+  $('#view').innerHTML=`<div class="wrap exams">
+    <h2>Real exam questions on forces</h2>
+    <p>These are College Board\'s released free-response questions. Tags show which Unit 2 topics each one uses. Levels marked with a boss icon on the path walk you through them step by step.</p>
+    ${yr('2026',SRC.y26,[['Q3','Finding the coefficient of kinetic friction on ramps (boss level)',['2.7','2.5']],['Q4','Toys spun by a string: rotational dynamics with a constant force',['2.5']]])}
+    ${yr('2025',SRC.y25,[['Q4','Block released underwater: Newton\'s second law with buoyancy (final boss)',['2.2','2.5']],['Q2','Block slides down a ramp into a spring: energy with spring forces',['2.8']]])}
+    ${yr('2024',SRC.y24,[['Q1','Block on a loop-the-loop track: forces at the top of a loop (boss level)',['2.2','2.9']],['Q3','Hinged beam held by a string: free-body diagram (boss level)',['2.2']],['Q4','Pendulum on planets with different mass and radius (boss level)',['2.6']],['Q2','Design an experiment to find a spring constant',['2.8']]])}
+    ${yr('2023',SRC.y23,null)}
+    <p>College Board doesn\'t publish past multiple-choice sections, so the practice questions in each lesson are original. For official multiple-choice practice, use AP Classroom through your teacher. <a href="${SRC.page}" target="_blank" rel="noopener">All past exam questions</a></p>
+  </div>`;
+}
+
+/* ---------- lesson runner ---------- */
+let R=null;
+function startNode(node){
+  const steps=[];
+  if(node.kind==='lesson'){
+    (node.learn||[]).forEach(l=>steps.push({type:'learn',...l}));
+    if(node.topic) steps.push({type:'video',topic:node.topic});
+    node.qs.forEach(q=>steps.push({type:'q',...q}));
+  }else if(node.kind==='placement'||node.kind==='jump'){
+    if(node.intro) steps.push({type:'intro'});
+    node.qs.forEach(q=>steps.push({type:'q',...q}));
+  }else{
+    steps.push({type:'intro'});
+    node.steps.forEach(q=>steps.push({type:'q',...q}));
+    steps.push({type:'model'});
+  }
+  const hearts=node.kind==='jump'?2:node.kind==='placement'?Infinity:5;
+  R={node,steps,i:0,hearts,mode:node.kind,answers:{},miss:0,total:steps.filter(s=>s.type==='q').length,retried:new Set(),t0:Date.now()};
+  const ov=h(`<div class="lesson" role="dialog" aria-label="${esc(node.title)}">
+    <div class="wrap l-top"><button class="iconbtn" id="lx" aria-label="Quit lesson">${I.x}</button><div class="bar"><i id="lbar" style="width:0%"></i></div><div class="hearts" id="lh" ${hearts===Infinity?'hidden':''}>${I.heart}<span>${hearts}</span></div></div>
+    <div class="l-body" id="lbody"></div><div class="l-foot" id="lfoot"></div></div>`);
+  document.body.appendChild(ov);
+  $('#lx').onclick=closeLesson;
+  showStep();
+}
+function closeLesson(){const o=$('.lesson');if(o)o.remove();R=null;renderShell();}
+function setBar(){$('#lbar').style.width=(100*R.i/R.steps.length)+'%';}
+
+let cur=null; // current question controller
+function showStep(){
+  setBar();
+  const s=R.steps[R.i], node=R.node, body=$('#lbody');
+  body.scrollTop=0; cur=null;
+  const kick=node.kind==='boss'?`<div class="kicker boss">${node.year?`${node.year} AP exam · ${node.qnum}`:esc(node.tag)}</div>`:`<div class="kicker">${esc(tagOf(node))} · ${esc(node.title)}</div>`;
+  if(s.type==='learn'){
+    body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">${s.h}</h2>
+      <div class="newt-say">${newt('happy')}<div class="say prose">${s.body}</div></div>
+      ${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}</div>`;
+    foot('continue');
+  }else if(s.type==='video'){
+    body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">Watch it explained</h2>
+      <div class="newt-say">${newt('wow')}<div class="say">Pick one, watch, then come back for practice. Links open in a new tab.</div></div>
+      <div class="vids">${vids(s.topic).map(v=>`<a class="vid" href="${v.href}" target="_blank" rel="noopener"><span class="play">${I.play}</span><span><b>${esc(v.t)}</b><span>${v.s}</span></span></a>`).join('')}</div></div>`;
+    foot('continue','Practice');
+  }else if(s.type==='intro'){
+    body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">${esc(node.title)}</h2>
+      ${node.src?`<div class="source"><b>From the real ${node.year} exam</b><span>Paraphrased from College Board\'s released free-response question. Open the original to see the figures.</span>
+      <div class="links"><a class="pill" href="${node.src.frq}" target="_blank" rel="noopener">${I.file}Original question</a><a class="pill" href="${node.src.sg}" target="_blank" rel="noopener">${I.check}Scoring guidelines</a></div></div>`:''}
+      <div class="prose">${node.intro}</div></div>`;
+    foot('continue','Start');
+  }else if(s.type==='model'){
+    body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">Model answer</h2>
+      <div class="newt-say">${newt('wow')}<div class="say prose">${node.model}</div></div>
+      ${node.src?`<div class="source"><b>Grade yourself like a reader would</b><div class="links"><a class="pill" href="${node.src.sg}" target="_blank" rel="noopener">${I.check}Official scoring guidelines</a><a class="pill" href="${node.src.frq}" target="_blank" rel="noopener">${I.file}Full question</a></div></div>`:''}</div>`;
+    foot('continue','Finish');
+  }else{
+    cur=renderQ(s, body, kick);
+    foot('check');
+  }
+}
+
+function renderQ(s, body, kick){
+  const wrap=h(`<div class="wrap">${kick}${s.ctx?`<div class="ctx">${s.ctx}</div>`:''}${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}<h2 class="qtitle">${esc(s.q)}</h2><div id="qa"></div></div>`);
+  body.innerHTML=''; body.appendChild(wrap);
+  const qa=$('#qa',wrap); let ctl={ready:()=>false};
+  if(s.t==='mc'||s.t==='tf'){
+    const opts=s.t==='tf'?[{txt:'True',ok:s.a===true},{txt:'False',ok:s.a===false}]:shuffle(s.c.map((txt,k)=>({txt,ok:k===s.a})));
+    qa.innerHTML=`<div class="choices ${s.t==='tf'?'tf':''} ${s.html?'pics':''}">${opts.map((o,k)=>`<button class="choice" data-k="${k}" aria-pressed="false"><span class="k">${k+1}</span><span>${s.html?o.txt:esc(o.txt)}</span></button>`).join('')}</div>`;
+    let sel=-1; const bs=[...qa.querySelectorAll('.choice')];
+    const pick=(k)=>{sel=k;bs.forEach((b,j)=>b.setAttribute('aria-pressed',j===k));ready();};
+    bs.forEach((b,k)=>b.onclick=()=>pick(k));
+    ctl={ready:()=>sel>=0, pick:(k)=>{if(k<bs.length)pick(k);},
+      check:()=>{qa.firstChild.classList.add('locked');const ok=opts[sel].ok;bs[sel].classList.add(ok?'right':'wrong');if(!ok)bs[opts.findIndex(o=>o.ok)].classList.add('right');return ok;},
+      answer:()=>s.html?s.ansText:opts.find(o=>o.ok).txt};
+  }else if(s.t==='num'){
+    qa.innerHTML=`<div class="numrow"><input id="numin" type="text" inputmode="decimal" autocomplete="off" placeholder="?" aria-label="Your answer">${s.unit?`<span class="unit">${esc(s.unit)}</span>`:''}</div><p class="given">Round sensibly. ${s.alt!=null?'Your class uses g = 10 m/s²; answers with 9.8 count too.':'Using g = 10 m/s² is close enough.'}</p>`;
+    const inp=$('#numin',qa); const val=()=>parseFloat(inp.value.replace(',','.').replace(/[^\d.\-eE]/g,''));
+    inp.oninput=ready; setTimeout(()=>inp.focus({preventScroll:true}),50);
+    const near=(v,t,tol)=>Math.abs(v-t)<=Math.max(tol*Math.abs(t),1e-9);
+    ctl={ready:()=>!isNaN(val()), check:()=>{inp.disabled=true;const v=val(),tol=s.tol??0.03;return near(v,s.a,tol)||(s.alt!=null&&near(v,s.alt,tol));},
+      answer:()=>`${s.a} ${s.unit||''}`.trim()+(s.alt!=null?` (${s.alt} with g = 9.8)`:'')};
+  }else if(s.t==='fbd'){
+    const opts=shuffle(s.f);
+    qa.innerHTML=`<div class="fbd"><div class="canvas"><svg viewBox="0 0 220 220" id="fbdsvg"></svg></div>
+      <div class="fchips">${opts.map((o,k)=>`<button class="fchip" data-k="${k}" aria-pressed="false">${dirIcon(o.dir)}<span>${esc(o.label)}</span></button>`).join('')}</div></div>
+      <p class="given">Tap forces to add them to the diagram. Tap again to remove.</p>`;
+    const on=new Set(), bs=[...qa.querySelectorAll('.fchip')], svg=$('#fbdsvg',qa);
+    const draw=()=>{svg.innerHTML=fbdSvg(opts.filter((o,k)=>on.has(k)));};
+    bs.forEach((b,k)=>b.onclick=()=>{on.has(k)?on.delete(k):on.add(k);b.setAttribute('aria-pressed',on.has(k));draw();ready();});
+    draw();
+    ctl={ready:()=>on.size>0, check:()=>{qa.querySelector('.fchips').classList.add('locked');return opts.every((o,k)=>!!o.ok===on.has(k));},
+      answer:()=>opts.filter(o=>o.ok).map(o=>o.label).join(', ')};
+  }else if(s.t==='tiles'){
+    const bank=shuffle(s.tiles.map((t,k)=>({t,k}))); const picked=[];
+    qa.innerHTML=`<div class="tiles-wrap"><div class="tiles-ans" id="tans" aria-label="Your equation"></div><div class="tiles-bank" id="tbank"></div></div>`;
+    const ans=$('#tans',qa), bk=$('#tbank',qa);
+    const paint=()=>{
+      ans.innerHTML=picked.map((p,j)=>`<button class="tile" data-j="${j}">${esc(p.t)}</button>`).join('');
+      bk.innerHTML=bank.map(b=>`<button class="tile ${picked.includes(b)?'ghost':''}" data-k="${b.k}">${esc(b.t)}</button>`).join('');
+      ans.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{picked.splice(+b.dataset.j,1);paint();ready();});
+      bk.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{const it=bank.find(x=>x.k==b.dataset.k);if(!picked.includes(it)){picked.push(it);paint();ready();}});
+    };
+    paint();
+    ctl={ready:()=>picked.length>0, check:()=>{qa.firstChild.classList.add('locked');return picked.map(p=>p.t).join(' ')===s.ans.join(' ');}, answer:()=>s.ans.join(' ')};
+  }
+  return ctl;
+}
+
+function dirIcon(dir){const r=dir*Math.PI/180,x=11+8*Math.cos(r),y=11-8*Math.sin(r),x0=11-6*Math.cos(r),y0=11+6*Math.sin(r);
+  return `<svg viewBox="0 0 22 22"><line x1="${x0}" y1="${y0}" x2="${x}" y2="${y}" class="s-force" stroke-width="2.6" stroke-linecap="round" marker-end="url(#ah-force)"/></svg>`;}
+function fbdSvg(list){
+  const cx=110,cy=110,L=72; const groups={};
+  list.forEach(f=>{(groups[f.dir]=groups[f.dir]||[]).push(f);});
+  let out='';
+  Object.entries(groups).forEach(([d,fs])=>{const r=d*Math.PI/180,ux=Math.cos(r),uy=-Math.sin(r),px=-uy,py=ux;
+    fs.forEach((f,j)=>{const o=(j-(fs.length-1)/2)*16; const sx=cx+ux*9+px*o, sy=cy+uy*9+py*o, ex=cx+ux*L+px*o, ey=cy+uy*L+py*o;
+      const lx=cx+ux*(L+20)+px*o*1.6, ly=cy+uy*(L+20)+py*o*1.6+4;
+      out+=arr(sx.toFixed(1),sy.toFixed(1),ex.toFixed(1),ey.toFixed(1),'force',3.5)+`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" class="t-force">${sub(f.sym)}</text>`;});});
+  return out+`<circle cx="${cx}" cy="${cy}" r="7" class="f-ink"/>`+(list.length?'':`<text x="110" y="150" text-anchor="middle" class="t-muted" style="font-family:var(--f-display);font-size:12px;font-weight:600">your object</text>`);
+}
+
+function ready(){const b=$('#lbtn');if(b&&cur&&b.dataset.mode==='check')b.disabled=!cur.ready();}
+function foot(mode,label){
+  const f=$('#lfoot'); f.className='l-foot';
+  if(mode==='check'){f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="check" disabled>Check</button></div>`;$('#lbtn').onclick=doCheck;}
+  else{f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="next">${label||'Continue'}</button></div>`;$('#lbtn').onclick=next;}
+}
+const GOOD=['Nice!','Correct!','You got it!','Exactly!','Solid.'];
+function doCheck(){
+  if(!cur||!cur.ready())return;
+  const s=R.steps[R.i]; const ok=cur.check(); const f=$('#lfoot');
+  if(R.mode==='placement') R.answers[s.area]=ok;
+  if(ok){sGood();}else{sBad();R.miss++;
+    if(R.mode!=='placement'){R.hearts--;const hh=$('#lh');hh.querySelector('span').textContent=R.hearts;hh.classList.remove('hit');void hh.offsetWidth;hh.classList.add('hit');}
+    if((R.mode==='lesson'||R.mode==='boss')&&!R.retried.has(s)){R.retried.add(s);const c={...s};R.retried.add(c);R.steps.push(c);}}
+  f.className='l-foot '+(ok?'good':'bad');
+  f.innerHTML=`<div class="wrap"><div class="fb"><span class="badge">${ok?I.check:I.x}</span><div>
+    <h4>${ok?GOOD[Math.floor(Math.random()*GOOD.length)]:'Not quite'}</h4>
+    ${ok?'':`<p>Answer: <span class="ans">${esc(cur.answer())}</span></p>`}<p>${esc(s.why||'')}</p></div></div>
+    <button class="btn ${ok?'':'red'}" id="lbtn" data-mode="next">${R.hearts<=0?'See results':'Continue'}</button></div>`;
+  $('#lbtn').onclick=next; $('#lbtn').focus({preventScroll:true});
+}
+function next(){
+  if(R.hearts<=0) return fail();
+  R.i++;
+  if(R.i>=R.steps.length) return finish();
+  showStep();
+}
+function fail(){
+  $('#lbar').style.width='100%';
+  $('#lbody').innerHTML=R.mode==='jump'
+    ?`<div class="wrap end">${newt('sad','big')}<h2 class="fail">Not this time</h2><p class="prose">Two misses ends the check. Work through the levels before it, or try the jump again later.</p></div>`
+    :`<div class="wrap end">${newt('sad','big')}<h2 class="fail">Out of hearts</h2><p class="prose">Mistakes are how this sticks. Reread the lesson cards, then try again.</p></div>`;
+  const f=$('#lfoot');f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><button class="btn ghost" id="lq">Back to path</button><button class="btn" id="lr">Try again</button></div>`;
+  $('#lq').onclick=closeLesson; $('#lr').onclick=()=>{const n=R.node;$('.lesson').remove();n.kind==='jump'?startJump(n.target):startNode(n);};
+}
+function finish(){
+  $('#lbar').style.width='100%';
+  if(R.mode==='placement') return placementResults();
+  if(R.mode==='jump') return jumpDone();
+  const n=R.node, first=!S.done[n.id], perfect=R.miss===0;
+  const xp=(n.kind==='boss'?30:10)+(perfect?5:0);
+  S.done[n.id]=true; addXp(xp); sWin(); confetti();
+  const acc=Math.round(100*R.total/(R.total+R.miss));
+  const secs=Math.round((Date.now()-R.t0)/1000), tm=`${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+  $('#lbody').innerHTML=`<div class="wrap end">${newt('happy','big')}
+    <h2>${n.kind==='boss'?'Boss defeated!':perfect?'Perfect lesson!':'Lesson complete!'}</h2>
+    <p class="prose">${n.kind==='boss'?(n.year?`You just worked a real ${n.year} AP free-response question.`:'Challenge cleared.'):first?'Next level unlocked.':'Good review.'} ${S.streak>1?`${S.streak} day streak.`:''}</p>
+    <div class="tiles3">
+      <div class="st" style="--c:var(--xp)"><small>Total XP</small><b>${I.bolt}${xp}</b></div>
+      <div class="st" style="--c:var(--go)"><small>Accuracy</small><b>${I.target}${acc}%</b></div>
+      <div class="st" style="--c:var(--field)"><small>Time</small><b>${I.clock}${tm}</b></div>
+    </div></div>`;
+  const f=$('#lfoot');f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="next">Continue</button></div>`;
+  $('#lbtn').onclick=closeLesson;
+}
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const c=document.createElement('canvas');c.className='confetti';document.body.appendChild(c);
+  const W=c.width=innerWidth,H=c.height=innerHeight,x=c.getContext('2d');const cs=getComputedStyle(document.documentElement);
+  const cols=['--force','--go','--xp','--field'].map(v=>cs.getPropertyValue(v).trim());
+  const P=Array.from({length:110},()=>({x:W/2,y:H*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*12-3,r:Math.random()*6+4,c:cols[Math.floor(Math.random()*4)],a:Math.random()*6,s:(Math.random()-.5)*.3}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<110)requestAnimationFrame(f);else c.remove();})();
+}
+
+document.addEventListener('keydown',e=>{
+  if(!R)return; const b=$('#lbtn');
+  if(e.key==='Enter'&&b&&!b.disabled){e.preventDefault();b.click();}
+  else if(/^[1-9]$/.test(e.key)&&cur&&cur.pick&&b&&b.dataset.mode==='check'){cur.pick(+e.key-1);}
+  else if(e.key==='Escape'){closeLesson();}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!R)closeSheet();});
+
+/* ---------- account ---------- */
+function acctHtml(){
+  const me=ACCT.me;
+  const img=me&&me.id&&me.avatarUrl?`<img src="${esc(me.avatarUrl)}" alt="">`:`<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>`;
+  return `${img}<i class="dot ${ACCT.state}"></i>`;
+}
+function renderAcct(){const b=$('#acct'); if(b) b.innerHTML=acctHtml();}
+function openSheet(html){
+  closeSheet();
+  const bg=h(`<div class="sheet-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`);
+  bg.onclick=e=>{if(e.target===bg)closeSheet();};
+  document.body.appendChild(bg);
+  return bg.firstElementChild;
+}
+function closeSheet(){const s=$('.sheet-bg'); if(s) s.remove();}
+function openAccount(){
+  const me=ACCT.me, name=(me&&me.name)||(ACCT.state==='synced'?'Your account':'Guest');
+  const status={synced:'Signed in. Your progress saves to your Claude account, so it follows you to any device.',
+    device:ACCT.web?'Progress saves in this browser on this device.':'Not signed in here, so progress saves in this browser only. Open this page while signed in to claude.ai to keep it everywhere.',
+    loading:'Connecting to your account…'}[ACCT.state];
+  const doneN=NODES.filter(n=>S.done[n.id]).length;
+  const sh=openSheet(`
+    <div class="sheet-head">${acctHtml()}<div><h3>${esc(name)}</h3><p class="sync ${ACCT.state}">${status}</p></div>
+      <button class="iconbtn" id="sx" aria-label="Close">${I.x}</button></div>
+    <div class="tiles3">
+      <div class="st" style="--c:var(--xp)"><small>XP</small><b>${I.bolt}${S.xp}</b></div>
+      <div class="st" style="--c:var(--force)"><small>Streak</small><b>${I.flame}${S.streak}</b></div>
+      <div class="st" style="--c:var(--go)"><small>Levels</small><b>${I.check}${doneN}/${NODES.length}</b></div>
+    </div>
+    <h4>Daily goal</h4>
+    <div class="goalopts">${[[20,'Casual'],[50,'Regular'],[100,'Serious']].map(([v,l])=>`<button class="choice" data-goal="${v}" aria-pressed="${goal()===v}"><b>${l}</b><span>${v} XP a day</span></button>`).join('')}</div>
+    <h4>Your level</h4>
+    <p class="muted">${S.place?`Placement test: ${S.place.score} of ${S.place.total} correct.`:'You haven\'t taken the placement test yet.'}</p>
+    <div class="sheet-btns">
+      <button class="btn ghost" id="sp">${S.place?'Retake placement test':'Take placement test'}</button>
+      <button class="btn ghost" id="ss">${S.skip?'Lock levels again':'Unlock every level'}</button>
+      <button class="btn ghost danger" id="sr">Reset progress</button>
+    </div>`);
+  $('#sx',sh).onclick=closeSheet;
+  sh.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{S.goal=+b.dataset.goal;save();renderShell();openAccount();});
+  $('#sp',sh).onclick=()=>{closeSheet();startPlacement();};
+  $('#ss',sh).onclick=()=>{S.skip=!S.skip;save();renderShell();openAccount();};
+  $('#sr',sh).onclick=()=>{
+    const b=$('#sr',sh);
+    if(b.dataset.armed){const snd=S.sound;S={...DEF,sound:snd,onboarded:true};save();closeSheet();renderShell();return;}
+    b.dataset.armed='1';b.textContent='Tap again to erase everything';
+  };
+}
+
+/* ---------- jump ahead: a short check on everything before a locked level ---------- */
+function openJump(n){
+  const sh=openSheet(`
+    <div class="sheet-head">${newt('wow')}<div><h3>Jump to ${esc(n.title.replace(/^(Final )?FRQ: /,''))}?</h3>
+      <p class="muted">Pass a 5-question check on the levels before it and they\'ll count as done. Two misses ends the check.</p></div></div>
+    <div class="sheet-btns"><button class="btn ghost" id="jn">Not now</button><button class="btn" id="jy">Start check</button></div>`);
+  $('#jn',sh).onclick=closeSheet;
+  $('#jy',sh).onclick=()=>{closeSheet();startJump(n);};
+}
+function startJump(target){
+  const before=target.sec.nodes.slice(0,target.sec.nodes.indexOf(target));
+  // lesson questions stand on their own; FRQ steps lean on their intro, so use them only to fill gaps
+  const ok=q=>q.t!=='tiles';
+  const lessonQs=shuffle(before.flatMap(n=>n.qs||[]).filter(ok)), bossQs=shuffle(before.flatMap(n=>n.steps||[]).filter(q=>ok(q)&&q.ctx));
+  startNode({id:'jump-'+target.id,kind:'jump',target,tag:'Jump ahead',title:target.title,qs:[...lessonQs,...bossQs].slice(0,5)});
+}
+function jumpDone(){
+  const t=R.node.target, arr=t.sec.nodes, idx=arr.indexOf(t);
+  arr.slice(0,idx).forEach(n=>{S.open[n.id]=true; if(n.kind==='lesson') S.done[n.id]=true;});
+  S.open[t.id]=true; addXp(10); sWin(); confetti();
+  $('#lbody').innerHTML=`<div class="wrap end">${newt('wow','big')}<h2>Jumped ahead!</h2>
+    <p class="prose">${esc(t.title)} is unlocked. Earlier FRQ levels stay open if you want to go back to them.</p></div>`;
+  const f=$('#lfoot');f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><button class="btn ghost" id="lq">Back to path</button><button class="btn" id="lgo">Start it</button></div>`;
+  $('#lq').onclick=closeLesson; $('#lgo').onclick=()=>{$('.lesson').remove();R=null;startNode(t);};
+}
+
+/* ---------- placement test: one question per area, sets what you skip and what to focus on ---------- */
+const AREAS=[
+  {id:'2.1',node:'2.1',label:'Systems & center of mass',place:true},
+  {id:'2.2',node:'2.2',label:'Free-body diagrams',place:true},
+  {id:'2.3',node:'2.3',label:'Newton\'s 3rd law',place:true},
+  {id:'2.4',node:'2.4',label:'Newton\'s 1st law',place:true},
+  {id:'2.5',node:'2.5',label:'Newton\'s 2nd law',place:true},
+  {id:'2.6',node:'2.6',label:'Gravitational force',place:true},
+  {id:'2.7',node:'2.7',label:'Friction',place:true},
+  {id:'2.8',node:'2.8',label:'Spring forces',place:true},
+  {id:'2.9',node:'2.9',label:'Circular motion',place:true},
+  {id:'joined',node:'c-joined',label:'Joined bodies & pulleys'},
+  {id:'angles',node:'p-angles',label:'Forces at angles'},
+  {id:'elev',node:'c-elev',label:'Elevators & apparent weight'},
+];
+const PLACEMENT=[
+  {area:'2.1',t:'mc',q:'A 1 kg mass sits at x = 0 and a 3 kg mass at x = 4 m. Where is the center of mass?',c:['3 m','2 m','1 m','4/3 m'],a:0,why:'(1·0 + 3·4) / 4 = 3 m, closer to the heavier mass.'},
+  {area:'2.2',t:'fbd',q:'You push a box across a rough floor with a horizontal hand at constant speed. Pick every force on the box.',f:[F('g','Gravity','F_g',-90,1),F('n','Normal from floor','F_N',90,1),F('p','Push from your hand','F_P',0,1),F('fr','Kinetic friction','F_f',180,1),F('m','Force of motion','F_m',0,0)],why:'Four real forces. "Force of motion" isn\'t a thing.'},
+  {area:'2.3',t:'mc',q:'A 2 kg ball hits a 50 kg student. How does the force on the ball compare with the force on the student?',c:['Equal','Bigger on the ball','Bigger on the student','Zero on the student'],a:0,why:'Newton\'s 3rd law pairs are always equal in size.'},
+  {area:'2.4',t:'mc',q:'A space probe coasts at 300 m/s far from any planet, engines off. What is the net force on it?',c:['Zero','Forward, to keep it moving','Backward','Equal to its weight'],a:0,why:'Constant velocity needs no net force.'},
+  {area:'2.5',t:'num',q:'A 6 kg box is pushed with 30 N against 12 N of friction. Find its acceleration.',a:3,unit:'m/s²',why:'(30 − 12) / 6 = 3 m/s².'},
+  {area:'2.6',t:'mc',q:'A satellite moves to 3 times its distance from Earth\'s center. The gravitational force on it becomes…',c:['1/9 as large','1/3 as large','3 times as large','The same'],a:0,why:'Inverse square: (1/3)² = 1/9.'},
+  {area:'2.7',t:'mc',q:'A 5 kg box sits on a floor with μs = 0.4 (max static friction 20 N). You push it with 10 N and it stays put. Friction on it is…',c:['10 N','20 N','2 N','0 N'],a:0,why:'Static friction matches the push, up to its 20 N maximum.'},
+  {area:'2.8',t:'num',q:'A spring with k = 150 N/m is stretched 0.20 m. How much force does it exert?',a:30,unit:'N',why:'F = kΔx = 150 × 0.20 = 30 N.'},
+  {area:'2.9',t:'mc',q:'A car rounds a flat curve at constant speed. What force points it toward the center?',c:['Static friction from the road','Centripetal force from the engine','Kinetic friction','The normal force'],a:0,why:'The tires grip without sliding, so static friction does the centripetal job.'},
+  {area:'joined',t:'num',q:'A 4 kg cart on a frictionless table is tied over a pulley to a hanging 1 kg mass. Find the acceleration.',a:2,alt:1.96,unit:'m/s²',why:'a = (1 × 10) / 5 = 2 m/s².'},
+  {area:'angles',t:'mc',q:'You pull a sled with a rope angled upward. Compared with mg, the normal force on the sled is…',c:['Smaller','Larger','Equal','Zero'],a:0,why:'The rope\'s upward component lifts part of the weight.'},
+  {area:'elev',t:'num',q:'A 60 kg student stands on a scale in an elevator accelerating upward at 1 m/s². What does the scale read?',a:660,alt:648,unit:'N',why:'F_N = m(g + a) = 60 × 11 = 660 N.'},
+];
+function startPlacement(){
+  startNode({id:'placement',kind:'placement',tag:'Placement test',title:'Find your level',qs:PLACEMENT,
+    intro:`<p>12 questions, one for each skill in the unit. There are no hearts and no penalty, so just answer what you know.</p><p>Get one right and that lesson counts as done. Miss one and it becomes a <b>focus</b> on your path.</p>`});
+}
+function placementResults(){
+  const res=R.answers, strong=AREAS.filter(a=>res[a.id]), weak=AREAS.filter(a=>!res[a.id]);
+  AREAS.forEach(a=>{if(res[a.id]&&a.place) S.done[a.node]=true;});
+  S.focus=weak.map(a=>a.node); weak.forEach(a=>{S.open[a.node]=true;});
+  S.place={date:Date.now(),score:strong.length,total:AREAS.length};
+  S.onboarded=true; addXp(15); sWin();
+  const placed=strong.filter(a=>a.place).length;
+  $('#lbody').innerHTML=`<div class="wrap end">${newt(strong.length>=8?'wow':'happy','big')}
+    <h2>${strong.length} of ${AREAS.length} correct</h2>
+    <p class="prose">${placed?`You tested out of ${placed} lesson${placed>1?'s':''}. `:''}${weak.length?`Your path now marks ${weak.length} focus area${weak.length>1?'s':''}, and they\'re unlocked so you can start there.`:'Nothing to focus on. Try the FRQ levels next.'}</p>
+    <ul class="results">${AREAS.map(a=>`<li><span>${esc(a.label)}</span><span class="rchip ${res[a.id]?'ok':'no'}">${res[a.id]?'Strong':'Focus'}</span></li>`).join('')}</ul></div>`;
+  const f=$('#lfoot');f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="next">See my path</button></div>`;
+  $('#lbtn').onclick=closeLesson;
+}
+
+/* ---------- first visit ---------- */
+function showOnboarding(){
+  let g=goal();
+  const ov=h(`<div class="lesson onb" role="dialog" aria-label="Welcome"><div class="l-body"><div class="wrap" id="onb"></div></div><div class="l-foot"><div class="wrap" id="onbf"></div></div></div>`);
+  document.body.appendChild(ov);
+  const first=((ACCT.me&&ACCT.me.name)||'').split(' ')[0];
+  const acctLine=ACCT.state==='synced'?`Signed in${first?' as '+esc(first):''}. Progress saves to your account.`:ACCT.web?'Progress saves in this browser.':'Progress saves in this browser. Sign in to claude.ai to sync it.';
+  const step1=()=>{
+    $('#onb').innerHTML=`<div class="newt-say">${newt('happy')}<div class="say"><b>Hi${first?' '+esc(first):''}! I\'m Newt.</b> I\'ll get you through AP Physics 1 forces, one level at a time. How much do you want to practice each day?</div></div>
+      <div class="choices">${[[20,'Casual','About 5 minutes'],[50,'Regular','About 12 minutes'],[100,'Serious','About 25 minutes']].map(([v,l,d])=>`<button class="choice" data-goal="${v}" aria-pressed="${g===v}"><span class="k">${v}</span><span><b>${l}</b> · ${d}</span></button>`).join('')}</div>
+      <p class="given">${acctLine}</p>`;
+    $('#onb').querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{g=+b.dataset.goal;$('#onb').querySelectorAll('[data-goal]').forEach(x=>x.setAttribute('aria-pressed',x===b));});
+    $('#onbf').innerHTML=`<button class="btn" id="onb1">Continue</button>`;
+    $('#onb1').onclick=()=>{S.goal=g;save();step2();};
+  };
+  const step2=()=>{
+    $('#onb').innerHTML=`<div class="newt-say">${newt('wow')}<div class="say"><b>Hi${first?' '+esc(first):''}! I\'m Newt.</b> Where do you want to start?</div></div>
+      <div class="choices">
+        <button class="choice" id="o-place"><span class="k">${I.target}</span><span><b>Find my level</b><br>A 12-question placement test. Skip what you know, focus on what you don\'t.</span></button>
+        <button class="choice" id="o-zero"><span class="k">${I.star}</span><span><b>Start from scratch</b><br>Begin with Topic 2.1 and work through in order.</span></button>
+      </div>`;
+    $('#onbf').innerHTML='';
+    $('#o-place').onclick=()=>{ov.remove();startPlacement();};
+    $('#o-zero').onclick=()=>{S.onboarded=true;save();ov.remove();renderShell();};
+  };
+  step2();
+}
+
+/* ---------- boot ---------- */
+renderShell();
+(async()=>{
+  if(!window.claude) await new Promise(r=>setTimeout(r,400));
+  await Promise.race([initCloud(),new Promise(r=>setTimeout(r,12000))]);
+  if(ACCT.state==='loading') ACCT.state='device';
+  if(!R) renderShell(); else renderAcct();
+  if(!S.onboarded&&!R) showOnboarding();
+})();
+</script>
+
+</body>
+</html>
