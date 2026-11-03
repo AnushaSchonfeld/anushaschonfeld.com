@@ -12,7 +12,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 /* Layout: one phone-width column; a zig-zag skill path on the home view, a full-screen lesson card stack on top of it. */
 :root{
@@ -119,6 +119,40 @@ svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;str
 .choice .k svg.ic{width:18px;height:18px}
 .banner.class{background:var(--go);box-shadow:0 5px 0 var(--go-deep)}
 .banner.frq{background:var(--force);box-shadow:0 5px 0 var(--force-deep)}
+.m{font-family:"STIX Two Text","Times New Roman",serif;font-style:italic;font-size:1.1em}
+.m sub,.cbq sub,.choice sub{font-size:.7em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-family:"STIX Two Text","Times New Roman",serif;font-style:italic;font-size:1em;line-height:1.15;margin:0 2px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px 1px}
+.frac>span:last-child{padding:1px 4px 0}
+.cbq{font-family:var(--f-body);font-weight:700;font-size:19px;line-height:1.45}
+.choices.exam .k{border-radius:50%;font-family:var(--f-body)}
+.choices.exam .choice{font-size:18px;min-height:56px}
+.choices.exam .frac{font-size:1.05em}
+.frin{width:100%;font:inherit;font-size:16px;line-height:1.5;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical}
+.frin:focus{outline:none;border-color:var(--field)}
+.frin[readonly]{opacity:.8}
+.guide{background:var(--surface);border:2px solid var(--line);border-left:6px solid var(--go);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.guide h3{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px}
+.guide .muted{margin:0}
+.rub{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rub label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;line-height:1.4}
+.rub input{width:20px;height:20px;margin-top:1px;flex:none;accent-color:var(--go)}
+.rub b{font-family:var(--f-display);color:var(--go-deep);margin-right:4px}
+:root[data-theme="dark"] .rub b{color:var(--go)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .rub b{color:var(--go)}}
+.model{background:var(--sunk);border-radius:12px;padding:10px 12px}
+.model .prose{margin-top:4px}
+.timer{font-family:var(--f-mono);font-weight:700;font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.timer.over{color:var(--force)}
+.testmode{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
+.testmode input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:var(--field)}
+.testmode b{font-family:var(--f-display);font-weight:600;font-size:17px}
+.review{list-style:none;margin:6px 0 0;padding:0;width:100%;max-width:560px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.review li{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:8px 12px}
+.review li.no{border-color:var(--force-soft)}
+.review summary{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.4}
+.review summary .rchip{margin-top:2px}
+.review p{margin:8px 0 0;font-size:15px}
 .setup{background:var(--surface);border:2px solid var(--line);border-left:6px solid var(--force);border-radius:14px;padding:0 14px}
 .setup summary{cursor:pointer;padding:10px 0;font-family:var(--f-display);font-weight:600;font-size:15px;color:var(--force-deep);list-style-position:inside}
 :root[data-theme="dark"] .setup summary{color:var(--force)}
@@ -1079,6 +1113,73 @@ const QINDEX={};
 NODES.forEach(n=>{n.topicKey=NODE_TOPIC[n.id]||'newton';
   (n.qs||n.steps||[]).forEach((q,i)=>{q.id=n.id+'#'+i; q.from=n.id; if(n.steps){q.part=i+1; q.parts=n.steps.length;} QINDEX[q.id]=q;});});
 
+/* ---------- exam-style bank: original questions written the way College Board writes them.
+   {...} renders as math (italic serif), [[top||bottom]] as a stacked fraction ---------- */
+const vtGraph=(f)=>mini([{f,c:'force'}],'t','v');
+const CB_MCQ=[
+ {topic:'sys',q:'A block of mass {m} is at {x = 0} and a block of mass {3m} is at {x = d}. Where is the center of mass of the two-block system?',c:['{x = }[[3d||4]]','{x = }[[d||4]]','{x = }[[d||2]]','{x = }[[2d||3]]'],why:'{x_cm = }[[m(0) + 3m(d)||4m]]{ = }[[3d||4]]. It sits closer to the heavier block.'},
+ {topic:'sys',q:'Two carts on a level, frictionless track collide and stick together. Which statement about the velocity of the center of mass of the two-cart system is correct?',c:['It stays the same before, during, and after the collision.','It increases during the collision.','It becomes zero after the collision.','It depends on whether the collision is elastic.'],why:'The collision forces are internal. With no net external force, the center of mass velocity cannot change.'},
+ {topic:'sys',q:'A student walks from the back of a boat to the front. The boat floats on water with negligible friction. Which describes the center of mass of the student-boat system?',c:['It stays in the same place.','It moves forward with the student.','It moves backward with the boat.','It moves forward, then returns when the student stops.'],why:'The push between the student and the boat is internal. The system started at rest, so its center of mass stays put while the boat slides backward.'},
+ {topic:'fbd',q:'A rope pulls a box across a rough floor at constant velocity. The rope makes angle {θ} above the horizontal and has tension {F_T}. Which is true about the normal force {F_N} on the box?',c:['{F_N < mg}','{F_N = mg}','{F_N > mg}','{F_N = mg − F_T}'],why:'Vertically: {F_N + F_T}sin{θ = mg}, so {F_N = mg − F_T}sin{θ}, which is less than {mg}. It equals {mg − F_T} only if the rope is vertical.'},
+ {topic:'fbd',q:'A block of mass {m} rests on a ramp inclined at angle {θ}. What is the magnitude of the normal force on the block?',c:['{mg}cos{θ}','{mg}','{mg}sin{θ}','[[mg||cosθ]]'],why:'Perpendicular to the ramp, the normal force balances the component of gravity into the surface: {mg}cos{θ}.'},
+ {topic:'newton',q:'A net force {F} gives an object of mass {m} an acceleration {a}. What acceleration does a net force {2F} give an object of mass {3m}?',c:['[[2||3]]{a}','[[3||2]]{a}','{6a}','{a}'],why:'{a\' = }[[2F||3m]]{ = }[[2||3]][[F||m]]{ = }[[2||3]]{a}.'},
+ {topic:'newton',q:'Blocks of mass {m} and {2m} hang on opposite sides of a light, frictionless pulley and are released from rest. What is the magnitude of their acceleration?',c:['[[g||3]]','[[g||2]]','[[2g||3]]','{g}'],why:'System: net external force {2mg − mg = mg} on total mass {3m}, so {a = }[[g||3]].'},
+ {topic:'newton',q:'In the same pulley system (masses {m} and {2m}), what is the tension in the string?',c:['[[4||3]]{mg}','{mg}','{2mg}','[[2||3]]{mg}'],why:'On the lighter block: {T − mg = m}[[g||3]], so {T = }[[4||3]]{mg}. It lies between the two weights, as it must.'},
+ {topic:'newton',q:'Two blocks touch on a frictionless surface. A horizontal force {F} pushes block 1 (mass {m_1}), which pushes block 2 (mass {m_2}). What is the magnitude of the force block 1 exerts on block 2?',c:['[[m₂||m₁ + m₂]]{F}','[[m₁||m₁ + m₂]]{F}','{F}','[[m₁ + m₂||m₂]]{F}'],why:'Both blocks share {a = }[[F||m₁ + m₂]]. Block 2 alone: {F_12 = m_2a = }[[m₂||m₁ + m₂]]{F}.'},
+ {topic:'newton',q:'Cart A (mass {2m}) pushes on cart B (mass {m}) with a force of magnitude {F} while both speed up. What is the magnitude of the force cart B exerts on cart A?',c:['{F}','[[F||2]]','{2F}','Zero, because they move together'],why:'Newton\'s third law: the forces in an interaction pair are always equal in magnitude, whatever the masses or motion.'},
+ {topic:'newton',html:true,q:'A cart starts from rest. A constant net force acts on it from {t = 0} to {t = T}, then the net force becomes zero. Which velocity–time graph matches?',c:[mini([{f:x=>x<0.5?1.6*x:0.8,c:'force'}],'t','v'),mini([{f:x=>x<0.5?1.6*x:0.8-1.6*(x-0.5),c:'force'}],'t','v'),mini([{f:x=>0.8*x,c:'force'}],'t','v'),mini([{f:x=>x<0.5?0.6:0,c:'force'}],'t','v')],ansText:'A straight rising line until T, then a flat line',why:'Constant net force gives constant acceleration (a straight sloped line). With zero net force the velocity stays constant (flat), it does not drop.'},
+ {topic:'newton',q:'A rope lifts a bucket of mass {m} upward at constant speed {v}. What is the tension in the rope?',c:['{mg}','{mg + mv}','{mg + }[[mv²||2]]','Greater than {mg}, since the bucket rises'],why:'Constant velocity means zero acceleration, so {T = mg}. Moving up does not require extra force.'},
+ {topic:'elev',q:'An elevator is moving downward and slowing down with an acceleration of magnitude {a}. A person of mass {m} stands on a scale inside. What does the scale read?',c:['{m(g + a)}','{m(g − a)}','{mg}','{ma}'],why:'Moving down and slowing means the acceleration points up. {F_N − mg = ma}, so {F_N = m(g + a)}.'},
+ {topic:'elev',q:'An elevator of total mass {M} accelerates upward with magnitude {a}. What is the tension in its cable?',c:['{M(g + a)}','{M(g − a)}','{Mg}','{Ma}'],why:'{T − Mg = Ma}.'},
+ {topic:'elev',q:'A student on a scale in an elevator notices the reading is less than their weight. Which claim must be true?',c:['The elevator\'s acceleration is directed downward.','The elevator is moving downward.','The elevator is slowing down.','The elevator is in free fall.'],why:'{F_N < mg} means the net force, and so the acceleration, points down. It could be speeding up downward OR slowing down while moving up.'},
+ {topic:'grav',q:'Planet X has twice Earth\'s mass and twice Earth\'s radius. Earth\'s surface gravitational field is {g}. What is the field at Planet X\'s surface?',c:['[[g||2]]','{g}','{2g}','[[g||4]]'],why:'{g = }[[GM||R²]]. Doubling {M} doubles it; doubling {R} divides it by 4. Net: [[2||4]]{g = }[[g||2]].'},
+ {topic:'grav',q:'A satellite moves from a distance {R} to a distance {2R} from Earth\'s center. The gravitational force on it was {F}. What is it now?',c:['[[F||4]]','[[F||2]]','{F}','{2F}'],why:'Inverse square: doubling the distance divides the force by {2² = 4}.'},
+ {topic:'grav',q:'A satellite of mass {m} moves in a circular orbit of radius {r} around a planet of mass {M}. What is its speed?',c:['√([[GM||r]])','√([[GM||r²]])','√([[2GM||r]])','[[GM||r]]'],why:'Gravity provides the centripetal force: [[GMm||r²]]{ = }[[mv²||r]], so {v = }√([[GM||r]]).'},
+ {topic:'grav',q:'How does the gravitational force Earth exerts on the Moon compare with the force the Moon exerts on Earth?',c:['They are equal in magnitude.','Earth\'s force on the Moon is larger.','The Moon\'s force on Earth is larger.','They are equal only when the Moon is closest.'],why:'They are a Newton\'s third law pair, so they are equal in magnitude at all times.'},
+ {topic:'fric',q:'A block slides across a horizontal floor with initial speed {v_0}. The coefficient of kinetic friction is {μ}. How far does it slide before stopping?',c:['[[v₀²||2μg]]','[[v₀²||μg]]','[[v₀||2μg]]','[[2μg||v₀²]]'],why:'Friction gives {a = μg}. Then {v_0² = 2ad}, so {d = }[[v₀²||2μg]].'},
+ {topic:'fric',q:'A block slides down a ramp of angle {θ} at constant speed. What is the coefficient of kinetic friction?',c:['tan{θ}','sin{θ}','cos{θ}','[[1||tanθ]]'],why:'Constant speed: {μmg}cos{θ = mg}sin{θ}, so {μ = }tan{θ}.'},
+ {topic:'fric',q:'A block slides down a ramp of angle {θ} with coefficient of kinetic friction {μ}. What is the magnitude of its acceleration?',c:['{g}(sin{θ − μ}cos{θ})','{g}(cos{θ − μ}sin{θ})','{g}sin{θ}','{g}(sin{θ + μ}cos{θ})'],why:'Along the ramp: {mg}sin{θ − μmg}cos{θ = ma}. Friction opposes the sliding, so it subtracts.'},
+ {topic:'fric',q:'A horizontal force {F} presses a block of mass {m} against a vertical wall. The coefficient of static friction is {μ_s}. What is the minimum {F} that keeps the block from sliding down?',c:['[[mg||μₛ]]','{μ_smg}','{mg}','[[μₛ||mg]]'],why:'{F} is the normal force. Friction must hold the weight: {μ_sF = mg}, so {F = }[[mg||μₛ]].'},
+ {topic:'fric',q:'A box rests on a floor. A student pushes horizontally with force {P}, and the box does not move. Which is true about the friction force {f}?',c:['{f = P}','{f = μ_smg}','{f > P}','{f = 0}'],why:'The box stays in equilibrium, so static friction matches the push. {μ_smg} is only the maximum.'},
+ {topic:'fric',q:'Identical boxes sit on identical floors, one on Earth and one on the Moon. Which correctly compares the horizontal push needed to start each box moving?',c:['Less push is needed on the Moon, because the normal force is smaller there.','The same push is needed, because the boxes have the same mass.','More push is needed on the Moon, because there is less gravity to help.','No push is needed on the Moon.'],why:'Maximum static friction is {μ_sF_N = μ_smg}. The Moon\'s {g} is smaller, so the friction to overcome is smaller.'},
+ {topic:'spring',q:'A block of mass {m} hangs at rest from a vertical spring with spring constant {k}. How far is the spring stretched?',c:['[[mg||k]]','[[k||mg]]','{kmg}','[[m||k]]'],why:'At rest: {kx = mg}.'},
+ {topic:'spring',q:'Two identical springs, each with constant {k}, are connected end to end and hold a block of mass {m}. How far does the pair stretch in total?',c:['[[2mg||k]]','[[mg||k]]','[[mg||2k]]','[[4mg||k]]'],why:'Each spring feels the full weight and stretches [[mg||k]]. End to end, the stretches add.'},
+ {topic:'spring',q:'Spring B\'s force-vs-stretch graph has twice the slope of spring A\'s. Both are pulled with the same force. How does B\'s stretch compare with A\'s?',c:['Half as much','The same','Twice as much','Four times as much'],why:'The slope is {k}, and {x = }[[F||k]]. Twice the {k} means half the stretch.'},
+ {topic:'circ',q:'A car of mass {m} rounds a flat curve of radius {r}. The coefficient of static friction is {μ_s}. What is the maximum speed without skidding?',c:['√({μ_sgr})','{μ_sgr}','√([[μₛg||r]])','√({μ_smgr})'],why:'Static friction provides the centripetal force: {μ_smg = }[[mv²||r]], so {v = }√({μ_sgr}). The mass cancels.'},
+ {topic:'circ',q:'A ball of mass {m} swings in a vertical circle of radius {r} on a string. At the lowest point its speed is {v}. What is the tension?',c:['{mg + }[[mv²||r]]','[[mv²||r]]{ − mg}','[[mv²||r]]','{mg}'],why:'At the bottom the center is above the ball: {T − mg = }[[mv²||r]].'},
+ {topic:'circ',q:'A car of mass {m} drives over the top of a rounded hill of radius {r} at speed {v}. What is the normal force on the car?',c:['{mg − }[[mv²||r]]','{mg + }[[mv²||r]]','{mg}','[[mv²||r]]'],why:'At the crest the center is below the car: {mg − F_N = }[[mv²||r]]. You feel lighter.'},
+ {topic:'circ',q:'An object moves in a circle of fixed radius. If its speed doubles, the net force needed changes by what factor?',c:['4','2','1','[[1||2]]'],why:'{F = }[[mv²||r]], and {v²} quadruples.'},
+ {topic:'joined',q:'Block {M} sits on a frictionless table. It is tied over a pulley to a hanging block {m}. What is the acceleration of the blocks?',c:['[[mg||M + m]]','[[Mg||M + m]]','[[mg||M]]','{g}'],why:'Only the hanging weight {mg} drives the whole system of mass {M + m}.'},
+ {topic:'joined',q:'Same setup, but the table now has coefficient of kinetic friction {μ}. What is the acceleration?',c:['[[(m − μM)g||M + m]]','[[(m + μM)g||M + m]]','[[(m − μM)g||M]]','[[mg||M + m]]'],why:'Friction {μMg} opposes the driving force {mg}: {a = }[[mg − μMg||M + m]].'},
+ {topic:'joined',q:'Frictionless table again: block {M} on the table, block {m} hanging. What is the tension in the string?',c:['[[Mmg||M + m]]','{mg}','[[m²g||M + m]]','{Mg}'],why:'The string alone accelerates {M}: {T = Ma = M}[[mg||M + m]]. It is less than {mg} because the hanging block accelerates downward.'},
+ {topic:'joined',q:'Three identical carts, each of mass {m}, are linked in a line and pulled by force {F} on the front cart. There is no friction. What is the tension in the link between the front cart and the middle cart?',c:['[[2||3]]{F}','[[1||3]]{F}','{F}','[[F||2]]'],why:'All carts have {a = }[[F||3m]]. That link pulls the two carts behind it: {T = 2m}[[F||3m]]{ = }[[2||3]]{F}.'},
+ {topic:'angles',q:'A box of mass {m} is pulled with force {F} at angle {θ} above the horizontal across a floor with kinetic friction coefficient {μ}. What is its acceleration?',c:['[[F cosθ − μ(mg − F sinθ)||m]]','[[F cosθ − μ(mg + F sinθ)||m]]','[[F − μmg||m]]','[[F sinθ − μmg||m]]'],why:'{F_N = mg − F}sin{θ}, so friction is {μ(mg − F}sin{θ)}. The forward component is {F}cos{θ}.'},
+ {topic:'angles',q:'A block slides down a frictionless ramp of angle {θ}. What is the magnitude of its acceleration?',c:['{g}sin{θ}','{g}cos{θ}','{g}','{g}tan{θ}'],why:'Only gravity\'s component along the ramp, {mg}sin{θ}, is unbalanced.'},
+ {topic:'angles',q:'A student pushes a box with force {F} directed at angle {θ} below the horizontal. What is the normal force on the box?',c:['{mg + F}sin{θ}','{mg − F}sin{θ}','{mg}','{mg + F}cos{θ}'],why:'The push presses the box into the floor, so the floor pushes back harder: {F_N = mg + F}sin{θ}.'},
+ {topic:'newton',q:'A student claims a heavy ball falls faster than a light ball in a vacuum because more gravitational force acts on it. Which best explains why the claim is wrong?',c:['The force is larger, but so is the mass, so [[F||m]] is the same.','There is no gravitational force in a vacuum.','Both balls have the same gravitational force on them.','Heavier objects have less inertia.'],why:'{a = }[[F_g||m]]{ = }[[mg||m]]{ = g} for every object.'},
+ {topic:'newton',html:true,q:'A skydiver jumps from a plane, and air resistance grows with speed. Which velocity–time graph best describes the fall until terminal speed?',c:[vtGraph(x=>0.9*(1-Math.exp(-4*x))),vtGraph(x=>0.9*x),vtGraph(x=>x<0.5?1.6*x:0.8-1.2*(x-0.5)),vtGraph(x=>0.6)],ansText:'A curve that rises steeply, then levels off',why:'At first only gravity acts (steep slope). As drag grows the net force shrinks, so the slope flattens until velocity is constant.'},
+];
+const CB_FRQ=[
+ {topic:'joined',ctx:'Block 1 (mass {m_1}) sits on a horizontal frictionless table. A light string over a frictionless pulley connects it to hanging block 2 (mass {m_2}). The blocks are released from rest.',q:'Derive an expression for the acceleration of the blocks in terms of {m_1}, {m_2}, and physical constants. Begin with a fundamental physics principle.',model:'Newton\'s second law for each block. Block 1: {T = m_1a}. Block 2: {m_2g − T = m_2a}. Adding them: {m_2g = (m_1 + m_2)a}, so {a = }[[m₂g||m₁ + m₂]].',rub:['Starts from Newton\'s second law (ΣF = ma) applied to each block or to the two-block system','Correctly identifies the net external force as m₂g with no tension in the system equation (or eliminates T correctly)','Final answer a = m₂g / (m₁ + m₂)']},
+ {topic:'joined',ctx:'Same setup: block 1 ({m_1}) on a frictionless table, hanging block 2 ({m_2}).',q:'Block 1 is replaced with a block of mass {2m_1}. Indicate whether the new acceleration is greater than, less than, or equal to the original. Justify your answer without using equations alone.',model:'<b>Less than.</b> The force driving the system is still the weight of block 2, {m_2g}, but that same force now has to accelerate more total mass ({2m_1 + m_2} instead of {m_1 + m_2}). The same net force on more mass gives a smaller acceleration.',rub:['Correct claim: less than','Justification refers to the same net (driving) force acting on a greater total mass or inertia']},
+ {topic:'fric',q:'A block slides across a horizontal floor with initial speed {v_0}. The coefficient of kinetic friction is {μ_k}. Derive an expression for the distance the block slides before stopping, in terms of {v_0}, {μ_k}, and physical constants.',model:'Friction is the net force: {μ_kmg = ma}, so {a = μ_kg} (opposite the motion). Kinematics: {0 = v_0² − 2ad}, so {d = }[[v₀²||2μₖg]].',rub:['Uses Newton\'s second law with friction μₖmg (normal force = mg) to get a = μₖg','Uses a kinematics equation (or work-energy) correctly with final speed zero','Final answer d = v₀² / (2μₖg), with mass cancelled']},
+ {topic:'angles',q:'A box of mass {m} is pulled at constant velocity across a rough floor (coefficient {μ_k}) by a rope at angle {θ} above the horizontal. Derive the rope tension {F} in terms of {m}, {g}, {μ_k}, and {θ}.',model:'Vertical: {F_N = mg − F}sin{θ}. Horizontal, constant velocity: {F}cos{θ = μ_kF_N = μ_k(mg − F}sin{θ)}. Solving: {F = }[[μₖmg||cosθ + μₖ sinθ]].',rub:['Normal force written as mg − F sinθ','Horizontal equilibrium F cosθ = μₖF_N (net force zero because velocity is constant)','Final answer F = μₖmg / (cosθ + μₖ sinθ)']},
+ {topic:'elev',q:'A student stands on a scale in an elevator. The scale reads {1.2mg}. Determine the direction and magnitude of the elevator\'s acceleration, and state whether the elevator could be moving downward. Justify.',model:'{F_N − mg = ma}, so {0.2mg = ma} and {a = 0.2g}, <b>upward</b>. <b>Yes</b>, it could be moving downward, as long as it is slowing down. Acceleration points the way the velocity is changing, not the way the elevator moves.',rub:['Acceleration is upward with magnitude 0.2g, from Newton\'s second law','States it could be moving down while slowing, and explains that velocity and acceleration can point in opposite directions']},
+ {topic:'circ',q:'A car travels around a flat circular track of radius {r}. The coefficient of static friction between the tires and the road is {μ_s}. Derive the maximum speed at which the car can round the curve without sliding.',model:'Static friction is the only horizontal force, so it provides the centripetal force: {μ_smg = }[[mv²||r]]. Solving: {v_max = }√({μ_sgr}).',rub:['Identifies static friction as the force providing the centripetal acceleration','Sets μₛmg = mv²/r (maximum static friction)','Final answer v = √(μₛgr)']},
+ {topic:'circ',q:'Rain halves the coefficient of static friction on that track. By what factor does the maximum safe speed change? Justify with reference to your expression.',model:'{v_max = }√({μ_sgr}). If {μ_s} is halved, {v_max} is multiplied by [[1||√2]] ≈ 0.71. Less friction can supply less centripetal force, so the car must go slower.',rub:['Correct factor 1/√2 (about 0.71)','Justification ties the smaller friction force to the smaller centripetal force available']},
+ {topic:'grav',q:'Planet X has twice Earth\'s mass and twice Earth\'s radius. Derive the gravitational field strength at Planet X\'s surface in terms of Earth\'s {g}, then state how an astronaut\'s weight there compares with on Earth.',model:'{g = }[[GM||R²]]. For X: [[G(2M)||(2R)²]]{ = }[[2||4]][[GM||R²]]{ = }[[g||2]]. The astronaut\'s weight is half of their Earth weight, while their mass is unchanged.',rub:['Starts from g = GM/R² (or Newton\'s law of gravitation)','Correctly finds g/2','States weight is half while mass is unchanged']},
+ {topic:'newton',ctx:'Block A (mass {m}) and block B (mass {2m}) touch on a frictionless table. A horizontal force {F} pushes A, and both accelerate.',q:'(i) Is the force of A on B greater than, less than, or equal to the force of B on A? Justify. (ii) Derive the magnitude of the force A exerts on B.',model:'(i) <b>Equal</b>: they are a Newton\'s third law pair. (ii) The system has {a = }[[F||3m]]. B alone: {F_AB = 2m}[[F||3m]]{ = }[[2F||3]].',rub:['(i) Equal, citing Newton\'s third law','(ii) Finds the system acceleration F/3m','(ii) Final answer 2F/3']},
+ {topic:'fbd',q:'A block rests on a rough ramp without sliding. List every force exerted on the block: its direction, and the object that exerts it. Do not include components.',model:'<b>Gravitational force</b>, exerted by Earth, straight down. <b>Normal force</b>, exerted by the ramp, perpendicular to the ramp surface, away from it. <b>Static friction</b>, exerted by the ramp, parallel to the surface, pointing up the ramp.',rub:['Gravity, by Earth, downward','Normal force, by the ramp, perpendicular to the surface','Static friction, by the ramp, up the ramp','No extra forces (no "force of motion," no ma, no components)']},
+ {topic:'fric',q:'Using only an adjustable ramp and a protractor, describe a procedure to find the coefficient of static friction between a shoe and the ramp, and how to calculate it from your measurements.',model:'Put the shoe on the ramp. Slowly raise the ramp until the shoe just begins to slide, and measure that angle {θ_c} with the protractor. Repeat several times and average {θ_c} to reduce uncertainty. At the slipping point {mg}sin{θ_c = μ_smg}cos{θ_c}, so {μ_s = }tan{θ_c}.',rub:['Increases the angle slowly until the shoe just starts to slip, and measures that angle','Repeats trials and averages (or another valid step that reduces uncertainty)','Computes μₛ = tan θ at the slipping angle']},
+ {topic:'spring',q:'Students hang different masses on a spring and measure the stretch for each. Describe what quantities to graph to get a straight line, and how to find the spring constant from the graph.',model:'Graph the spring force (the weight, {mg}) on the vertical axis against the stretch {x} on the horizontal axis. Draw a best-fit line. Its slope is {k}, since {F = kx}. (Or graph {x} vs {mg}, and {k} is 1/slope.)',rub:['Plots force (mg) and stretch on the axes','Uses a best-fit line','Slope = k (or 1/slope if axes are swapped)']},
+ {topic:'joined',ctx:'For block 1 ({m_1}) on a frictionless table tied to hanging block 2 ({m_2}), you derived {a = }[[m₂g||m₁ + m₂]].',q:'A student claims that if the hanging block is made much heavier than block 1, the acceleration approaches {g}. Is the claim consistent with your expression? Justify.',model:'<b>Yes.</b> When {m_2 ≫ m_1}, {m_1 + m_2 ≈ m_2}, so {a ≈ }[[m₂g||m₂]]{ = g}. Physically, block 1 adds almost no inertia, so block 2 is nearly in free fall.',rub:['States the claim is consistent','Uses the expression with m₂ ≫ m₁ to show a approaches g (or a physical free-fall argument)']},
+];
+CB_MCQ.forEach((q,i)=>{q.t='mc';q.cb=true;q.a=0;q.id='cb#'+i;QINDEX[q.id]=q;});
+CB_FRQ.forEach((q,i)=>{q.t='write';q.cb=true;q.id='cbw#'+i;QINDEX[q.id]=q;});
+const qTopic=q=>q.topic||(q.from&&nodeById(q.from)?nodeById(q.from).topicKey:'newton');
+/* {..} math and [[a||b]] fractions, applied after escaping */
+const fmt=s=>esc(s).replace(/\[\[(.+?)\|\|(.+?)\]\]/g,'<span class="frac"><span>$1</span><span>$2</span></span>').replace(/\{([^{}]+)\}/g,'<span class="m">$1</span>').replace(/_(cm|max|AB|[0-9]+|[A-Za-z])/g,'<sub>$1</sub>');
+
 /* ---------- state ---------- */
 const KEY='forcepath-v1';
 const dayStr=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -1241,64 +1342,89 @@ function examsHtml(){
     <p>College Board doesn\'t publish past multiple-choice sections, so the practice questions in each lesson are original. For official multiple-choice practice, use AP Classroom through your teacher. <a href="${SRC.page}" target="_blank" rel="noopener">All past exam questions</a></p>`;
 }
 
-/* ---------- mixed practice ---------- */
-const PR={mode:'mix',topics:new Set(),len:10};
+/* ---------- mixed practice: exam-style MCQs (A–D) and written FRQ parts ---------- */
+const PR={fmt:'mcq',src:'all',topics:new Set(),len:20,test:false};
+const LENS={mcq:[10,20,40],frq:[3,5,8],both:[10,20,30]};
 const missIds=()=>Object.keys(S.miss||{}).filter(id=>QINDEX[id]);
-function practicePool(){
-  let pool=Object.values(QINDEX);
-  if(PR.topics.size) pool=pool.filter(q=>PR.topics.has(nodeById(q.from).topicKey));
-  if(PR.mode==='mistakes') pool=pool.filter(q=>S.miss&&S.miss[q.id]);
-  if(PR.mode==='weak'){
-    const weak=new Set((S.focus||[]).map(id=>nodeById(id)).filter(Boolean).map(n=>n.topicKey));
-    const w=pool.filter(q=>(S.miss&&S.miss[q.id])||weak.has(nodeById(q.from).topicKey));
-    if(w.length) pool=w;
+const isMcq=q=>q.t==='mc'&&!q.area, isFrq=q=>q.t==='write';
+function practicePools(){
+  let all=Object.values(QINDEX);
+  if(PR.topics.size) all=all.filter(q=>PR.topics.has(qTopic(q)));
+  if(PR.src==='mistakes') all=all.filter(q=>S.miss&&S.miss[q.id]);
+  if(PR.src==='weak'){
+    const weak=new Set((S.focus||[]).map(nodeById).filter(Boolean).map(n=>n.topicKey));
+    const w=all.filter(q=>(S.miss&&S.miss[q.id])||weak.has(qTopic(q)));
+    if(w.length) all=w;
   }
-  return pool;
+  // exam-style bank first, then the app's other multiple-choice questions
+  const mc=all.filter(isMcq), cbFirst=[...shuffle(mc.filter(q=>q.cb)),...shuffle(mc.filter(q=>!q.cb))];
+  return {mc:cbFirst, frq:shuffle(all.filter(isFrq))};
+}
+function buildSession(){
+  const {mc,frq}=practicePools(), n=PR.len;
+  if(PR.fmt==='mcq') return shuffle(mc.slice(0,n));
+  if(PR.fmt==='frq') return frq.slice(0,n);
+  const nf=Math.max(1,Math.round(n/5)), f=frq.slice(0,nf), m=shuffle(mc.slice(0,n-f.length));
+  return [...m,...f]; // multiple choice first, then free response, like the exam
 }
 function renderPractice(){
-  const missN=missIds().length, pool=practicePool(), n=Math.min(PR.len,pool.length);
-  const byTopic={}; missIds().forEach(id=>{const k=nodeById(QINDEX[id].from).topicKey; byTopic[k]=(byTopic[k]||0)+1;});
-  const modes=[
-    ['mix','Mix everything','Random questions from every lesson, MCQ set and FRQ.'],
-    ['weak','Weak spots',S.focus&&S.focus.length?'Your placement focus topics plus questions you\'ve missed.':'Questions you\'ve missed. Take the placement test to add focus topics.'],
-    ['mistakes','Mistakes only',missN?`${missN} question${missN>1?'s':''} you got wrong. Get one right here and it leaves the list.`:'Nothing yet. Questions you miss anywhere land here.'],
-  ];
+  if(!LENS[PR.fmt].includes(PR.len)) PR.len=LENS[PR.fmt][1];
+  const missN=missIds().length, {mc,frq}=practicePools();
+  const avail=PR.fmt==='mcq'?mc.length:PR.fmt==='frq'?frq.length:mc.length+frq.length, n=Math.min(PR.len,avail);
+  const byTopic={}; missIds().forEach(id=>{const k=qTopic(QINDEX[id]); byTopic[k]=(byTopic[k]||0)+1;});
+  const fmts=[['mcq','AP multiple choice','Four choices, A to D. Symbolic answers, graphs, claims and justifications, like the real exam.'],
+    ['frq','AP free response','Derive, compare, justify and design. Write your answer, then grade it against a scoring guide.'],
+    ['both','Both, like the exam','Multiple choice first, then free-response parts.']];
+  const srcs=[['all','All questions'],['weak','Weak spots'],['mistakes',`My mistakes${missN?' ('+missN+')':''}`]];
   $('#view').innerHTML=`<div class="wrap practice">
-    <h2>Mixed practice</h2>
-    <p class="muted">Shuffled questions from across the app, like a real exam section. No hearts. Missed questions come back at the end.</p>
-    <div class="choices pmodes">${modes.map(([k,t,d])=>`<button class="choice" data-mode="${k}" aria-pressed="${PR.mode===k}" ${k==='mistakes'&&!missN?'disabled':''}><span><b>${t}</b><br><span class="muted">${d}</span></span></button>`).join('')}</div>
+    <h2>Exam practice</h2>
+    <p class="muted">Written the way College Board writes them. Questions you miss here or anywhere else are saved to your mistakes.</p>
+    <div class="choices pmodes">${fmts.map(([k,t,d])=>`<button class="choice" data-fmt="${k}" aria-pressed="${PR.fmt===k}"><span><b>${t}</b><br><span class="muted">${d}</span></span></button>`).join('')}</div>
+    <h4>Questions from</h4>
+    <div class="tchips">${srcs.map(([k,l])=>`<button class="tchip" data-src="${k}" aria-pressed="${PR.src===k}" ${k==='mistakes'&&!missN?'disabled':''}>${l}</button>`).join('')}</div>
     <h4>Topics</h4>
     <div class="tchips"><button class="tchip" data-topic="" aria-pressed="${!PR.topics.size}">All topics</button>${TOPICS.map(([k,l])=>`<button class="tchip" data-topic="${k}" aria-pressed="${PR.topics.has(k)}">${esc(l)}</button>`).join('')}</div>
     <h4>Length</h4>
-    <div class="tchips">${[10,20,30].map(v=>`<button class="tchip" data-len="${v}" aria-pressed="${PR.len===v}">${v} questions</button>`).join('')}</div>
-    <div class="pstart"><button class="btn" id="pgo" ${n?'':'disabled'}>${n?`Start ${n} question${n>1?'s':''}`:'No questions match'}</button></div>
+    <div class="tchips">${LENS[PR.fmt].map(v=>`<button class="tchip" data-len="${v}" aria-pressed="${PR.len===v}">${v} ${PR.fmt==='frq'?'parts':'questions'}</button>`).join('')}</div>
+    <label class="testmode"><input type="checkbox" id="ptest" ${PR.test?'checked':''}><span><b>Test mode</b><br><span class="muted">No feedback until the end, with a timer: 2 minutes per multiple-choice question, 5 per free-response part.</span></span></label>
+    <div class="pstart"><button class="btn" id="pgo" ${n?'':'disabled'}>${n?`Start ${n} ${PR.fmt==='frq'?'part':'question'}${n>1?'s':''}`:'No questions match'}</button></div>
     ${missN?`<h4>Mistakes by topic</h4><ul class="results">${Object.entries(byTopic).sort((a,b)=>b[1]-a[1]).map(([k,c])=>`<li><span>${esc(topicName(k))}</span><span class="rchip no">${c}</span></li>`).join('')}</ul>`:''}
   </div>`;
   const v=$('#view');
-  v.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{PR.mode=b.dataset.mode;renderPractice();});
+  v.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{PR.fmt=b.dataset.fmt;renderPractice();});
+  v.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{PR.src=b.dataset.src;renderPractice();});
   v.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>{const k=b.dataset.topic; if(!k) PR.topics.clear(); else PR.topics.has(k)?PR.topics.delete(k):PR.topics.add(k); renderPractice();});
   v.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{PR.len=+b.dataset.len;renderPractice();});
+  $('#ptest').onchange=e=>{PR.test=e.target.checked;};
   $('#pgo').onclick=startPractice;
 }
 function startPractice(){
-  const qs=shuffle(practicePool()).slice(0,PR.len);
-  if(!qs.length) return;
-  startNode({id:'practice',kind:'practice',tag:'Mixed practice',title:PR.mode==='mistakes'?'Mistakes review':PR.mode==='weak'?'Weak spots':'Mixed practice',qs});
+  const qs=buildSession(); if(!qs.length) return;
+  const budget=qs.reduce((t,q)=>t+(q.t==='write'?300:120),0);
+  startNode({id:'practice',kind:'practice',tag:'Exam practice',test:PR.test,budget,
+    title:PR.fmt==='frq'?'Free-response practice':PR.fmt==='both'?'Exam practice':'Multiple-choice practice',qs});
 }
 function practiceDone(){
-  const right=Math.max(0,R.total-R.firstMiss.size), xp=Math.max(5,right);
-  addXp(xp); sWin(); if(R.firstMiss.size===0) confetti();
-  const missedTopics=[...new Set([...R.firstMiss].map(id=>nodeById(QINDEX[id].from).topicKey))];
+  clearTimeout(tickT);
+  const mcRes=R.res.filter(r=>'ok' in r), frRes=R.res.filter(r=>'pts' in r);
+  const right=mcRes.filter(r=>r.ok).length, pts=frRes.reduce((t,r)=>t+r.pts,0), maxPts=frRes.reduce((t,r)=>t+r.max,0);
+  const xp=Math.max(5,right+2*pts); addXp(xp); sWin(); if(mcRes.length&&right===mcRes.length) confetti();
   const secs=Math.round((Date.now()-R.t0)/1000), tm=`${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
-  $('#lbody').innerHTML=`<div class="wrap end">${newt(R.firstMiss.size?'happy':'wow','big')}
-    <h2>${right} of ${R.total} on the first try</h2>
-    <p class="prose">${R.firstMiss.size?'The ones you missed are saved to your mistakes list.':'Clean sweep.'}</p>
+  const bud=`${Math.floor(R.budget/60)}:00`;
+  const wrong=mcRes.filter(r=>!r.ok);
+  const review=(R.test?mcRes:wrong).map(r=>`<li class="${r.ok?'ok':'no'}"><details><summary><span class="rchip ${r.ok?'ok':'no'}">${r.ok?'Right':'Missed'}</span><span>${r.s.cb?fmt(r.s.q):esc(r.s.q)}</span></summary>
+      <p><b>Your answer:</b> ${r.s.cb?fmt(r.picked):esc(r.picked)}</p>${r.ok?'':`<p><b>Correct:</b> ${r.s.cb?fmt(r.right):esc(r.right)}</p>`}<p class="muted">${r.s.cb?fmt(r.s.why||''):esc(r.s.why||'')}</p></details></li>`).join('');
+  const topics=[...new Set([...wrong.map(r=>qTopic(r.s)),...frRes.filter(r=>r.pts<r.max).map(r=>qTopic(r.s))])];
+  $('#lbody').innerHTML=`<div class="wrap end">${newt(topics.length?'happy':'wow','big')}
+    <h2>${mcRes.length?`${right} of ${mcRes.length} multiple choice`:''}${mcRes.length&&frRes.length?' · ':''}${frRes.length?`${pts} of ${maxPts} FRQ points`:''}</h2>
+    <p class="prose">${topics.length?'Anything you missed is saved to your mistakes.':'Clean sweep.'}</p>
     <div class="tiles3">
       <div class="st" style="--c:var(--xp)"><small>XP</small><b>${I.bolt}${xp}</b></div>
-      <div class="st" style="--c:var(--go)"><small>Accuracy</small><b>${I.target}${Math.round(100*right/R.total)}%</b></div>
-      <div class="st" style="--c:var(--field)"><small>Time</small><b>${I.clock}${tm}</b></div>
+      <div class="st" style="--c:var(--go)"><small>Score</small><b>${I.target}${Math.round(100*(right+pts)/Math.max(1,mcRes.length+maxPts))}%</b></div>
+      <div class="st" style="--c:var(--field)"><small>${R.test?'Time / budget':'Time'}</small><b>${I.clock}${tm}${R.test?`<span class="muted" style="font-size:14px">/${bud}</span>`:''}</b></div>
     </div>
-    ${missedTopics.length?`<div class="focus-row" style="justify-content:center"><span>Review</span>${missedTopics.map(k=>`<span class="fchip-go">${esc(topicName(k))}</span>`).join('')}</div>`:''}</div>`;
+    ${topics.length?`<div class="focus-row" style="justify-content:center"><span>Review</span>${topics.map(k=>`<span class="fchip-go">${esc(topicName(k))}</span>`).join('')}</div>`:''}
+    ${review?`<ul class="review">${review}</ul>`:''}</div>`;
   const f=$('#lfoot');f.className='l-foot';
   f.innerHTML=`<div class="wrap"><button class="btn ghost" id="lq">Done</button><button class="btn" id="lagain">Practice again</button></div>`;
   $('#lq').onclick=closeLesson; $('#lagain').onclick=()=>{$('.lesson').remove();R=null;startPractice();};
@@ -1345,7 +1471,7 @@ function startNode(node){
     steps.push({type:'model'});
   }
   const hearts=node.kind==='jump'?2:(node.kind==='placement'||node.kind==='practice')?Infinity:5;
-  R={node,steps,i:0,hearts,mode:node.kind,answers:{},firstMiss:new Set(),miss:0,total:steps.filter(s=>s.type==='q').length,retried:new Set(),t0:Date.now()};
+  R={node,steps,i:0,hearts,mode:node.kind,test:!!node.test,budget:node.budget||0,res:[],answers:{},firstMiss:new Set(),miss:0,total:steps.filter(s=>s.type==='q').length,retried:new Set(),t0:Date.now()};
   const ov=h(`<div class="lesson" role="dialog" aria-label="${esc(node.title)}">
     <div class="wrap l-top"><button class="iconbtn" id="lx" aria-label="Quit lesson">${I.x}</button><div class="bar"><i id="lbar" style="width:0%"></i></div><div class="hearts" id="lh" ${hearts===Infinity?'hidden':''}>${I.heart}<span>${hearts}</span></div></div>
     <div class="l-body" id="lbody"></div><div class="l-foot" id="lfoot"></div></div>`);
@@ -1353,7 +1479,7 @@ function startNode(node){
   $('#lx').onclick=closeLesson;
   showStep();
 }
-function closeLesson(){const o=$('.lesson');if(o)o.remove();R=null;renderShell();}
+function closeLesson(){clearTimeout(tickT);const o=$('.lesson');if(o)o.remove();R=null;renderShell();}
 function setBar(){$('#lbar').style.width=(100*R.i/R.steps.length)+'%';}
 
 let cur=null; // current question controller
@@ -1388,6 +1514,7 @@ function showStep(){
     const qn=(s.from&&nodeById(s.from))||node;
     const qkick=qn.kind==='boss'
       ?`<div class="kicker boss">${qn.year?`${qn.year} AP exam · ${qn.qnum}`:esc(qn.tag)}${s.part?` · Part ${s.part} of ${s.parts}`:''}</div>`
+      :s.cb?`<div class="kicker">${s.t==='write'?'Free response':'Multiple choice'} · ${esc(topicName(s.topic))}</div>`
       :(R.mode==='practice'?`<div class="kicker">${esc(tagOf(qn))} · ${esc(qn.title)}</div>`:kick);
     cur=renderQ(s, body, qkick, qn);
     foot('check');
@@ -1396,19 +1523,28 @@ function showStep(){
 
 function renderQ(s, body, kick, qn){
   const setup=qn&&qn.kind==='boss'&&qn.intro?`<details class="setup" ${setupOpen?'open':''}><summary>Problem setup${qn.steps?` · ${qn.steps.length} parts`:''}</summary><div class="prose">${qn.intro}</div>${qn.src?`<div class="links"><a class="pill" href="${qn.src.frq}" target="_blank" rel="noopener">${I.file}Original question</a><a class="pill" href="${qn.src.sg}" target="_blank" rel="noopener">${I.check}Scoring guidelines</a></div>`:''}</details>`:'';
-  const wrap=h(`<div class="wrap">${kick}${setup}${s.ctx?`<div class="ctx">${s.ctx}</div>`:''}${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}<h2 class="qtitle">${esc(s.q)}</h2><div id="qa"></div></div>`);
+  const wrap=h(`<div class="wrap">${kick}${setup}${s.ctx?`<div class="ctx">${s.cb?fmt(s.ctx):s.ctx}</div>`:''}${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}<h2 class="qtitle ${s.cb?'cbq':''}">${s.cb?fmt(s.q):esc(s.q)}</h2><div id="qa"></div></div>`);
   body.innerHTML=''; body.appendChild(wrap);
   const sd=$('details.setup',wrap); if(sd) sd.ontoggle=()=>{setupOpen=sd.open;};
   const qa=$('#qa',wrap); let ctl={ready:()=>false};
   if(s.t==='mc'||s.t==='tf'){
-    const opts=s.t==='tf'?[{txt:'True',ok:s.a===true},{txt:'False',ok:s.a===false}]:shuffle(s.c.map((txt,k)=>({txt,ok:k===s.a})));
-    qa.innerHTML=`<div class="choices ${s.t==='tf'?'tf':''} ${s.html?'pics':''}">${opts.map((o,k)=>`<button class="choice" data-k="${k}" aria-pressed="false"><span class="k">${k+1}</span><span>${s.html?o.txt:esc(o.txt)}</span></button>`).join('')}</div>`;
+    const exam=R&&R.mode==='practice';
+    let all=s.t==='tf'?null:s.c.map((txt,k)=>({txt,ok:k===s.a}));
+    if(all&&exam&&all.length>4) all=[all.find(o=>o.ok),...all.filter(o=>!o.ok).slice(0,3)];
+    const opts=s.t==='tf'?[{txt:'True',ok:s.a===true},{txt:'False',ok:s.a===false}]:shuffle(all);
+    const show=t=>s.html?t:s.cb?fmt(t):esc(t);
+    qa.innerHTML=`<div class="choices ${s.t==='tf'?'tf':''} ${s.html?'pics':''} ${exam?'exam':''}">${opts.map((o,k)=>`<button class="choice" data-k="${k}" aria-pressed="false"><span class="k">${exam?'ABCD'[k]:k+1}</span><span>${show(o.txt)}</span></button>`).join('')}</div>`;
     let sel=-1; const bs=[...qa.querySelectorAll('.choice')];
     const pick=(k)=>{sel=k;bs.forEach((b,j)=>b.setAttribute('aria-pressed',j===k));ready();};
     bs.forEach((b,k)=>b.onclick=()=>pick(k));
     ctl={ready:()=>sel>=0, pick:(k)=>{if(k<bs.length)pick(k);},
       check:()=>{qa.firstChild.classList.add('locked');const ok=opts[sel].ok;bs[sel].classList.add(ok?'right':'wrong');if(!ok)bs[opts.findIndex(o=>o.ok)].classList.add('right');return ok;},
-      answer:()=>s.html?s.ansText:opts.find(o=>o.ok).txt};
+      answer:()=>s.html?s.ansText:opts.find(o=>o.ok).txt,
+      letter:()=>exam?'ABCD'[opts.findIndex(o=>o.ok)]:'', picked:()=>sel<0?'':(exam?'ABCD'[sel]+'. ':'')+(s.html?'(graph '+'ABCD'[sel]+')':opts[sel].txt)};
+  }else if(s.t==='write'){
+    qa.innerHTML=`<textarea id="frin" class="frin" rows="7" placeholder="Write it like the exam: start from a fundamental principle, show your steps, and justify any claim."></textarea>
+      <p class="given">Your answer stays on this screen only. Next you\'ll compare it with a scoring guide and award yourself points.</p>`;
+    ctl={ready:()=>true, write:true};
   }else if(s.t==='num'){
     qa.innerHTML=`<div class="numrow"><input id="numin" type="text" inputmode="decimal" autocomplete="off" placeholder="?" aria-label="Your answer">${s.unit?`<span class="unit">${esc(s.unit)}</span>`:''}</div><p class="given">Round sensibly. ${s.alt!=null?'Your class uses g = 10 m/s²; answers with 9.8 count too.':'Using g = 10 m/s² is close enough.'}</p>`;
     const inp=$('#numin',qa); const val=()=>parseFloat(inp.value.replace(',','.').replace(/[^\d.\-eE]/g,''));
@@ -1459,13 +1595,21 @@ function fbdSvg(list){
 function ready(){const b=$('#lbtn');if(b&&cur&&b.dataset.mode==='check')b.disabled=!cur.ready();}
 function foot(mode,label){
   const f=$('#lfoot'); f.className='l-foot';
-  if(mode==='check'){f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="check" disabled>Check</button></div>`;$('#lbtn').onclick=doCheck;}
+  if(mode==='check'){f.innerHTML=`<div class="wrap">${R&&R.test?`<span class="timer" id="ltimer"></span>`:''}<button class="btn" id="lbtn" data-mode="check" disabled>${cur&&cur.write?'Show scoring guide':R&&R.test?'Submit':'Check'}</button></div>`;$('#lbtn').onclick=doCheck;ready();tick();}
   else{f.innerHTML=`<div class="wrap"><button class="btn" id="lbtn" data-mode="next">${label||'Continue'}</button></div>`;$('#lbtn').onclick=next;}
 }
 const GOOD=['Nice!','Correct!','You got it!','Exactly!','Solid.'];
 function doCheck(){
   if(!cur||!cur.ready())return;
-  const s=R.steps[R.i]; const ok=cur.check(); const f=$('#lfoot');
+  const s=R.steps[R.i];
+  if(cur.write) return revealWrite(s);
+  const ok=cur.check(); const f=$('#lfoot');
+  if(R.mode==='practice'&&!R.retried.has(s)) R.res.push({s,ok,picked:cur.picked(),right:(cur.letter&&cur.letter()?cur.letter()+'. ':'')+cur.answer()});
+  if(R.test){ // exam conditions: no feedback until the end
+    if(s.id&&QINDEX[s.id]){ if(!ok){S.miss=S.miss||{};S.miss[s.id]=1;} else if(S.miss&&S.miss[s.id]) delete S.miss[s.id]; save(); }
+    if(!ok) R.miss++;
+    return next();
+  }
   if(R.mode==='placement') R.answers[s.area]=ok;
   if(s.id&&QINDEX[s.id]){ if(!ok){S.miss=S.miss||{};S.miss[s.id]=1;if(!R.retried.has(s))R.firstMiss.add(s.id);save();} else if(R.mode==='practice'&&S.miss&&S.miss[s.id]&&!R.firstMiss.has(s.id)){delete S.miss[s.id];save();} }
   if(ok){sGood();}else{sBad();R.miss++;
@@ -1474,9 +1618,33 @@ function doCheck(){
   f.className='l-foot '+(ok?'good':'bad');
   f.innerHTML=`<div class="wrap"><div class="fb"><span class="badge">${ok?I.check:I.x}</span><div>
     <h4>${ok?GOOD[Math.floor(Math.random()*GOOD.length)]:'Not quite'}</h4>
-    ${ok?'':`<p>Answer: <span class="ans">${esc(cur.answer())}</span></p>`}<p>${esc(s.why||'')}</p></div></div>
+    ${ok?'':`<p>Answer: <span class="ans">${s.cb?fmt((cur.letter&&cur.letter()?cur.letter()+'. ':'')+cur.answer()):esc((cur.letter&&cur.letter()?cur.letter()+'. ':'')+cur.answer())}</span></p>`}<p>${s.cb?fmt(s.why||''):esc(s.why||'')}</p></div></div>
     <button class="btn ${ok?'':'red'}" id="lbtn" data-mode="next">${R.hearts<=0?'See results':'Continue'}</button></div>`;
   $('#lbtn').onclick=next; $('#lbtn').focus({preventScroll:true});
+}
+/* FRQ parts: write, then grade yourself point by point against the scoring guide */
+function revealWrite(s){
+  $('#frin').readOnly=true;
+  const box=h(`<section class="guide"><h3>Scoring guide</h3><p class="muted">Tick each point your answer earns.</p>
+    <ul class="rub">${s.rub.map((r,k)=>`<li><label><input type="checkbox" data-r="${k}"><span><b>1 pt</b> ${fmt(r)}</span></label></li>`).join('')}</ul>
+    <div class="model"><b>Model answer</b><div class="prose">${fmt(s.model).replace(/&lt;(\/?)b&gt;/g,'<$1b>')}</div></div></section>`);
+  $('#lbody .wrap').appendChild(box); box.scrollIntoView({behavior:'smooth',block:'start'});
+  const f=$('#lfoot'); f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><span class="timer" id="ptally">0 / ${s.rub.length} pts</span><button class="btn" id="lbtn" data-mode="next">Save score</button></div>`;
+  box.querySelectorAll('input').forEach(i=>i.onchange=()=>{$('#ptally').textContent=box.querySelectorAll('input:checked').length+' / '+s.rub.length+' pts';});
+  $('#lbtn').onclick=()=>{
+    const pts=box.querySelectorAll('input:checked').length;
+    if(!R.retried.has(s)) R.res.push({s,pts,max:s.rub.length});
+    if(pts<s.rub.length){S.miss=S.miss||{};S.miss[s.id]=1;} else if(S.miss&&S.miss[s.id]) delete S.miss[s.id];
+    save(); next();
+  };
+}
+let tickT=null;
+function tick(){
+  clearTimeout(tickT); const el=$('#ltimer'); if(!el||!R||!R.test) return;
+  const used=Math.round((Date.now()-R.t0)/1000), left=R.budget-used, m=Math.floor(Math.abs(left)/60), sec=String(Math.abs(left)%60).padStart(2,'0');
+  el.textContent=(left<0?'+':'')+m+':'+sec+(left<0?' over':' left'); el.classList.toggle('over',left<0);
+  tickT=setTimeout(tick,1000);
 }
 function next(){
   if(R.hearts<=0) return fail();
@@ -1527,6 +1695,7 @@ function confetti(){
 
 document.addEventListener('keydown',e=>{
   if(!R)return; const b=$('#lbtn');
+  if(e.target&&e.target.tagName==='TEXTAREA') return;
   if(e.key==='Enter'&&b&&!b.disabled){e.preventDefault();b.click();}
   else if(/^[1-9]$/.test(e.key)&&cur&&cur.pick&&b&&b.dataset.mode==='check'){cur.pick(+e.key-1);}
   else if(e.key==='Escape'){closeLesson();}
