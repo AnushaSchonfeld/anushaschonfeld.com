@@ -119,6 +119,44 @@ svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;str
 .choice .k svg.ic{width:18px;height:18px}
 .banner.class{background:var(--go);box-shadow:0 5px 0 var(--go-deep)}
 .banner.frq{background:var(--force);box-shadow:0 5px 0 var(--force-deep)}
+.setup{background:var(--surface);border:2px solid var(--line);border-left:6px solid var(--force);border-radius:14px;padding:0 14px}
+.setup summary{cursor:pointer;padding:10px 0;font-family:var(--f-display);font-weight:600;font-size:15px;color:var(--force-deep);list-style-position:inside}
+:root[data-theme="dark"] .setup summary{color:var(--force)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .setup summary{color:var(--force)}}
+.setup[open]{padding-bottom:12px}
+.setup .prose{max-height:300px;overflow-y:auto;font-size:15px}
+.setup .fig{padding:6px}
+.setup .fig svg{max-width:340px}
+.setup .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.parts-note{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;color:var(--muted)}
+.parts-note svg.ic{width:18px;height:18px}
+.practice{padding-block:18px 80px;display:flex;flex-direction:column;gap:12px}
+.practice h2{font-family:var(--f-display);font-weight:700;font-size:24px;margin:0}
+.practice h4{margin:6px 0 0;font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pmodes .choice b{font-family:var(--f-display);font-weight:600;font-size:17px}
+.pmodes .choice .muted{font-size:14px}
+.choice:disabled{opacity:.5;cursor:default}
+.tchips{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{background:var(--surface);border:2px solid var(--line);border-bottom-width:3px;border-radius:999px;padding:6px 12px;font-size:14px}
+.tchip[aria-pressed="true"]{border-color:var(--field);background:var(--field-soft);color:var(--ink)}
+.pstart{padding-top:6px}
+.pstart .btn{margin-left:0;width:100%}
+.frq-group{display:flex;flex-direction:column;gap:10px}
+.frq-gt{margin:8px 0 0;font-family:var(--f-display);font-weight:700;font-size:20px}
+.frq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.frq-card{background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.frq-card.is-done{border-color:var(--xp)}
+.frq-card h3{margin:2px 0 0;font-family:var(--f-display);font-weight:700;font-size:18px;line-height:1.2;text-wrap:balance}
+.frq-card .muted{margin:0}
+.frq-meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.frq-meta .chip{margin:0}
+.frq-status{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--muted);font-family:var(--f-display);font-weight:600}
+.frq-status svg.ic{width:16px;height:16px;color:var(--xp-deep)}
+.frq-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto;padding-top:6px}
+.frq-act .btn{margin-left:0;min-width:0;padding:9px 18px;font-size:15px}
+.frq-links{display:flex;gap:12px;font-size:14px;font-weight:700}
+.frq-links a{text-decoration:none}
+.frq-links a:hover{text-decoration:underline}
 .banner.mcq{background:var(--field-deep);box-shadow:0 5px 0 var(--field)}
 .choices.pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 .choices.pics .choice{flex-direction:column;align-items:flex-start}
@@ -1030,10 +1068,21 @@ const SECTIONS=[
 ];
 const NODES = SECTIONS.flatMap(s=>s.nodes.map(n=>(n.sec=s,n)));
 
+/* every question gets a stable id (node#index) and a topic, for mixed practice and mistake tracking */
+const TOPICS=[['sys','Systems & center of mass'],['fbd','Free-body diagrams'],['newton','Newton\'s laws'],['grav','Gravity'],['fric','Friction'],['spring','Springs'],['circ','Circular motion'],['joined','Joined bodies & pulleys'],['angles','Angles & ramps'],['elev','Elevators']];
+const NODE_TOPIC={'2.1':'sys','2.2':'fbd','boss-fbd':'fbd','2.3':'newton','2.4':'newton','2.5':'newton','boss-final':'newton','2.6':'grav','boss-planet':'grav','2.7':'fric','boss-ramp':'fric','2.8':'spring','2.9':'circ','boss-loop':'circ',
+  'c-fric':'fric','c-hw':'fric','c-incline':'angles','c-joined':'joined','c-sys':'joined','c-elev':'elev','c-elevap':'elev',
+  'p-angles':'angles','p-fan':'angles','p-4h':'joined','p-jb1':'joined','p-jb2':'joined','p-jb3':'joined','p-jb4':'joined','m-angles':'angles','m-joined':'joined','m-com':'sys'};
+const topicName=k=>(TOPICS.find(t=>t[0]===k)||[,''])[1];
+const nodeById=id=>NODES.find(n=>n.id===id);
+const QINDEX={};
+NODES.forEach(n=>{n.topicKey=NODE_TOPIC[n.id]||'newton';
+  (n.qs||n.steps||[]).forEach((q,i)=>{q.id=n.id+'#'+i; q.from=n.id; if(n.steps){q.part=i+1; q.parts=n.steps.length;} QINDEX[q.id]=q;});});
+
 /* ---------- state ---------- */
 const KEY='forcepath-v1';
 const dayStr=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-const DEF={xp:0,done:{},open:{},streak:0,last:null,day:null,dayXp:0,sound:true,skip:false,goal:50,onboarded:false,place:null,focus:[],updated:0};
+const DEF={xp:0,done:{},open:{},streak:0,last:null,day:null,dayXp:0,sound:true,skip:false,goal:50,onboarded:false,place:null,focus:[],miss:{},updated:0};
 let S={...DEF};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s) S={...S,...s};}catch(e){}
 
@@ -1054,7 +1103,7 @@ function merge(a,b){
   const lat=(b.last||'')>(a.last||'')?b:a; o.streak=lat.streak||0; o.last=lat.last||null;
   if(a.day===b.day) o.dayXp=Math.max(a.dayXp||0,b.dayXp||0); else {const d=(b.day||'')>(a.day||'')?b:a; o.day=d.day; o.dayXp=d.dayXp||0;}
   const nw=(b.updated||0)>(a.updated||0)?b:a; o.goal=nw.goal||50; o.skip=!!nw.skip; o.updated=nw.updated||0;
-  o.onboarded=!!(a.onboarded||b.onboarded);
+  o.onboarded=!!(a.onboarded||b.onboarded); o.miss=nw.miss||{};
   const pb=(b.place&&b.place.date)||0, pa=(a.place&&a.place.date)||0;
   if(pb>pa){o.place=b.place;o.focus=b.focus||[];} else {o.place=a.place;o.focus=a.focus||[];}
   return o;
@@ -1099,7 +1148,7 @@ const unlocked=(n)=>{const a=n.sec.nodes,i=a.indexOf(n);return S.skip||i===0||!!
 const tagOf=(n)=>n.year?`${n.year} · ${n.qnum}`:n.tag||`Topic ${n.id}`;
 
 /* ---------- app shell ---------- */
-let tab='path';
+let tab=['path','practice','frqs'].includes(location.hash.slice(1))?location.hash.slice(1):'path';
 function renderShell(){
   const app=$('#app');
   app.innerHTML=`
@@ -1113,13 +1162,14 @@ function renderShell(){
     </div></div></header>
   <div class="wrap"><div class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="path" aria-selected="${tab==='path'}">${I.map}Path</button>
-    <button class="tab" role="tab" data-tab="exams" aria-selected="${tab==='exams'}">${I.file}Past exams</button>
+    <button class="tab" role="tab" data-tab="practice" aria-selected="${tab==='practice'}">${I.target}Practice</button>
+    <button class="tab" role="tab" data-tab="frqs" aria-selected="${tab==='frqs'}">${I.file}FRQs</button>
   </div></div>
   <main id="view"></main>`;
   $('#snd').onclick=()=>{S.sound=!S.sound;save();$('#snd').innerHTML=S.sound?I.sound:I.mute;};
   $('#acct').onclick=openAccount;
-  app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderShell();});
-  tab==='path'?renderPath():renderExams();
+  app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;try{history.replaceState(null,'','#'+tab);}catch(e){}renderShell();});
+  ({path:renderPath,practice:renderPractice,frqs:renderFrqs}[tab]||renderPath)();
 }
 
 const OFF=[0,58,84,58,0,-58,-84,-58];
@@ -1176,31 +1226,117 @@ function todayCard(){
   </section>`;
 }
 
-function renderExams(){
+function examsHtml(){
   const yr=(y,src,items)=>`<article class="year"><header><h3>${y} AP Physics 1 FRQs</h3><div class="links">
     <a class="pill" href="${src.frq}" target="_blank" rel="noopener">${I.file}Questions</a>
     <a class="pill" href="${src.sg}" target="_blank" rel="noopener">${I.check}Scoring</a></div></header>
     ${items?`<ul class="qlist">${items.map(([q,t,tags])=>`<li><span class="qn">${q}</span><span>${t}${tags.map(x=>`<span class="chip">${x}</span>`).join('')}</span></li>`).join('')}</ul>`:'<p>Not mapped yet. Open the PDF and look for free-body diagrams, Newton\'s laws, friction, springs, and circular motion.</p>'}</article>`;
-  $('#view').innerHTML=`<div class="wrap exams">
-    <h2>Real exam questions on forces</h2>
-    <p>These are College Board\'s released free-response questions. Tags show which Unit 2 topics each one uses. Levels marked with a boss icon on the path walk you through them step by step.</p>
+  return `
+    <h2>Official FRQ PDFs by year</h2>
+    <p>College Board\'s released free-response questions. Tags show which Unit 2 topics each one uses.</p>
     ${yr('2026',SRC.y26,[['Q3','Finding the coefficient of kinetic friction on ramps (boss level)',['2.7','2.5']],['Q4','Toys spun by a string: rotational dynamics with a constant force',['2.5']]])}
     ${yr('2025',SRC.y25,[['Q4','Block released underwater: Newton\'s second law with buoyancy (final boss)',['2.2','2.5']],['Q2','Block slides down a ramp into a spring: energy with spring forces',['2.8']]])}
     ${yr('2024',SRC.y24,[['Q1','Block on a loop-the-loop track: forces at the top of a loop (boss level)',['2.2','2.9']],['Q3','Hinged beam held by a string: free-body diagram (boss level)',['2.2']],['Q4','Pendulum on planets with different mass and radius (boss level)',['2.6']],['Q2','Design an experiment to find a spring constant',['2.8']]])}
     ${yr('2023',SRC.y23,null)}
-    <p>College Board doesn\'t publish past multiple-choice sections, so the practice questions in each lesson are original. For official multiple-choice practice, use AP Classroom through your teacher. <a href="${SRC.page}" target="_blank" rel="noopener">All past exam questions</a></p>
+    <p>College Board doesn\'t publish past multiple-choice sections, so the practice questions in each lesson are original. For official multiple-choice practice, use AP Classroom through your teacher. <a href="${SRC.page}" target="_blank" rel="noopener">All past exam questions</a></p>`;
+}
+
+/* ---------- mixed practice ---------- */
+const PR={mode:'mix',topics:new Set(),len:10};
+const missIds=()=>Object.keys(S.miss||{}).filter(id=>QINDEX[id]);
+function practicePool(){
+  let pool=Object.values(QINDEX);
+  if(PR.topics.size) pool=pool.filter(q=>PR.topics.has(nodeById(q.from).topicKey));
+  if(PR.mode==='mistakes') pool=pool.filter(q=>S.miss&&S.miss[q.id]);
+  if(PR.mode==='weak'){
+    const weak=new Set((S.focus||[]).map(id=>nodeById(id)).filter(Boolean).map(n=>n.topicKey));
+    const w=pool.filter(q=>(S.miss&&S.miss[q.id])||weak.has(nodeById(q.from).topicKey));
+    if(w.length) pool=w;
+  }
+  return pool;
+}
+function renderPractice(){
+  const missN=missIds().length, pool=practicePool(), n=Math.min(PR.len,pool.length);
+  const byTopic={}; missIds().forEach(id=>{const k=nodeById(QINDEX[id].from).topicKey; byTopic[k]=(byTopic[k]||0)+1;});
+  const modes=[
+    ['mix','Mix everything','Random questions from every lesson, MCQ set and FRQ.'],
+    ['weak','Weak spots',S.focus&&S.focus.length?'Your placement focus topics plus questions you\'ve missed.':'Questions you\'ve missed. Take the placement test to add focus topics.'],
+    ['mistakes','Mistakes only',missN?`${missN} question${missN>1?'s':''} you got wrong. Get one right here and it leaves the list.`:'Nothing yet. Questions you miss anywhere land here.'],
+  ];
+  $('#view').innerHTML=`<div class="wrap practice">
+    <h2>Mixed practice</h2>
+    <p class="muted">Shuffled questions from across the app, like a real exam section. No hearts. Missed questions come back at the end.</p>
+    <div class="choices pmodes">${modes.map(([k,t,d])=>`<button class="choice" data-mode="${k}" aria-pressed="${PR.mode===k}" ${k==='mistakes'&&!missN?'disabled':''}><span><b>${t}</b><br><span class="muted">${d}</span></span></button>`).join('')}</div>
+    <h4>Topics</h4>
+    <div class="tchips"><button class="tchip" data-topic="" aria-pressed="${!PR.topics.size}">All topics</button>${TOPICS.map(([k,l])=>`<button class="tchip" data-topic="${k}" aria-pressed="${PR.topics.has(k)}">${esc(l)}</button>`).join('')}</div>
+    <h4>Length</h4>
+    <div class="tchips">${[10,20,30].map(v=>`<button class="tchip" data-len="${v}" aria-pressed="${PR.len===v}">${v} questions</button>`).join('')}</div>
+    <div class="pstart"><button class="btn" id="pgo" ${n?'':'disabled'}>${n?`Start ${n} question${n>1?'s':''}`:'No questions match'}</button></div>
+    ${missN?`<h4>Mistakes by topic</h4><ul class="results">${Object.entries(byTopic).sort((a,b)=>b[1]-a[1]).map(([k,c])=>`<li><span>${esc(topicName(k))}</span><span class="rchip no">${c}</span></li>`).join('')}</ul>`:''}
   </div>`;
+  const v=$('#view');
+  v.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{PR.mode=b.dataset.mode;renderPractice();});
+  v.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>{const k=b.dataset.topic; if(!k) PR.topics.clear(); else PR.topics.has(k)?PR.topics.delete(k):PR.topics.add(k); renderPractice();});
+  v.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{PR.len=+b.dataset.len;renderPractice();});
+  $('#pgo').onclick=startPractice;
+}
+function startPractice(){
+  const qs=shuffle(practicePool()).slice(0,PR.len);
+  if(!qs.length) return;
+  startNode({id:'practice',kind:'practice',tag:'Mixed practice',title:PR.mode==='mistakes'?'Mistakes review':PR.mode==='weak'?'Weak spots':'Mixed practice',qs});
+}
+function practiceDone(){
+  const right=Math.max(0,R.total-R.firstMiss.size), xp=Math.max(5,right);
+  addXp(xp); sWin(); if(R.firstMiss.size===0) confetti();
+  const missedTopics=[...new Set([...R.firstMiss].map(id=>nodeById(QINDEX[id].from).topicKey))];
+  const secs=Math.round((Date.now()-R.t0)/1000), tm=`${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+  $('#lbody').innerHTML=`<div class="wrap end">${newt(R.firstMiss.size?'happy':'wow','big')}
+    <h2>${right} of ${R.total} on the first try</h2>
+    <p class="prose">${R.firstMiss.size?'The ones you missed are saved to your mistakes list.':'Clean sweep.'}</p>
+    <div class="tiles3">
+      <div class="st" style="--c:var(--xp)"><small>XP</small><b>${I.bolt}${xp}</b></div>
+      <div class="st" style="--c:var(--go)"><small>Accuracy</small><b>${I.target}${Math.round(100*right/R.total)}%</b></div>
+      <div class="st" style="--c:var(--field)"><small>Time</small><b>${I.clock}${tm}</b></div>
+    </div>
+    ${missedTopics.length?`<div class="focus-row" style="justify-content:center"><span>Review</span>${missedTopics.map(k=>`<span class="fchip-go">${esc(topicName(k))}</span>`).join('')}</div>`:''}</div>`;
+  const f=$('#lfoot');f.className='l-foot';
+  f.innerHTML=`<div class="wrap"><button class="btn ghost" id="lq">Done</button><button class="btn" id="lagain">Practice again</button></div>`;
+  $('#lq').onclick=closeLesson; $('#lagain').onclick=()=>{$('.lesson').remove();R=null;startPractice();};
+}
+
+/* ---------- FRQ hub: every FRQ level in one place, always open ---------- */
+function renderFrqs(){
+  const bosses=NODES.filter(n=>n.kind==='boss');
+  const groups=[
+    ['Real AP exam FRQs','Paraphrased from College Board\'s released questions, with the original PDF and scoring guidelines.',bosses.filter(n=>n.year)],
+    ['Your class FRQ packets','From your Joined Body, Forces at Angles and Elevator practice FRQs.',bosses.filter(n=>!n.year&&n.badge!=='MAX')],
+    ['Challenge problems','',bosses.filter(n=>n.badge==='MAX')],
+  ];
+  const card=n=>`<article class="frq-card ${S.done[n.id]?'is-done':''}">
+    <div class="frq-meta"><span class="chip">${esc(topicName(n.topicKey))}</span><span class="frq-status">${S.done[n.id]?I.check+'Done':`${n.steps.length} parts`}</span></div>
+    <h3>${esc(n.title.replace(/^(Final )?FRQ: /,''))}</h3>
+    <p class="muted">${esc(tagOf(n))}</p>
+    <div class="frq-act"><button class="btn" data-frq="${n.id}">${S.done[n.id]?'Redo':'Start'}</button>
+      ${n.src?`<span class="frq-links"><a href="${n.src.frq}" target="_blank" rel="noopener">Question PDF</a><a href="${n.src.sg}" target="_blank" rel="noopener">Scoring</a></span>`:''}</div>
+  </article>`;
+  $('#view').innerHTML=`<div class="wrap exams">
+    <h2>Free-response practice</h2>
+    <p>Every FRQ in the app, open any time. Each one walks you through its parts with the setup pinned above every question.</p>
+    ${groups.filter(g=>g[2].length).map(([t,d,list])=>`<section class="frq-group"><h3 class="frq-gt">${esc(t)}</h3>${d?`<p>${esc(d)}</p>`:''}<div class="frq-grid">${list.map(card).join('')}</div></section>`).join('')}
+    ${examsHtml()}
+  </div>`;
+  $('#view').querySelectorAll('[data-frq]').forEach(b=>b.onclick=()=>startNode(nodeById(b.dataset.frq)));
 }
 
 /* ---------- lesson runner ---------- */
-let R=null;
+let R=null, setupOpen=true;
 function startNode(node){
   const steps=[];
   if(node.kind==='lesson'){
     (node.learn||[]).forEach(l=>steps.push({type:'learn',...l}));
     if(node.topic) steps.push({type:'video',topic:node.topic});
     node.qs.forEach(q=>steps.push({type:'q',...q}));
-  }else if(node.kind==='placement'||node.kind==='jump'){
+  }else if(node.kind==='placement'||node.kind==='jump'||node.kind==='practice'){
     if(node.intro) steps.push({type:'intro'});
     node.qs.forEach(q=>steps.push({type:'q',...q}));
   }else{
@@ -1208,8 +1344,8 @@ function startNode(node){
     node.steps.forEach(q=>steps.push({type:'q',...q}));
     steps.push({type:'model'});
   }
-  const hearts=node.kind==='jump'?2:node.kind==='placement'?Infinity:5;
-  R={node,steps,i:0,hearts,mode:node.kind,answers:{},miss:0,total:steps.filter(s=>s.type==='q').length,retried:new Set(),t0:Date.now()};
+  const hearts=node.kind==='jump'?2:(node.kind==='placement'||node.kind==='practice')?Infinity:5;
+  R={node,steps,i:0,hearts,mode:node.kind,answers:{},firstMiss:new Set(),miss:0,total:steps.filter(s=>s.type==='q').length,retried:new Set(),t0:Date.now()};
   const ov=h(`<div class="lesson" role="dialog" aria-label="${esc(node.title)}">
     <div class="wrap l-top"><button class="iconbtn" id="lx" aria-label="Quit lesson">${I.x}</button><div class="bar"><i id="lbar" style="width:0%"></i></div><div class="hearts" id="lh" ${hearts===Infinity?'hidden':''}>${I.heart}<span>${hearts}</span></div></div>
     <div class="l-body" id="lbody"></div><div class="l-foot" id="lfoot"></div></div>`);
@@ -1240,7 +1376,8 @@ function showStep(){
     body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">${esc(node.title)}</h2>
       ${node.src?`<div class="source"><b>From the real ${node.year} exam</b><span>Paraphrased from College Board\'s released free-response question. Open the original to see the figures.</span>
       <div class="links"><a class="pill" href="${node.src.frq}" target="_blank" rel="noopener">${I.file}Original question</a><a class="pill" href="${node.src.sg}" target="_blank" rel="noopener">${I.check}Scoring guidelines</a></div></div>`:''}
-      <div class="prose">${node.intro}</div></div>`;
+      <div class="prose">${node.intro}</div>
+      ${node.steps?`<p class="parts-note">${I.map}${node.steps.length} parts. This setup stays pinned above every part, so you can reread it any time.</p>`:''}</div>`;
     foot('continue','Start');
   }else if(s.type==='model'){
     body.innerHTML=`<div class="wrap">${kick}<h2 class="qtitle">Model answer</h2>
@@ -1248,14 +1385,20 @@ function showStep(){
       ${node.src?`<div class="source"><b>Grade yourself like a reader would</b><div class="links"><a class="pill" href="${node.src.sg}" target="_blank" rel="noopener">${I.check}Official scoring guidelines</a><a class="pill" href="${node.src.frq}" target="_blank" rel="noopener">${I.file}Full question</a></div></div>`:''}</div>`;
     foot('continue','Finish');
   }else{
-    cur=renderQ(s, body, kick);
+    const qn=(s.from&&nodeById(s.from))||node;
+    const qkick=qn.kind==='boss'
+      ?`<div class="kicker boss">${qn.year?`${qn.year} AP exam · ${qn.qnum}`:esc(qn.tag)}${s.part?` · Part ${s.part} of ${s.parts}`:''}</div>`
+      :(R.mode==='practice'?`<div class="kicker">${esc(tagOf(qn))} · ${esc(qn.title)}</div>`:kick);
+    cur=renderQ(s, body, qkick, qn);
     foot('check');
   }
 }
 
-function renderQ(s, body, kick){
-  const wrap=h(`<div class="wrap">${kick}${s.ctx?`<div class="ctx">${s.ctx}</div>`:''}${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}<h2 class="qtitle">${esc(s.q)}</h2><div id="qa"></div></div>`);
+function renderQ(s, body, kick, qn){
+  const setup=qn&&qn.kind==='boss'&&qn.intro?`<details class="setup" ${setupOpen?'open':''}><summary>Problem setup${qn.steps?` · ${qn.steps.length} parts`:''}</summary><div class="prose">${qn.intro}</div>${qn.src?`<div class="links"><a class="pill" href="${qn.src.frq}" target="_blank" rel="noopener">${I.file}Original question</a><a class="pill" href="${qn.src.sg}" target="_blank" rel="noopener">${I.check}Scoring guidelines</a></div>`:''}</details>`:'';
+  const wrap=h(`<div class="wrap">${kick}${setup}${s.ctx?`<div class="ctx">${s.ctx}</div>`:''}${s.fig?`<div class="fig">${FIG[s.fig]}</div>`:''}<h2 class="qtitle">${esc(s.q)}</h2><div id="qa"></div></div>`);
   body.innerHTML=''; body.appendChild(wrap);
+  const sd=$('details.setup',wrap); if(sd) sd.ontoggle=()=>{setupOpen=sd.open;};
   const qa=$('#qa',wrap); let ctl={ready:()=>false};
   if(s.t==='mc'||s.t==='tf'){
     const opts=s.t==='tf'?[{txt:'True',ok:s.a===true},{txt:'False',ok:s.a===false}]:shuffle(s.c.map((txt,k)=>({txt,ok:k===s.a})));
@@ -1324,9 +1467,10 @@ function doCheck(){
   if(!cur||!cur.ready())return;
   const s=R.steps[R.i]; const ok=cur.check(); const f=$('#lfoot');
   if(R.mode==='placement') R.answers[s.area]=ok;
+  if(s.id&&QINDEX[s.id]){ if(!ok){S.miss=S.miss||{};S.miss[s.id]=1;if(!R.retried.has(s))R.firstMiss.add(s.id);save();} else if(R.mode==='practice'&&S.miss&&S.miss[s.id]&&!R.firstMiss.has(s.id)){delete S.miss[s.id];save();} }
   if(ok){sGood();}else{sBad();R.miss++;
     if(R.mode!=='placement'){R.hearts--;const hh=$('#lh');hh.querySelector('span').textContent=R.hearts;hh.classList.remove('hit');void hh.offsetWidth;hh.classList.add('hit');}
-    if((R.mode==='lesson'||R.mode==='boss')&&!R.retried.has(s)){R.retried.add(s);const c={...s};R.retried.add(c);R.steps.push(c);}}
+    if((R.mode==='lesson'||R.mode==='boss'||R.mode==='practice')&&!R.retried.has(s)){R.retried.add(s);const c={...s};R.retried.add(c);R.steps.push(c);}}
   f.className='l-foot '+(ok?'good':'bad');
   f.innerHTML=`<div class="wrap"><div class="fb"><span class="badge">${ok?I.check:I.x}</span><div>
     <h4>${ok?GOOD[Math.floor(Math.random()*GOOD.length)]:'Not quite'}</h4>
@@ -1352,6 +1496,7 @@ function fail(){
 function finish(){
   $('#lbar').style.width='100%';
   if(R.mode==='placement') return placementResults();
+  if(R.mode==='practice') return practiceDone();
   if(R.mode==='jump') return jumpDone();
   const n=R.node, first=!S.done[n.id], perfect=R.miss===0;
   const xp=(n.kind==='boss'?30:10)+(perfect?5:0);
